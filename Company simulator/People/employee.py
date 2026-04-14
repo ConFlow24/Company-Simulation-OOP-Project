@@ -1,0 +1,35 @@
+class Employee:
+    def __init__(self, name = "John Doe", role = "Employee", pay = 50000):#could add more
+        self.name = name
+        self.role = role
+        self.pay = pay
+    def work(self):
+        pass
+    def clock_in(self):
+        pass
+    def clock_out(self):
+        pass
+
+class Manager(Employee):
+    def __init__(self, name, role, pay):
+        super().__init__(name, role, pay)
+    def manage(self):
+        pass
+
+class CEO(Employee):
+    def __init__(self, name, role, pay):
+        super().__init__(name, role, pay)
+    def make_decision(self):
+        pass
+
+class Intern(Employee):
+    def __init__(self, name, role, pay):
+        super().__init__(name, role, pay)
+    def learn(self):
+        pass
+
+class Senior(Employee):
+    def __init__(self, name, role, pay):
+        super().__init__(name, role, pay)
+    def mentor(self):
+        pass
