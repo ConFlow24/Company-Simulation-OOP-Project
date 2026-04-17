@@ -18,14 +18,14 @@ class EmpGen:
             return "CEO"#ensures that the first employee generated is a CEO
         roles = ["Employee", "Manager", "Intern", "Senior"]
         weights = [0.71, 0.09, 0.1, 0.1]
-        return random.choices(roles, weights=weights, k=1)[0]
+        return random.choices(roles, weights=weights, k=1)[0] #weighted randomness
     @classmethod
     def generate_employee(cls, amount):
         for _ in range(amount):
             role = cls.get_role()
             min_pay, max_pay = role_pay_hash[role]
             cls.employees.append(Employee(fake.name(), role, random.randint(min_pay, max_pay)//1000*1000))
-        
+            #generates employee with random name, role based on weighted randomness, and pay based on role with some variability. Pay is rounded to the nearest 1000 for simplicity.
     @classmethod
     def print_employees(cls):
         print(f"{'Name':<20} | {'Role':<10} | {'Pay per Year':<10}\n {'-'*19} | {'-'*10} | {'-'*10} ")

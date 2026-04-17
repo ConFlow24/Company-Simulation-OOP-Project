@@ -29,7 +29,6 @@ while True:
         initial_comp_size = int(input("Welcome to the company simulator! Input how many employees to start with(5-10): "))
         if 5 <= initial_comp_size <= 10:
             EmpGen.generate_employee(initial_comp_size)
-            employees = EmpGen.employees
             EmpGen.print_employees()
 
             break
@@ -38,4 +37,4 @@ while True:
     except ValueError:
         print("Invalid input. Please enter a number.")
 
-#insert day generator here
+#insert main simulation engine here

@@ -3,8 +3,8 @@ from collections import defaultdict
 class Attendance:
     def __init__(self):
       # Yung init, purpose niya mag-store ng employee id, status (present or not), hours worked, late, overtime hours using dictionary.
-        self.records = defaultdict(dict) # has status, hours worked, overtime hours
-
+        self.records = defaultdict(dict) # per employee has status, hours worked, overtime hours. defaultdict automatically makes keys for no errors
+        # has total lates and absences for each employee for salary deductions and bonuses.
     def clock_in(self, day, employee_name):# day is from day generator when implemented into the manin program
         attendance_hash = ["Present", "Late", "Absent"]
         weights = [0.9, 0.07, 0.03]
@@ -17,8 +17,12 @@ class Attendance:
                 self.records[day][employee_name]["hours_worked"] = 8
             case "Late":
                 self.records[day][employee_name]["hours_worked"] = 8- random.randint(1, 2)
+                employee_name.late_count += 1 # adds to employee late count for salary deductions and bonuses
+                
             case "Absent":
                 self.records[day][employee_name]["hours_worked"] = 0
+                employee_name.absent_count += 1 # adds to employee absent count for salary deductions
+        employee_name.total_hours += self.records[day][employee_name]["hours_worked"] # adds to employee total hours for salary bonuses and ranking
 
     def clock_out(self, day, employee_name):
         if self.records[day][employee_name]["status"] == "Present" or self.records[day][employee_name]["status"] == "Late":
@@ -31,6 +35,12 @@ class Attendance:
         else:
             self.records[day][employee_name]["overtime_hours"] = 0
 
+    def get_total_work_hours(self, employee_name):
+        total_hours = 0
+        for day, employees in self.records.items():
+            if employee_name in employees:
+                total_hours += employees[employee_name]["hours_worked"]
+        return total_hours
 
     def show_attendance(self):
         for day, employees in self.records.items():
