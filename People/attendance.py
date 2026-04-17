@@ -18,13 +18,13 @@ class Attendance:
         self.day = 1
         self.records[self.day] = {}
 
-    def clock_in(self, employee):
+    def clock_in(self, employee_id):
         pass
 
-    def clock_out(self, employee):
+    def clock_out(self, employee_id):
         pass
 
-    def mark_absent(self, employee):
+    def mark_absent(self, employee_id):
         pass
 
     def next_day(self):
