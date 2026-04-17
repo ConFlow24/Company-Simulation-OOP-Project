@@ -1,149 +1,231 @@
-# Workplace Simulation System 🏢
+ok legit na to. AKo gumawa ng lahat ng concept pinaganda ko lang kay GPT. Pag may mali siya may kasalanan.
+
+
+# 🏢 Company Simulation System
 
 ## 📌 Overview
 
-The **Workplace Simulation System** is an Object-Oriented Programming (OOP) project that simulates the daily operations of a business. Instead of simply storing data, the system models how employees behave, how workdays progress, and how business performance evolves over time.
+This program simulates the daily operations of a company over a user-defined number of days. At the start, the user selects how many days to simulate and how many employees to begin with.
 
-This project demonstrates core OOP principles such as **encapsulation, inheritance, polymorphism, and abstraction** through a dynamic and interactive simulation.
+Each day represents a full business cycle involving employee attendance, task execution, inventory management, and financial updates.
 
----
-
-## 🎯 Objectives
-
-* Simulate day-to-day workplace operations
-* Track employee attendance, performance, and salary
-* Manage inventory and process daily orders
-* Generate reports based on daily outcomes
-* Apply OOP concepts in a real-world scenario
+The system is **primarily user-driven**, where the player acts as the CEO and directly manages company decisions. However, an **auto-simulation option** is available for selected day ranges.
 
 ---
 
-## ⚙️ Core Features
+# 🧠 Core Daily Flow
 
-### 👨‍💼 Employee Management
+Each simulated day follows this structure:
 
-* Add, remove, and view employees
-* Roles (e.g., Manager, Staff)
-* Attributes:
-
-  * Punctuality
-  * Productivity
-  * Salary rate
-
-### 🗓️ Workday Simulation
-
-* Start and end a workday
-* Employees may:
-
-  * Arrive on time, late, or be absent
-  * Generate performance output
-* Randomized behavior based on employee attributes
-
-### 💰 Payroll System
-
-* Salary calculation based on:
-
-  * Attendance
-  * Performance
-* Bonuses:
-
-  * Perfect attendance
-  * High productivity
-* Deductions:
-
-  * Late or absences
-
-### 📦 Inventory & Orders
-
-* Manage product stock
-* Simulate daily orders
-* Automatically update inventory levels
-
-### 📊 Reports
-
-* Daily summary:
-
-  * Attendance
-  * Employee performance
-  * Profit/loss
-  * Inventory changes
-
----
-
-## 🧠 OOP Concepts Demonstrated
-
-* **Encapsulation** – Private fields with controlled access
-* **Inheritance** – Base `Employee` class extended by roles
-* **Polymorphism** – Different salary/behavior logic per role
-* **Abstraction** – Simulation engine handling system processes
-
----
-
-## 🧩 System Structure (Simplified)
-
+```plaintext id="flow3"
+1. Start of Day
+2. Generate Tasks / Orders
+3. Employee Clock-in (attendance check)
+4. CEO Task Assignment (manual default)
+5. Task Execution (based on speed + punctuality)
+6. Inventory & Money Updates
+7. Random Events
+8. Promotions / Demotions
+9. End-of-Day Report
+10. CEO Action Menu
 ```
-Employee (abstract)
+
+---
+
+# 👑 CEO Control System (DEFAULT MODE)
+
+The player always acts as the CEO by default and directly controls company decisions.
+
+## 🎮 CEO Responsibilities:
+
+* Assign tasks to employees manually
+* Hire new employees
+* Fire employees or managers
+* Promote or demote employees
+* Give bonuses or apply deductions
+* Buy and sell inventory manually
+* Manage stock levels
+* Review employee performance
+
+---
+
+# ⚙️ Auto-Simulation Mode
+
+The system allows the CEO to enable **automatic simulation** for a selected number of days.
+
+During auto-mode:
+
+* Tasks are assigned automatically
+* Inventory decisions are system-generated
+* Employee actions are simulated without input
+
+The user can return to manual control after the selected period ends.
+
+---
+
+# 📋 Daily CEO Menu (UI FLOW)
+
+At the end of each day, the user is presented with the main control menu:
+
+```plaintext id="menu1"
+===== END OF DAY MENU =====
+
+1. Start Next Day
+2. CEO Management Panel
+3. View Reports
+4. View Inventory
+5. View Employees
+6. Enable Auto-Simulation (Select Day Range)
+7. Exit Simulation
+```
+
+---
+
+## 🧑‍💼 CEO Management Panel (Option 2)
+
+Inside this panel, the user can:
+
+### Employee Control
+
+* Hire employee
+* Fire employee
+* Promote / demote employee
+* Assign tasks manually
+
+### Financial Control
+
+* Give bonuses
+* Apply deductions
+
+### Inventory Control
+
+* Buy stock
+* Sell stock
+* Adjust inventory
+
+---
+
+## 📊 Reports Menu (Option 3)
+
+Displays:
+
+* Daily profit/loss
+* Task completion rate
+* Employee performance rankings
+* Best and worst employees
+* Company efficiency score
+* Attendance summary
+
+---
+
+## 📦 Inventory View (Option 4)
+
+Shows:
+
+* Current stock levels
+* Product status
+* Inventory value
+
+---
+
+## 👥 Employee View (Option 5)
+
+Shows:
+
+* All employees
+* Role hierarchy
+* Speed and punctuality stats
+* Attendance record
+
+---
+
+# 👨‍💼 Employee System
+
+## 🧍 Roles:
+
+* Intern → low efficiency, training stage
+* Employee → standard worker
+* Senior → high efficiency worker
+* Manager → supervises staff and supports CEO decisions
+* CEO → player-controlled role
+
+---
+
+## 📊 Stats:
+
+### ⚡ Speed
+
+* Determines task completion rate
+
+### ⏰ Punctuality
+
+* Affects attendance (late/absent probability)
+
+---
+
+# 📦 Inventory & Finance System
+
+The company manages:
+
+* product stock
+* buying and selling operations
+* cash balance
+
+Employees and CEO actions directly affect:
+
+* inventory levels
+* company profit
+
+---
+
+# 🎲 Random Events System  (OPTIONAL)
+
+Each day may include events such as:
+
+* employee sickness
+* sudden increase in orders
+* supply shortages
+* productivity changes
+
+---
+
+# 🧱 System Architecture (OOP Structure)
+
+```plaintext id="arch3"
+Employee (base class)
+ ├── Intern
+ ├── Employee
+ │     └── Senior
  ├── Manager
- ├── Staff
+ └── CEO (player-controlled role)
 
 SimulationEngine
-WorkDay
-
-AttendanceRecord
-PerformanceRecord
-
-PayrollSystem
-
-Product
-Order
-InventoryManager
-
-ReportGenerator
-SystemController
+TaskGenerator
+InventorySystem
+FinanceSystem
+ReportSystem
+CEOInterface (command handler)
+AutoSimulationController
 ```
 
 ---
 
-## 👥 Team Roles
+# 🎯 Purpose of the Project
 
-* **Simulation Engine Developer** – Handles day cycle and logic flow
-* **Employee System Developer** – Manages employee data and behavior
-* **Payroll Developer** – Computes salary, bonuses, and deductions
-* **Inventory Developer** – Handles products and order processing
-* **UI/Integration Developer** – Connects modules and displays output
+This project demonstrates:
 
----
-
-## 🚀 Future Improvements
-
-* Save/Load system (file handling)
-* Promotion and ranking system
-* Random workplace events
-* Graphical User Interface (GUI)
+* Object-Oriented Programming principles (inheritance, polymorphism, encapsulation)
+* Simulation of real-world business operations
+* Human decision-making integrated with automated systems
+* System modularity and structured design
 
 ---
 
-## 🛠️ Tech Stack
+# 📌 Footnote (Optional Expansion Ideas)
 
-*(To be decided by the team)*
+A significantly larger extension of this project could include:
 
-* Language: Java / Python / C++
-* Interface: CLI or GUI
-
----
-
-## 📅 Project Status
-
-🚧 In Development – Initial design and planning phase
-
----
-
-## ✨ Notes
-
-This project focuses on transforming a traditional management system into a **dynamic simulation**, making it more interactive, scalable, and suitable for demonstrating advanced OOP design.
-
-
-
-
-Dependencies:
-Faker - on cmd enter "pip install faker"
+* A full graphical user interface (GUI) instead of a console-based system
+* Persistent data storage using JSON files (saving/loading simulation states)
+* Charts or visual analytics for company performance over time
+* Enhanced AI-based employee decision-making systems
