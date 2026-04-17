@@ -1,7 +1,7 @@
 class Employee:
-    def __init__(self, name = "John Doe", id = 0001, role = "Employee", pay = 50000):#could add more
+    def __init__(self, name = "John Doe", employee_id = 0001, role = "Employee", pay = 50000):#could add more
         self.name = name
-        self.id = id
+        self.employee_id = employee_id
         self.role = role
         self.pay = pay
         
@@ -21,25 +21,25 @@ class Employee:
         pass
 
 class Manager(Employee):
-    def __init__(self, name, id, role, pay):
-        super().__init__(name, id, role, pay)
+    def __init__(self, name, employee_id, role, pay):
+        super().__init__(name, employee_id, role, pay)
     def manage(self):
         pass
 
 class CEO(Employee):
-    def __init__(self, name, id, role, pay):
-        super().__init__(name, id, role, pay)
+    def __init__(self, name, employee_id, role, pay):
+        super().__init__(name, employee_id, role, pay)
     def make_decision(self):
         pass
 
 class Intern(Employee):
-    def __init__(self, name, id, role, pay):
-        super().__init__(name, id, role, pay)
+    def __init__(self, name, employee_id, role, pay):
+        super().__init__(name, employee_id, role, pay)
     def learn(self):
         pass
 
 class Senior(Employee):
-    def __init__(self, name, id, role, pay):
-        super().__init__(name, id, role, pay)
+    def __init__(self, name, employee_id, role, pay):
+        super().__init__(name, employee_id, role, pay)
     def mentor(self):
         pass
