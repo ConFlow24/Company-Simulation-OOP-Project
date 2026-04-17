@@ -1,5 +1,5 @@
 class Employee:
-    def __init__(self, name = "John Doe", id, role = "Employee", pay = 50000):#could add more
+    def __init__(self, name = "John Doe", id = 0001, role = "Employee", pay = 50000):#could add more
         self.name = name
         self.id = id
         self.role = role
