@@ -1,3 +1,4 @@
+#main simulation engine, responsible for generating days and managing the flow of the simulation
 class DayGenerator:
     def __init__(self):
         self.day = 1
