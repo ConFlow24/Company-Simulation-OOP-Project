@@ -17,7 +17,7 @@ from Systems.employee_generator import EmpGen
 
 while True:
     try:
-        weeks_to_simulate = int(input("Welcome to the company simulator! Input how many weeks you want to simulate(1-50): "))
+        weeks_to_simulate = int(input("Welcome to the company simulator! Input how many days you want to simulate(1-50): "))
         if 1 <= weeks_to_simulate <= 50:
             break
         else:

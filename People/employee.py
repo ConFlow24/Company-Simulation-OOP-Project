@@ -41,3 +41,6 @@ class Senior(Employee):
         super().__init__(name, role, pay, speed, punctuality, total_hours, late_count, absent_count)
     def mentor(self):
         pass
+
+
+#kung magdadagdag ka pa ng functions for each class sabihin kay ian para madagdag sa tasks system

@@ -46,4 +46,4 @@ class Attendance:
         for day, employees in self.records.items():
             print(f"Day {day}:")
             for employee_name, record in employees.items():
-                print(f"  {employee_name}: {record['status']}, Hours Worked: {record['hours_worked']}, Overtime Hours: {record['overtime_hours']}")
+                print(f"  {employee_name}: {record['status']}")
