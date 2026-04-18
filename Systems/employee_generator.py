@@ -1,8 +1,20 @@
 from People.employee import Employee
-from faker import Faker
 import random
 
-fake = Faker()
+first_names = [
+    "Liam", "Noah", "Ethan", "Mason", "Lucas", "Aiden", "Elijah", "James", "Benjamin", "Logan",
+    "Olivia", "Emma", "Ava", "Sophia", "Isabella", "Alice", "Charlotte", "Amelia", "Harper", "Evelyn",
+    "Henry", "Alexander", "Daniel", "Matthew", "Samuel", "Joseph", "David", "Carter", "Owen", "Wyatt",
+    "John", "Jack", "Luke", "Jayden", "Dylan", "Levi", "Isaac", "Gabriel", "Julian", "Anthony"
+]
+
+last_names = [
+    "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez",
+    "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin",
+    "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson",
+    "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores"
+]
+
 role_pay_hash = {
     "Employee": (50000, 70000),
     "Manager": (70000, 90000),
@@ -10,6 +22,7 @@ role_pay_hash = {
     "Intern": (30000, 40000),
     "Senior": (80000, 120000)
 }
+
 class EmpGen:
     employees = []
     @staticmethod
@@ -24,7 +37,8 @@ class EmpGen:
         for _ in range(amount):
             role = cls.get_role()
             min_pay, max_pay = role_pay_hash[role]
-            cls.employees.append(Employee(fake.name(), role, random.randint(min_pay, max_pay)//1000*1000))
+            random_name = f"{random.choice(first_names)} {random.choice(last_names)}"
+            cls.employees.append(Employee(random_name, role, random.randint(min_pay, max_pay)//1000*1000))
             #generates employee with random name, role based on weighted randomness, and pay based on role with some variability. Pay is rounded to the nearest 1000 for simplicity.
     @classmethod
     def print_employees(cls):
