@@ -12,7 +12,7 @@ class Company:
         self.day = 0
         self.employees = []
         self.attendance = Attendance()
-        self.salary = Salary()
+        self.salary = self.salary = Salary(salary_record={})
         self.inventory = Inventory(starting_cash)
         self.daily_log = []
 
