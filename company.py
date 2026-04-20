@@ -3,7 +3,6 @@
 
 from Systems.attendance import Attendance
 from Systems.salary import Salary
-from Systems.inventory import Inventory
 
 
 class Company:
@@ -12,8 +11,8 @@ class Company:
         self.day = 0
         self.employees = []
         self.attendance = Attendance()
-        self.salary = self.salary = Salary(salary_record={})
-        self.inventory = Inventory(starting_cash)
+        self.salary = Salary(salary_record={})
+        # self.inventory = Inventory(starting_cash)
         self.daily_log = []
 
     # Employee managem
