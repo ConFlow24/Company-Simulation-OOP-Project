@@ -1,4 +1,5 @@
 from People.employee import Employee, Intern, Manager, Senior
+from employee_generator import EmpGen
 
 
 class CEO(Employee):
