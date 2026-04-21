@@ -12,11 +12,11 @@ class Employee:
         self.absent_count = absent_count
         self.tasks_completed = tasks_completed
 
-    def work:
-    self.tasks_completed += 1
+    def work(self):
+        self.tasks_completed += 1
         print(f"{self.name} is working. Tasks completed: {self.tasks_completed}.")
         if self.tasks_completed >= promotion_threshold["SENIOR"]:
-            print(f"{self.name} is ready for promotion to SENIOR!")
+            print(f"{self.name} is ready for promotion to EMPLOYEE!")
 
 class Manager(Employee):
     def __init__(self, name, pay, role="Manager", speed=1, punctuality=1,
@@ -43,7 +43,7 @@ class Intern(Employee):
     def learn(self):
         self.tasks_completed += 1
         print(f"{self.name} is learning. Tasks completed: {self.tasks_completed}.")
-        if self.tasks_completed >= promotion_threshold["EMPLOYEE"]:
+        if self.tasks_completed >= promotion_threshold["INTERN"]:
             print(f"{self.name} is ready for promotion to EMPLOYEE!")
 
 
@@ -56,5 +56,6 @@ class Senior(Employee):
     def mentor(self):
         self.tasks_completed += 1
         print(f"{self.name} is working. Tasks completed: {self.tasks_completed}.")
-        if self.tasks_completed >= promotion_threshold[":
+        if self.tasks_completed >= promotion_threshold["SENIOR"]:
             print(f"{self.name} is ready for promotion to MANAGER!")
+
