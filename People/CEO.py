@@ -7,7 +7,7 @@ class CEO(Employee):
         super().__init__(name, role="CEO", pay=pay)
 
     def fire_employee(self, company):
-        company.list_employees()
+        EmpGen.employees()
         name = input("Enter the name of the employee to fire: ")
 
         if name == "CEO":
