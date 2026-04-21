@@ -28,14 +28,14 @@ class Manager(Employee):
         self.tasks_completed += 1
 
 class CEO(Employee):
-    def __init__(self, name, pay, role="Manager", speed=1, punctuality=1,
+    def __init__(self, name, pay, role="CEO", speed=1, punctuality=1,
                  total_hours=0, late_count=0, absent_count=0, tasks_completed=0):
         super().__init__(name, role, pay, speed, punctuality,
                          total_hours, late_count, absent_count, tasks_completed)
 
 
 class Intern(Employee):
-    def __init__(self, name, pay, role="Manager", speed=1, punctuality=1,
+    def __init__(self, name, pay, role="INTERN", speed=1, punctuality=1,
                  total_hours=0, late_count=0, absent_count=0, tasks_completed=0):
         super().__init__(name, role, pay, speed, punctuality,
                          total_hours, late_count, absent_count, tasks_completed)
@@ -48,7 +48,7 @@ class Intern(Employee):
 
 
 class Senior(Employee):
-    def __init__(self, name, pay, role="Manager", speed=1, punctuality=1,
+    def __init__(self, name, pay, role="SENIOR", speed=1, punctuality=1,
                  total_hours=0, late_count=0, absent_count=0, tasks_completed=0):
         super().__init__(name, role, pay, speed, punctuality,
                          total_hours, late_count, absent_count, tasks_completed)
