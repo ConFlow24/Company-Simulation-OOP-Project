@@ -1,4 +1,4 @@
-# not real nung saturday pa to hindi ko pala na-sync sa github, aayusin ko ulit base sa new version
+
 
 
 from Systems.attendance import Attendance
