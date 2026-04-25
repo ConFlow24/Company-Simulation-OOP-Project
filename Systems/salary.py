@@ -5,13 +5,13 @@ class Salary:
         self.salary_record = salary_record
 
 
-    def apply_bonus(self, employee, total_hours, original_salary):
+    def apply_bonus(self, employee):
         # If worked hours more than 12 hours add 15% for bonus.
-        if total_hours > 12:
+        if employee.total_hours > 12:
             employee.pay += 1000
             self.salary_record[employee]["Bonuses"] += 1000
 
-        return original_salary
+        return employee.pay
 
     def apply_deduction(self, employee):
         if employee.late_count > 6 or employee.absent_count > 3:

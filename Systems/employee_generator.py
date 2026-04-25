@@ -24,24 +24,32 @@ role_pay_hash = {
 }
 
 class EmpGen:
-    employees = []
-    @staticmethod
-    def get_role():
-        if EmpGen.employees == []:
-            return "CEO"#ensures that the first employee generated is a CEO
-        roles = ["Employee", "Manager", "Intern", "Senior"]
-        weights = [0.71, 0.09, 0.1, 0.1]
-        return random.choices(roles, weights=weights, k=1)[0] #weighted randomness
-    @classmethod
-    def generate_employee(cls, amount):
+    def __init__(self, first_names, last_names, role_pay_hash):
+        self.employees = []
+        self.role_pay_hash = role_pay_hash
+        self.first_names = first_names
+        self.last_names = last_names
+        self.roles = ["Employee", "Manager", "Intern", "Senior"]
+        self.weights = [0.71, 0.09, 0.1, 0.1]
+
+    def get_role(self):
+        if self.employees == []:
+            return "CEO"  # first employee is CEO
+        return random.choices(self.roles, weights=self.weights, k=1)[0]
+
+    def generate_employee(self, amount):
         for _ in range(amount):
-            role = cls.get_role()
-            min_pay, max_pay = role_pay_hash[role]
-            random_name = f"{random.choice(first_names)} {random.choice(last_names)}"
-            cls.employees.append(Employee(random_name, role, random.randint(min_pay, max_pay)//1000*1000))
-            #generates employee with random name, role based on weighted randomness, and pay based on role with some variability. Pay is rounded to the nearest 1000 for simplicity.
-    @classmethod
-    def print_employees(cls):
-        print(f"{'Name':<20} | {'Role':<10} | {'Pay per Year':<10}\n {'-'*19} | {'-'*10} | {'-'*10} ")
-        for employee in cls.employees:
+            role = self.get_role()
+            min_pay, max_pay = self.role_pay_hash[role]
+            random_name = f"{random.choice(self.first_names)} {random.choice(self.last_names)}"
+            pay = random.randint(min_pay, max_pay) // 1000 * 1000
+
+            self.employees.append(
+                Employee(random_name, role, pay)
+            )
+
+    def print_employees(self):
+        print(f"{'Name':<20} | {'Role':<10} | {'Pay per Year':<10}")
+        print(f"{'-'*19} | {'-'*10} | {'-'*10}")
+        for employee in self.employees:
             print(f"{employee.name:<20} | {employee.role:<10} | {employee.pay:<10}")
