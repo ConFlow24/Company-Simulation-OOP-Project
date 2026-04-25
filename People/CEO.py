@@ -116,7 +116,8 @@ class CEO(Employee):
         if employee is None:
             print("Employee not found.")
             return
-        salary.apply_bonus(employee)
+        bonus = int(input("Enter the bonus amount: "))
+        salary.apply_bonus(employee, bonus)
 
     def apply_deduction(self, employee, company, salary):
         name = input("Enter the name of the employee: ")
@@ -124,8 +125,8 @@ class CEO(Employee):
         if employee is None:
             print("Employee not found.")
             return
-        salary.apply_deduction(employee)
-        
+        deduction = int(input("Enter the deduction amount: "))
+        salary.apply_deduction(employee, deduction)
 
     def buy_stock(self, inventory):
         pass
