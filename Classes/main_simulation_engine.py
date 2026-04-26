@@ -1,9 +1,8 @@
 #main simulation engine, responsible for generating days and managing the flow of the simulation
-from Classes.attendance_salary import Attendance
-from Classes.task_generator import TaskSystems as TaskGen
+
 
 class main_simulation_engine:
-    def sim_engine(self, day, employees, control_type, company):#loop in main.py
+    def sim_engine(self, day, employees, control_type, company, Attendance, TaskGen):#loop in main.py
         print(f"Day {day}")
         #generate attendance for each employee
         for employee in employees:

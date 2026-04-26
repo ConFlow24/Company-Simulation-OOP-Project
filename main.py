@@ -16,6 +16,8 @@ main_simulation_engine = main_simulation_engine()
 EmpGen = EmpGen()
 CEOPanel = CEOPanel()
 inventory = Inventory()
+Attendance = Attendance()
+TasGen = TaskGen()
 
 
 print("Welcome to the company simulator!") #add more explanation
@@ -46,7 +48,7 @@ while True:
         control_type = "Auto"
         auto_days -= 1
     
-    main_simulation_engine.sim_engine(day, EmpGen.employees, control_type, company)
+    main_simulation_engine.sim_engine(day, EmpGen.employees, control_type, company, Attendance, TaskGen)
 
 
     while True:
