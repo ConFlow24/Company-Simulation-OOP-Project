@@ -28,3 +28,8 @@ class Inventory:
                 if size != "Base Price":
                     total_price += self.get_price(name, size) * quantity
         return total_stock, total_price
+    
+    def show_inventory(self):
+        print("\n--- Inventory ---")
+        for name, sizes in self.items.items():
+            print(f"{name} | Small: {sizes['Small']} | Medium: {sizes['Medium']} | Large: {sizes['Large']} | Base Price: {sizes['Base Price']:.2f}")

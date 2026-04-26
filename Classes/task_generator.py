@@ -139,13 +139,14 @@ class TaskSystems:
             self.task_list.append(Task(type, name, size, duration))
 
     def generate_sell_task(self, employees):
-        for _ in range(len(inventory.items) // 3): #generate sell tasks based on the number of items in inventory, but not more than half of the total items
-            type = "Sell"
-            item_to_sell = random.choice(list(inventory.items.keys()))
-            name = item_to_sell[name]
-            size = item_to_sell[name][size]
-            duration = random.randint(*self.size_lookup[size])
-            self.task_list.append(Task(type, name, size, duration))
+        if inventory.items():
+            for _ in range(len(inventory.items) // 3): #generate sell tasks based on the number of items in inventory, but not more than half of the total items
+                type = "Sell"
+                item_to_sell = random.choice(list(inventory.items.keys()))
+                name = item_to_sell[name]
+                size = item_to_sell[name][size]
+                duration = random.randint(*self.size_lookup[size])
+                self.task_list.append(Task(type, name, size, duration))
 
     def do_task(self, employee):
         for task in self.doing_tasks[:]:
@@ -186,3 +187,8 @@ class TaskSystems:
                             self.store_list.remove(item)
                             break
                     self.complete_tasks.remove(task)
+
+    def show_tasks(self):
+        print("\n--- Tasks ---")
+        for task in self.task_list:
+            print(f"{task.type} | {task.name} | {task.size} | Duration: {task.duration} | Assigned to: {task.assigned_to.name if task.assigned_to else 'Unassigned'}")
