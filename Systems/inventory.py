@@ -1,26 +1,3 @@
-#parang may queue like for example nagbuy yung employee, mapupunta siya sa to_store = []
-#tas for each item sa to_store gagawa ng isang task kada item
-#may size din each item na nakakaapekto sa speed ng pagkumpleto ng task na yun
-
-#purely inventory lang to, like isang dictionary lang
-
-
-# from dataclasses import dataclass, field
-
-# @dataclass #auto generate init method
-# class Item:
-#     name: str
-#     price:float #base price ng item, nagbabago depende sa size
-#     stock: dict = field(default_factory=dict) #{"Small": 10, "Large": 4}, bawal daw dict = {} kasi idk
-
-#     def get_price(self, size: str) -> float: #-> means it returns a flaot
-#         size_multipliers = {"small": 1, "medium": 1.5, "large": 2}
-#         return self.price * size_multipliers.get(self.stock.get(size), 1)
-    
-#     def total_stock_n_price(self):
-#         return sum(self.stock.values()), sum(self.get_price("small"), self.get_price("medium"), self.get_price("large"))
-    
-
 from collections import defaultdict
 
 class Inventory:

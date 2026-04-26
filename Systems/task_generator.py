@@ -24,6 +24,7 @@
 
 import random
 from collections import defaultdict
+from inventory import Inventory
 
 items = [
     "keyboard", "mouse", "monitor", "laptop", "desktop computer", "printer", "scanner",
@@ -80,7 +81,7 @@ items = [
 
 
 
-
+inventory = Inventory()
 
 class Task:
     def __init__(self, type, name, size, duration = 1):
@@ -93,15 +94,10 @@ class Task:
 
 class TaskSystems:
     def __init__(self):
-        self.task_list = []
-        self.doing_tasks = []
+        self.task_list = [] #iniial task list
+        self.doing_tasks = [] #task list when assigned to employees and in progress
         self.store_list = [] #for storing items that are bought and waiting to be added to inventory, each item is a dictionary with name, size, and quantity
-
-    size_lookup = { #for length of task duration
-        "Small": (1, 3),
-        "Medium": (4, 6),
-        "Large": (7, 10)
-    }
+        self.completed_tasks = [] 
 
     def assign_task(self, employees, attendance, day):
         available_employees = []
@@ -142,19 +138,21 @@ class TaskSystems:
             duration = random.randint(*self.size_lookup[size])
             self.task_list.append(Task(type, name, size, duration))
 
-    def generate_sell_task(self, employees, inventory):
+    def generate_sell_task(self, employees):
         for _ in range(len(inventory.items) // 3): #generate sell tasks based on the number of items in inventory, but not more than half of the total items
             type = "Sell"
-            name = random.choice(items)
-            size = random.choice(["Small", "Medium", "Large"])
+            item_to_sell = random.choice(list(inventory.items.keys()))
+            name = item_to_sell[name]
+            size = item_to_sell[name][size]
             duration = random.randint(*self.size_lookup[size])
             self.task_list.append(Task(type, name, size, duration))
 
-    def complete_task(self, employee):
+    def do_task(self, employee):
         for task in self.doing_tasks[:]:
             if task.assigned_to == employee:
                 task.progress += employee.speed
                 if task.progress >= task.duration:
+                    self.completed_tasks.append(task)
                     self.doing_tasks.remove(task)
                     employee.tasks_completed += 1
                     employee.working = False
@@ -162,8 +160,29 @@ class TaskSystems:
     
     def overtime_check(self, employee, attendance, day):
         if self.doing_tasks:
-            for task in self.doing_tasks:
+            for task in self.doing_tasks[:]:
                 #add remaining hours to overtime if task not complete in 8 hours(loops)
                 remaining = task.duration - task.progress
                 attendance.records[day][employee.name]["overtime_hours"] = remaining
                 attendance.records[day][employee.name]["hours_worked"] += remaining
+                self.completed_tasks.append(task)
+                self.doing_tasks.remove(task)
+
+    def complete_task(self):
+        for task in self.completed_tasks[:]:
+            match task.type:
+                case "Buy":
+                    self.store_list.append({"name": task.name, "size": task.size, "quantity": 1})
+                    inventory.money -= inventory.get_price(task.name, task.size)
+                    self.complete_tasks.remove(task)
+                case "Sell":
+                    inventory.remove_item(task.name, task.size, 1)
+                    inventory.money += inventory.get_price(task.name, task.size)
+                    self.complete_tasks.remove(task)
+                case "Store":
+                    for item in self.store_list:
+                        if item["name"] == task.name and item["size"] == task.size:
+                            inventory.add_item(task.name, task.size, item["quantity"], inventory.get_price(task.name, task.size))
+                            self.store_list.remove(item)
+                            break
+                    self.complete_tasks.remove(task)
