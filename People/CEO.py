@@ -1,138 +1,131 @@
-from email import generator
+# Employee Options
 
-from People.employee import Employee, Intern, Manager, Senior
+def hire_employee(company, emp_gen):
+    candidates = emp_gen.generate_candidates(3)
+
+    print("\n--- Candidates ---")
+    for i, emp in enumerate(candidates, 1):
+        print(f"{i}. {emp.name} | {emp.role} | {emp.pay:,}")
+
+    choice = input("Pick candidate (1-3): ").strip()
+
+    if choice not in ["1", "2", "3"]:
+        print("Invalid choice.")
+        return
+
+    chosen = candidates[int(choice) - 1]
+    emp_gen.employees.append(chosen)
+    company.add_employee(chosen)
+    print(f"{chosen.name} hired as {chosen.role}!")
 
 
-class CEO(Employee):
-    def __init__(self, name, pay):
-        super().__init__(name, role="CEO", pay=pay)
+def fire_employee(company):
+    company.list_employees()
+    name = input("Enter employee name to fire: ").strip()
 
-    def fire_employee(self, company):
-        name = input("Enter the name of the employee to fire: ")
-        employee = company.get_employee(name)
-        if employee.role == "CEO":
-            print("Cannot fire the CEO!")
-            return
+    if name == "CEO":
+        print("Cannot fire the CEO!")
+        return
 
-        if employee is None:
-            print("Employee not found.")
-            return
-        company.remove_employee(name)
+    employee = company.get_employee(name)
+    if employee is None:
+        print("Employee not found.")
+        return
 
-    def hire_employee(self, company, generator_cls):
-        generator = generator_cls(self.first_names, self.last_names, self.role_pay_hash)
-        generator.roles = ["Employee", "Intern"]
-        generator.weights = [0.71, 0.29]
-        generator.generate_employee(3)
+    company.remove_employee(name)
+    print(f"{name} has been fired.")
 
-        while True:
-            for i, emp in enumerate(generator.employees):
-                print(f"{i+1}. {emp.name} | {emp.role} | {emp.pay:,}")
 
-            choice = input("Choose an employee to hire (1, 2, or 3): ")
-            if choice in ["1", "2", "3"]:
-                break
-            print("Invalid choice.")
-        company.add_employee(generator.employees[int(choice) - 1])
-        return generator.employees[int(choice) - 1]
+def promote_employee(company):
+    company.list_employees()
+    name = input("Enter employee name to promote: ").strip()
 
-    def promote_employee(self, company):
-        name = input("Enter the name of the employee: ")
-        employee = company.get_employee(name)
+    employee = company.get_employee(name)
+    if employee is None:
+        print("Employee not found.")
+        return
 
-        if employee is None:
-            print("Employee not found.")
-            return
+    manager_count = 0
+    for emp in company.employees:
+        if emp.role == "Manager":
+            manager_count += 1
 
-        while True:
-            match employee.role:
-                case "CEO":
-                    print("Cannot promote the CEO!")
-                case "Manager":
-                    print("Cannot promote a Manager!")
-                case "Intern":
-                    employee.role = "Employee"
-                    break
-                case "Employee":
-                    choice = input("Promote to Senior, or Manager?: ").lower()
-                    if choice == "senior":
-                        employee.role = "Senior"
-                        break
-                    elif choice == "manager":
-                        employee.role = "Manager"
-                        break
-                    else:
-                        print("Invalid choice.")
-                        continue
-                case "Senior":
-                    employee.role = "Manager"
-                    break
-                case _:
-                    print("Unknown role.")
-                    break
-        return employee
-        
+    match employee.role:
+        case "CEO":
+            print(f"{employee.name} cannot be promoted.")
+        case "Manager":
+            print(f"{employee.name} is already at the highest role.")
+        case "Intern":
+            employee.role = "Employee"
+            employee.pay = 55000
+            print(f"{employee.name} promoted to Employee!")
+        case "Employee":
+            skip = input("Skip Senior? (yes/no): ").strip().lower()
+            if skip == "yes":
+                if manager_count >= 5:
+                    print("Cannot promote. Already have 5 managers!")
+                    return
+                employee.role = "Manager"
+                employee.pay = 80000
+                print(f"{employee.name} promoted to Manager!")
+            else:
+                employee.role = "Senior"
+                employee.pay = 90000
+                print(f"{employee.name} promoted to Senior!")
+        case "Senior":
+            if manager_count >= 5:
+                print("Cannot promote. Already have 5 managers!")
+                return
+            employee.role = "Manager"
+            employee.pay = 80000
+            print(f"{employee.name} promoted to Manager!")
 
-    def demote_employee(self, company):
-        name = input("Enter the name of the employee: ")
-        employee = company.get_employee(name)
 
-        if employee is None:
-            print("Employee not found.")
-            return
+def demote_employee(company):
+    company.list_employees()
+    name = input("Enter employee name to demote: ").strip()
 
-        while True:
-            match employee.role:
-                case "CEO":
-                    print("Cannot demote the CEO!")
-                case "Manager":
-                    choice = input("Demote to Senior, or Employee?: ").lower()
-                    if choice == "senior":
-                        employee.role = "Senior"
-                        break
-                    elif choice == "employee":
-                        employee.role = "Employee"
-                        break
-                    else:
-                        print("Invalid choice.")
-                        continue
-                case "Intern":
-                    employee.role = "Employee"
-                    break
-                case "Employee":
-                    employee.role = "Intern"
-                    break
-                case "Senior":
-                    employee.role = "Employee"
-                    break
-                case _:
-                    print("Unknown role.")
-                    break
-        return employee
+    employee = company.get_employee(name)
+    if employee is None:
+        print("Employee not found.")
+        return
 
-    def give_bonus(self, employee, company, salary):
-        name = input("Enter the name of the employee: ")
-        employee = company.get_employee(name)
-        if employee is None:
-            print("Employee not found.")
-            return
-        bonus = int(input("Enter the bonus amount: "))
-        salary.apply_bonus(employee, bonus)
+    match employee.role:
+        case "CEO":
+            print("Cannot demote the CEO!")
+        case "Intern":
+            print(f"{employee.name} is already at the lowest role.")
+        case "Employee":
+            employee.role = "Intern"
+            employee.pay = 30000
+            print(f"{employee.name} demoted to Intern!")
+        case "Senior":
+            employee.role = "Employee"
+            employee.pay = 55000
+            print(f"{employee.name} demoted to Employee!")
+        case "Manager":
+            employee.role = "Senior"
+            employee.pay = 90000
+            print(f"{employee.name} demoted to Senior!")
 
-    def apply_deduction(self, employee, company, salary):
-        name = input("Enter the name of the employee: ")
-        employee = company.get_employee(name)
-        if employee is None:
-            print("Employee not found.")
-            return
-        deduction = int(input("Enter the deduction amount: "))
-        salary.apply_deduction(employee, deduction)
+# Financial Options
 
-    def buy_stock(self, inventory):
-        pass
 
-    def sell_stock(self, inventory):
-        pass
+def increase_salary(company):
+    pass
 
-    def adjust_inventory(self, inventory):
-        pass
+
+def decrease_salary(company):
+    pass
+
+
+def buy_item(company, items_list):
+    pass
+
+
+def sell_item(company):
+    pass
+
+
+def delete_item(company):
+    pass

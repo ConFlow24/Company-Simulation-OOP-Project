@@ -1,4 +1,7 @@
-promotion_threshold = {"INTERN": 10, "EMPLOYEE": 20, "SENIOR": 35}
+# Already  done, pa-check if ok, ung check promotion i-call yan sa main.py
+
+promotion_threshold = {"Intern": 10,
+                       "Employee": 20, "Senior": 35, "Manager": 999}
 
 
 class Employee:
@@ -16,11 +19,11 @@ class Employee:
         print(f"{self.name} is working.")
 
     def check_promotion(self):
-        if self.role == "INTERN" and self.tasks_completed >= promotion_threshold["INTERN"]:
+        if self.role == "Intern" and self.tasks_completed >= promotion_threshold["Intern"]:
             print(f"{self.name} is ready for promotion!")
-        elif self.role == "EMPLOYEE" and self.tasks_completed >= promotion_threshold["EMPLOYEE"]:
+        elif self.role == "Employee" and self.tasks_completed >= promotion_threshold["Employee"]:
             print(f"{self.name} is ready for promotion!")
-        elif self.role == "SENIOR" and self.tasks_completed >= promotion_threshold["SENIOR"]:
+        elif self.role == "Senior" and self.tasks_completed >= promotion_threshold["Senior"]:
             print(f"{self.name} is ready for promotion!")
 
 
@@ -42,7 +45,7 @@ class CEO(Employee):
 
 
 class Intern(Employee):
-    def __init__(self, name, pay, role="INTERN", speed=1, punctuality=1,
+    def __init__(self, name, pay, role="Intern", speed=1, punctuality=1,
                  total_hours=0, tasks_completed=0, working=False):
         super().__init__(name, role, pay, speed, punctuality,
                          total_hours, tasks_completed, working)
@@ -52,7 +55,7 @@ class Intern(Employee):
 
 
 class Senior(Employee):
-    def __init__(self, name, pay, role="SENIOR", speed=1, punctuality=1,
+    def __init__(self, name, pay, role="Senior", speed=1, punctuality=1,
                  total_hours=0, tasks_completed=0, working=False):
         super().__init__(name, role, pay, speed, punctuality,
                          total_hours, tasks_completed)
