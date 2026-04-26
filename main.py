@@ -2,30 +2,75 @@
 # Dito papasok kung paano gumagalaw ung attendance sa totoong buhay. 
 
 from Classes.employee_generator import EmpGen
-from Classes.main_simulation_engine import mainSimulationEngine
+from Classes.main_simulation_engine import main_simulation_engine
+from Classes.attendance_salary import *
+from Classes.company import Company
+from Classes.CEO_Panel import *
+from Classes.employee_generator import EmpGen
+from Classes.task_generator import TaskGen
+from Classes.inventory import Inventory
+
+
+main_simulation_engine = main_simulation_engine()
+company = Company()
+EmpGen = EmpGen()
+CEOPanel = CEOPanel()
+inventory = Inventory()
+
+
+print("Welcome to the company simulator!") #add more explanation
 
 
 
 while True:
     try:
-        weeks_to_simulate = int(input("Welcome to the company simulator! Input how many days you want to simulate(1-50): "))
-        if 1 <= weeks_to_simulate <= 50:
-            break
-        else:
-            print("Invalid input. Please enter a number between 1 and 50.")
-    except ValueError:
-        print("Invalid input. Please enter a number.")
-while True:
-    try:
-        initial_comp_size = int(input("Welcome to the company simulator! Input how many employees to start with(5-10): "))
+        initial_comp_size = int(input(" how many employees to start with(5-10): "))
         if 5 <= initial_comp_size <= 10:
             EmpGen.generate_employee(initial_comp_size)
             EmpGen.print_employees()
-
             break
         else:
             print("Invalid input. Please enter a number between 5 and 10.")
     except ValueError:
         print("Invalid input. Please enter a number.")
 
-#insert main simulation engine here
+day = 1
+control_type = "Manual"
+auto_days = 0
+while True:
+    if auto_days == 0:
+        control_type = "Manual"
+    else:
+        control_type = "Auto"
+        auto_days -= 1
+    
+    main_simulation_engine.Engine_simEngine(day, EmpGen.employees, control_type)
+
+
+    while True:
+            End_day_choice = input(f"""1. Start next day
+2. Open CEO panel
+3. View reports
+4. View Inventory
+5. View Employees
+6. Enable Auto Simulation
+7. Exit Simulation
+Input choice: """)
+            match End_day_choice:
+                case "1":
+                    break
+                    #start next day
+                case "2":
+                    CEOPanel.show_panel(company, EmpGen, inventory)
+                case "3":
+                    company.show_full_report()
+                case "4":
+                    inventory.show_inventory()
+                case "5":
+                    company.list_employees()
+                case "6":
+                    amount = int(input("Enter number of days to simulate: "))
+                    auto_days = amount
+                case "7":
+                    print("Thank you for using this programs!")
+                    exit()

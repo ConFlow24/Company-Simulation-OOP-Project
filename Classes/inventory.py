@@ -1,19 +1,19 @@
 from collections import defaultdict
+from task_generator import items
 
 class Inventory:
     def __init__(self):
         self.items = defaultdict(lambda: {"Small": 0, "Medium": 0, "Large": 0, "Base Price": 0})
         self.cash = 100000.00
 
-    def add_item(self, name, size, quantity, base_price):
+    def add_item(self, name, size, quantity):
         self.items[name][size] += quantity
-        self.items[name]["Base Price"] = base_price
+        self.items[name]["Base Price"] = items[name]
 
     def remove_item(self, name, size, quantity):
         if self.items[name][size] >= quantity:
             self.items[name][size] -= quantity
-            return True
-        return False
+
 
     def get_price(self, name, size):
         size_multipliers = {"Small": 1, "Medium": 1.5, "Large": 2}

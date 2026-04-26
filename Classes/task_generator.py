@@ -26,58 +26,64 @@ import random
 from collections import defaultdict
 from inventory import Inventory
 
-items = [
-    "keyboard", "mouse", "monitor", "laptop", "desktop computer", "printer", "scanner",
-    "tablet", "smartphone", "phone case", "charger", "power bank", "usb cable",
-    "headphones", "earbuds", "speaker", "webcam", "microphone", "router", "modem",
+items = {
+    "keyboard": 25, "mouse": 15, "monitor": 180, "laptop": 800, "desktop computer": 900,
+    "printer": 120, "scanner": 100, "tablet": 300, "smartphone": 700, "phone case": 15,
+    "charger": 20, "power bank": 30, "usb cable": 10, "headphones": 60, "earbuds": 40,
+    "speaker": 80, "webcam": 50, "microphone": 70, "router": 100, "modem": 90,
 
-    "table", "chair", "sofa", "couch", "bed frame", "mattress", "cabinet", "drawer",
-    "bookshelf", "desk", "office chair", "stool", "bench", "wardrobe",
+    "table": 150, "chair": 80, "sofa": 500, "couch": 600, "bed frame": 250,
+    "mattress": 400, "cabinet": 200, "drawer": 120, "bookshelf": 140, "desk": 180,
+    "office chair": 220, "stool": 50, "bench": 130, "wardrobe": 350,
 
-    "lightbulb", "lamp", "desk lamp", "floor lamp", "extension cord", "power strip",
-    "fan", "air conditioner", "heater",
+    "lightbulb": 5, "lamp": 40, "desk lamp": 30, "floor lamp": 70,
+    "extension cord": 20, "power strip": 25, "fan": 60, "air conditioner": 400, "heater": 90,
 
-    "shoes", "sneakers", "sandals", "slippers", "boots", "heels",
-    "t-shirt", "shirt", "polo", "hoodie", "jacket", "coat", "jeans",
-    "shorts", "skirt", "dress", "socks", "underwear", "belt", "hat", "cap",
+    "shoes": 80, "sneakers": 100, "sandals": 40, "slippers": 20, "boots": 120, "heels": 90,
+    "t-shirt": 20, "shirt": 35, "polo": 40, "hoodie": 50, "jacket": 80, "coat": 120,
+    "jeans": 60, "shorts": 30, "skirt": 35, "dress": 70, "socks": 10, "underwear": 15,
+    "belt": 25, "hat": 20, "cap": 18,
 
-    "watch", "sunglasses", "bag", "backpack", "wallet", "purse", "jewelry",
-    "necklace", "bracelet", "ring", "earrings",
+    "watch": 120, "sunglasses": 80, "bag": 70, "backpack": 60, "wallet": 40,
+    "purse": 90, "jewelry": 150, "necklace": 100, "bracelet": 80, "ring": 120, "earrings": 70,
 
-    "books", "notebooks", "magazines", "textbooks", "comics",
-    "pens", "pencils", "markers", "highlighters", "art supplies",
+    "books": 20, "notebooks": 10, "magazines": 8, "textbooks": 100, "comics": 12,
+    "pens": 5, "pencils": 3, "markers": 12, "highlighters": 10, "art supplies": 50,
 
-    "kitchen utensils", "plates", "bowls", "cups", "mugs", "glasses",
-    "spoons", "forks", "knives", "cutting board", "cookware",
-    "pots", "pans", "kettle", "rice cooker", "microwave", "oven", "toaster", "blender",
+    "kitchen utensils": 40, "plates": 30, "bowls": 25, "cups": 20, "mugs": 15, "glasses": 25,
+    "spoons": 15, "forks": 15, "knives": 30, "cutting board": 20, "cookware": 150,
+    "pots": 60, "pans": 50, "kettle": 40, "rice cooker": 80, "microwave": 120,
+    "oven": 500, "toaster": 30, "blender": 70,
 
-    "refrigerator", "freezer", "washing machine", "dryer", "dishwasher",
+    "refrigerator": 800, "freezer": 500, "washing machine": 600,
+    "dryer": 500, "dishwasher": 700,
 
-    "toys", "board games", "puzzles", "action figures", "dolls",
-    "video games", "game console", "controllers",
+    "toys": 25, "board games": 40, "puzzles": 20, "action figures": 30, "dolls": 25,
+    "video games": 60, "game console": 500, "controllers": 60,
 
-    "bicycle", "helmet", "skateboard", "roller skates",
-    "dumbbells", "barbell", "yoga mat", "exercise bands",
+    "bicycle": 300, "helmet": 50, "skateboard": 80, "roller skates": 70,
+    "dumbbells": 60, "barbell": 120, "yoga mat": 25, "exercise bands": 20,
 
-    "car accessories", "motorcycle helmet", "car cover", "seat cover",
-    "toolbox", "hammer", "screwdriver", "wrench", "drill", "saw",
+    "car accessories": 100, "motorcycle helmet": 150, "car cover": 60, "seat cover": 80,
+    "toolbox": 70, "hammer": 15, "screwdriver": 10, "wrench": 20, "drill": 80, "saw": 50,
 
-    "gardening tools", "plant pots", "seeds", "fertilizer", "watering can",
+    "gardening tools": 50, "plant pots": 30, "seeds": 10, "fertilizer": 20, "watering can": 15,
 
-    "cosmetics", "makeup", "skincare products", "perfume", "hair dryer", "straightener",
+    "cosmetics": 50, "makeup": 60, "skincare products": 70, "perfume": 100,
+    "hair dryer": 40, "straightener": 50,
 
-    "curtains", "carpet", "rug", "bedsheets", "blankets", "pillows",
+    "curtains": 60, "carpet": 200, "rug": 120, "bedsheets": 50, "blankets": 60, "pillows": 30,
 
-    "collectibles", "antiques", "coins", "stamps", "trading cards",
+    "collectibles": 200, "antiques": 500, "coins": 50, "stamps": 40, "trading cards": 30,
 
-    "pet supplies", "pet food", "leash", "collar", "pet toys", "aquarium",
+    "pet supplies": 60, "pet food": 40, "leash": 20, "collar": 15, "pet toys": 25, "aquarium": 150,
 
-    "camera", "lens", "tripod", "lighting equipment", "drone",
+    "camera": 700, "lens": 400, "tripod": 80, "lighting equipment": 150, "drone": 900,
 
-    "musical instruments", "guitar", "piano keyboard", "drum set", "violin",
+    "musical instruments": 300, "guitar": 200, "piano keyboard": 250, "drum set": 500, "violin": 180,
 
-    "cleaning supplies", "vacuum cleaner", "mop", "broom", "detergent"
-]
+    "cleaning supplies": 40, "vacuum cleaner": 150, "mop": 20, "broom": 15, "detergent": 25
+}
 
 
 
@@ -97,7 +103,8 @@ class TaskSystems:
         self.task_list = [] #iniial task list
         self.doing_tasks = [] #task list when assigned to employees and in progress
         self.store_list = [] #for storing items that are bought and waiting to be added to inventory, each item is a dictionary with name, size, and quantity
-        self.completed_tasks = [] 
+        self.completed_tasks = []
+        self.size_lookup = {"Small": (1, 2), "Medium": (3, 5), "Large": (6, 8)} #task duration based on size of item
 
     def assign_task(self, employees, attendance, day):
         available_employees = []
@@ -122,10 +129,41 @@ class TaskSystems:
             available_employees.remove(emp)
             self.task_list.remove(task)
 
+    def assign_task_manual(self, employees, attendance, day, company):
+        available_employees = []
+        for emp in employees:
+            if emp.role == "CEO" or emp.working:
+                continue
+            emp_record = attendance.records[day].get(emp.name, {})
+            if emp_record.get("status") == "Absent":
+                continue
+
+            available_employees.append(emp)
+        for task in self.task_list[:]:
+            if not available_employees:
+                break
+
+            company.list_employees()
+            while True:
+                emp = input("Enter an employee from the list:  ").strip()
+
+                employee = company.get_employee(emp)
+                if employee is None:
+                    print("Employee not found.")
+                else: break
+                
+            task.assigned_to = emp
+            task.duration = random.randint(*self.size_lookup[task.size])
+
+            emp.working = True
+            self.doing_tasks.append(task)
+            available_employees.remove(emp)
+            self.task_list.remove(task)
+
     def generate_buy_task(self, employees):
         for _ in range(int(len(employees) // 1.5)): #generate buy tasks based on the number of employees, but not more than half of the total employees
             type = "Buy"
-            name = random.choice(items)
+            name = random.choice(list(items))
             size = random.choice(["Small", "Medium", "Large"])
             duration = random.randint(*self.size_lookup[size])
             self.task_list.append(Task(type, name, size, duration))
@@ -178,7 +216,7 @@ class TaskSystems:
                     self.complete_tasks.remove(task)
                 case "Sell":
                     inventory.remove_item(task.name, task.size, 1)
-                    inventory.money += inventory.get_price(task.name, task.size)
+                    inventory.money += inventory.get_price(task.name, task.size) * 1.2 #sell for 20% profit
                     self.complete_tasks.remove(task)
                 case "Store":
                     for item in self.store_list:
