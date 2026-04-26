@@ -171,9 +171,9 @@ class CEOPanel:
             choice_amount = input("How many: ")
         except: ValueError
         else: 
-            if choice_amount > inventory.items[choice][choice_size]:
+            if int(choice_amount) > inventory.items[choice][choice_size]:
                 print("Choice is larger than the amount in stock.")
-            elif choice_amount < 0:
+            elif int(choice_amount) < 0:
                 print("Choice cannot be negative.")
             else:
                 inventory.remove_item(choice, choice_size, choice_amount)
@@ -191,9 +191,9 @@ class CEOPanel:
             choice_amount = input("How many: ")
         except: ValueError
         else: 
-            if choice_amount > inventory.items[choice][choice_size]:
+            if int(choice_amount) > inventory.items[choice][choice_size]:
                 print("Choice is larger than the amount in stock.")
-            elif choice_amount < 0:
+            elif int(choice_amount) < 0:
                 print("Choice cannot be negative.")
             else:
                 inventory.remove_item(choice, choice_size, choice_amount)

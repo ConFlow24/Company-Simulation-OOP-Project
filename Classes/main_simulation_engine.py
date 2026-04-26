@@ -2,18 +2,18 @@
 
 
 class main_simulation_engine:
-    def sim_engine(self, day, employees, control_type, company, Attendance, TaskGen):#loop in main.py
-        print(f"Day {day}")
+    def sim_engine(self, day, employees, control_type, company, Attendance, TaskGen, inventory, salary):#loop in main.py
+        print(f"\nDay {day}\n")
         #generate attendance for each employee
         for employee in employees:
             Attendance.clock_in(day, employee.name)
-        print("Attendance for the day:")
+        print("Attendance for", end=" ")
         Attendance.show_attendance()
 
         #tasks
         TaskGen.generate_buy_task(employees)
         TaskGen.generate_store_task(employees)
-        TaskGen.generate_sell_task(employees)
+        TaskGen.generate_sell_task(employees, inventory)
         print("Tasks for the day:")
         TaskGen.show_tasks()
         match control_type:
@@ -24,7 +24,7 @@ class main_simulation_engine:
                     for employee in employees:
                         TaskGen.do_task(employee)
                 TaskGen.overtime_check(employees, Attendance, day)
-                TaskGen.complete_task()
+                TaskGen.complete_task(inventory)
             case "Manual":
                 TaskGen.assign_task_manual(employees, Attendance, day, company)
                 for employee in employees:
@@ -33,7 +33,7 @@ class main_simulation_engine:
                     else:
                         TaskGen.do_task(employee)
                 TaskGen.overtime_check(employees, Attendance, day)
-                TaskGen.complete_task()
+                TaskGen.complete_task(inventory)
                 
         #show End of day menu
         

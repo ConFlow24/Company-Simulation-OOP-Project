@@ -38,11 +38,11 @@ class Attendance:
 
 class Salary:
     def __init__(self):
-        self.salary_record = defaultdict(dict)
+        self.salary_record = defaultdict(lambda: defaultdict(dict))
 
     def apply_bonus(self, employee, attendance, day, bonus = 1000):
         # If worked hours more than 12 hours add 15% for bonus.
-        if attendance.records[day][employee.name]["hours_worked"] > 12:
+        if attendance.records[day][employee.name]["hours_worked"] > 10:
             employee.pay += bonus
             self.salary_record[employee]["Bonuses"] += bonus
 
