@@ -78,36 +78,92 @@ items = [
     "cleaning supplies", "vacuum cleaner", "mop", "broom", "detergent"
 ]
 
-class task:
-    task_choices = ["buy"]
-    queue = defaultdict(dict)
-    to_store = []
-    tasks_generated = ["buy{productname}, {size:7}"]
 
-    def generate_task(self):
-        # task = {}
-        # if inventory has item
-            #task[type_of_task] = type of task
-            # task_choices.append(task)
 
-        # if queue has items
-            # task_choices.append("store")
-        return random.choice(self.task_choices)
+
+
+class Task:
+    def __init__(self, type, name, size, duration = 1):
+        self.name = name
+        self.type = type
+        self.duration = duration
+        self.size = size
+        self.progress = 0
+        self.assigned_to = None
+
+class TaskSystems:
+    def __init__(self):
+        self.task_list = []
+        self.doing_tasks = []
+        self.store_list = [] #for storing items that are bought and waiting to be added to inventory, each item is a dictionary with name, size, and quantity
+
+    size_lookup = { #for length of task duration
+        "Small": (1, 3),
+        "Medium": (4, 6),
+        "Large": (7, 10)
+    }
+
+    def assign_task(self, employees, attendance, day):
+        available_employees = []
+        for emp in employees:
+            if emp.role == "CEO" or emp.working:
+                continue
+            emp_record = attendance.records[day].get(emp.name, {})
+            if emp_record.get("status") == "Absent":
+                continue
+
+            available_employees.append(emp)
+        for task in self.task_list[:]:
+            if not available_employees:
+                break
+
+            emp = random.choice(available_employees)
+            task.assigned_to = emp
+            task.duration = random.randint(*self.size_lookup[task.size])
+
+            emp.working = True
+            self.doing_tasks.append(task)
+            available_employees.remove(emp)
+            self.task_list.remove(task)
+
+    def generate_buy_task(self, employees):
+        for _ in range(int(len(employees) // 1.5)): #generate buy tasks based on the number of employees, but not more than half of the total employees
+            type = "Buy"
+            name = random.choice(items)
+            size = random.choice(["Small", "Medium", "Large"])
+            duration = random.randint(*self.size_lookup[size])
+            self.task_list.append(Task(type, name, size, duration))
+
+    def generate_store_task(self, employees):
+        for task in self.store_list:
+            type = "Store"
+            name = task.get("name")
+            size = task.get("size")
+            duration = random.randint(*self.size_lookup[size])
+            self.task_list.append(Task(type, name, size, duration))
+
+    def generate_sell_task(self, employees, inventory):
+        for _ in range(len(inventory.items) // 3): #generate sell tasks based on the number of items in inventory, but not more than half of the total items
+            type = "Sell"
+            name = random.choice(items)
+            size = random.choice(["Small", "Medium", "Large"])
+            duration = random.randint(*self.size_lookup[size])
+            self.task_list.append(Task(type, name, size, duration))
+
+    def complete_task(self, employee):
+        for task in self.doing_tasks[:]:
+            if task.assigned_to == employee:
+                task.progress += employee.speed
+                if task.progress >= task.duration:
+                    self.doing_tasks.remove(task)
+                    employee.tasks_completed += 1
+                    employee.working = False
+                    break
     
-    def buy(self):
-        self.queue[random.choice(items)]["size"] = random.randint(1,3)
-
-    def sell(self):
-        pass
-
-    def store(self, inventory):
-        if self.queue:
-             self.generate_task()
-
-
-task1 = task()
-
-for i in range(5):
-    task1.buy()
-
-print(task1.queue)
+    def overtime_check(self, employee, attendance, day):
+        if self.doing_tasks:
+            for task in self.doing_tasks:
+                #add remaining hours to overtime if task not complete in 8 hours(loops)
+                remaining = task.duration - task.progress
+                attendance.records[day][employee.name]["overtime_hours"] = remaining
+                attendance.records[day][employee.name]["hours_worked"] += remaining
