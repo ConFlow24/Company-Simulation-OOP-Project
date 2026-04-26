@@ -3,30 +3,32 @@
 
 from Classes.employee_generator import EmpGen
 from Classes.main_simulation_engine import main_simulation_engine
-from Classes.attendance_salary import *
+from Classes.attendance_salary import Attendance
+from Classes.attendance_salary import Salary
 from Classes.company import Company
-from Classes.CEO_Panel import *
+from Classes.CEO_Panel import CEOPanel
 from Classes.employee_generator import EmpGen
-from Classes.task_generator import TaskGen
+from Classes.task_generator import TaskSystems as TaskGen
 from Classes.inventory import Inventory
 
 
 main_simulation_engine = main_simulation_engine()
-company = Company()
 EmpGen = EmpGen()
 CEOPanel = CEOPanel()
 inventory = Inventory()
 
 
 print("Welcome to the company simulator!") #add more explanation
+name = input("Enter the name of your Company: ")
+company = Company(name, Attendance, Salary, Inventory)
 
 
 
 while True:
     try:
-        initial_comp_size = int(input(" how many employees to start with(5-10): "))
+        initial_comp_size = int(input("How many employees to start with(5-10): "))
         if 5 <= initial_comp_size <= 10:
-            EmpGen.generate_employee(initial_comp_size)
+            EmpGen.generate_employee(initial_comp_size, company)
             EmpGen.print_employees()
             break
         else:
@@ -44,7 +46,7 @@ while True:
         control_type = "Auto"
         auto_days -= 1
     
-    main_simulation_engine.Engine_simEngine(day, EmpGen.employees, control_type)
+    main_simulation_engine.sim_engine(day, EmpGen.employees, control_type, company)
 
 
     while True:

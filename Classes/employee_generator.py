@@ -1,4 +1,4 @@
-from employee import Employee
+from Classes.employee import Employee
 import random
 
 first_names = [
@@ -25,7 +25,7 @@ role_pay_hash = {
 
 
 class EmpGen:
-    def __init__(self, first_names, last_names, role_pay_hash):
+    def __init__(self, first_names = first_names, last_names = last_names, role_pay_hash = role_pay_hash):
         self.employees = []
         self.role_pay_hash = role_pay_hash
         self.first_names = first_names

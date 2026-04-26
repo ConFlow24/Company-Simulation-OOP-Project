@@ -1,5 +1,5 @@
 from collections import defaultdict
-from task_generator import items
+from Classes.items import items
 
 class Inventory:
     def __init__(self):

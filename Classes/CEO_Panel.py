@@ -1,5 +1,5 @@
 import random
-from task_generator import items
+from Classes.task_generator import items
 
 
 class CEOPanel:
