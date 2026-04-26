@@ -1,6 +1,9 @@
-# Employee Options
+import random
+
+
 class CEOPanel:
-    def hire_employee(company, emp_gen):
+    # Employee Options
+    def hire_employee(self, company, emp_gen):
         candidates = emp_gen.generate_candidates(3)
 
         print("\n--- Candidates ---")
@@ -18,8 +21,7 @@ class CEOPanel:
         company.add_employee(chosen)
         print(f"{chosen.name} hired as {chosen.role}!")
 
-
-    def fire_employee(company):
+    def fire_employee(self, company):
         company.list_employees()
         name = input("Enter employee name to fire: ").strip()
 
@@ -35,8 +37,7 @@ class CEOPanel:
         company.remove_employee(name)
         print(f"{name} has been fired.")
 
-
-    def promote_employee(company):
+    def promote_employee(self, company):
         company.list_employees()
         name = input("Enter employee name to promote: ").strip()
 
@@ -80,8 +81,7 @@ class CEOPanel:
                 employee.pay = 80000
                 print(f"{employee.name} promoted to Manager!")
 
-
-    def demote_employee(company):
+    def demote_employee(self, company):
         company.list_employees()
         name = input("Enter employee name to demote: ").strip()
 
@@ -109,23 +109,18 @@ class CEOPanel:
                 print(f"{employee.name} demoted to Senior!")
 
     # Financial Options
-
-
-    def increase_salary(company):
+    def increase_salary(self, company):
         pass
 
-
-    def decrease_salary(company):
+    def decrease_salary(self, company):
         pass
 
-
-    def buy_item(company, items_list):
+    # Inventory Options
+    def buy_item(self, company, items_list):
         pass
 
-
-    def sell_item(company):
+    def sell_item(self, company):
         pass
 
-
-    def delete_item(company):
+    def delete_item(self, company):
         pass
