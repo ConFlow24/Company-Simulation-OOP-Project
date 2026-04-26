@@ -23,6 +23,7 @@ role_pay_hash = {
     "Senior": (80000, 120000)
 }
 
+
 class EmpGen:
     def __init__(self, first_names, last_names, role_pay_hash):
         self.employees = []
@@ -37,16 +38,15 @@ class EmpGen:
             return "CEO"  # first employee is CEO
         return random.choices(self.roles, weights=self.weights, k=1)[0]
 
-    def generate_employee(self, amount):
+    def generate_employee(self, amount, company):
         for _ in range(amount):
             role = self.get_role()
             min_pay, max_pay = self.role_pay_hash[role]
             random_name = f"{random.choice(self.first_names)} {random.choice(self.last_names)}"
             pay = random.randint(min_pay, max_pay) // 1000 * 1000
-
-            self.employees.append(
-                Employee(random_name, role, pay)
-            )
+            emp = Employee(random_name, role, pay)
+            self.employees.append(emp)
+            company.add_employee(emp)
 
     def print_employees(self):
         print(f"{'Name':<20} | {'Role':<10} | {'Pay per Year':<10}")
