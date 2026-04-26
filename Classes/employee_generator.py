@@ -1,4 +1,4 @@
-from Systems.employee import Employee
+from employee import Employee
 import random
 
 first_names = [

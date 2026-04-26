@@ -1,6 +1,6 @@
 #main simulation engine, responsible for generating days and managing the flow of the simulation
-from Systems.attendance_salary import Attendance
-from Systems.attendance_salary import Salary
+from attendance_salary import Attendance
+from attendance_salary import Salary
 
 
 class mainSimulationEngine:
