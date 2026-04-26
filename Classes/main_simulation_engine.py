@@ -1,6 +1,9 @@
 #main simulation engine, responsible for generating days and managing the flow of the simulation
-from attendance_salary import Attendance
-from attendance_salary import Salary
+from attendance_salary import *
+from company import Company
+from CEO_Panel import *
+from employee_generator import EmpGen
+from task_generator import TaskGen
 
 
 class mainSimulationEngine:
@@ -11,6 +14,8 @@ class mainSimulationEngine:
             Attendance.clock_in(day, employee.name)
         print("Attendance for the day:")
         Attendance.show_attendance()
+
+        #tasks
 
         #weighted random for how many tasks to generate for today
         #insert function to generate tasks for the day
