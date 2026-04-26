@@ -23,18 +23,6 @@ class Attendance:
                 self.records[employee_name]["absent_count"] = self.records[employee_name].get("absent_count", 0) + 1 # adds to employee absent count for salary deductions
         self.records[day][employee_name]["total_hours"] = self.records[day][employee_name].get("total_hours", 0) + self.records[day][employee_name]["hours_worked"] # adds to employee total hours for salary bonuses and ranking
 
-    # def clock_out(self, day, employee_name):
-    #     if self.records[day][employee_name]["status"] == "Present" or self.records[day][employee_name]["status"] == "Late":
-    #         overtime_chance = random.random()
-    #         if overtime_chance < 0.1:  # 10% chance of working overtime
-    #             self.records[day][employee_name]["overtime_hours"] = random.randint(1, 4)
-    #             self.records[day][employee_name]["hours_worked"] += self.records[day][employee_name]["overtime_hours"]
-    #         else:
-    #             self.records[day][employee_name]["overtime_hours"] = 0
-    #     else:
-    #         self.records[day][employee_name]["overtime_hours"] = 0
-    #outdated sa tasks system na lang overitme
-
     def get_total_work_hours(self, employee_name):
         total_hours = 0
         for day, employees in self.records.items():
