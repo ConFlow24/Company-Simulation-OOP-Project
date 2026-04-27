@@ -20,18 +20,19 @@ class main_simulation_engine:
             case "Auto":
                 #work for 8 hours
                 TaskGen.assign_task(employees, Attendance, day)
-                for i in range(8):
+                for _ in range(8):
                     for employee in employees:
                         TaskGen.do_task(employee)
                 TaskGen.overtime_check(employees, Attendance, day)
                 TaskGen.complete_task(inventory)
             case "Manual":
                 TaskGen.assign_task_manual(employees, Attendance, day, company)
-                for employee in employees:
-                    if employee.working == False:
-                        TaskGen.assign_task_manual_individual(employee)
-                    else:
-                        TaskGen.do_task(employee)
+                for _ in range(8):
+                    for employee in employees:
+                        if employee.working == False:
+                            if not TaskGen.task_list:
+                                break
+                            TaskGen.assign_task_manual_individual(employee)
                 TaskGen.overtime_check(employees, Attendance, day)
                 TaskGen.complete_task(inventory)
                 

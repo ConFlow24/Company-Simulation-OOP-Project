@@ -36,7 +36,6 @@ class TaskSystems:
 
             emp = random.choice(available_employees)
             task.assigned_to = emp
-            task.duration = random.randint(*self.size_lookup[task.size])
 
             emp.working = True
             self.doing_tasks.append(task)
@@ -59,19 +58,27 @@ class TaskSystems:
 
             company.list_employees()
             while True:
-                emp = input("Enter an employee from the list:  ").strip()
-
-                employee = company.get_employee(emp)
+                name = input("Enter an employee from the list: ").strip()
+                employee = company.get_employee(name)
                 if employee is None:
                     print("Employee not found.")
-                else: break
+                else:
+                    found = False
+                    for emp in available_employees:
+                        if emp.name == employee.name:
+                            found = True
+                            break
+                    if not found:
+                        print("Employee is unavailable (absent, already working, or is CEO).")
+                    else:
+                        break
 
             task.assigned_to = employee
             task.duration = random.randint(*self.size_lookup[task.size])
 
-            emp.working = True
+            employee.working = True
             self.doing_tasks.append(task)
-            available_employees.remove(emp)
+            available_employees.remove(employee)
             self.task_list.remove(task)
 
     def assign_task_manual_individual(self, emp):
@@ -87,16 +94,16 @@ class TaskSystems:
             type = "Buy"
             name = random.choice(list(items))
             size = random.choice(["Small", "Medium", "Large"])
-            # duration = random.randint(*self.size_lookup[size]), duration is now set in assign_task
-            self.task_list.append(Task(type, name, size))#if error add duration param back
+            duration = random.randint(*self.size_lookup[size])
+            self.task_list.append(Task(type, name, size, duration))
 
     def generate_store_task(self):
         for task in self.store_list:
             type = "Store"
             name = task.get("name")
             size = task.get("size")
-            # duration = random.randint(*self.size_lookup[size])
-            self.task_list.append(Task(type, name, size))
+            duration = random.randint(*self.size_lookup[size])
+            self.task_list.append(Task(type, name, size, duration))
 
     def generate_sell_task(self, inventory):
         if inventory.items:
@@ -105,18 +112,21 @@ class TaskSystems:
                 item_to_sell = random.choice(list(inventory.items.keys()))
                 name = item_to_sell[name]
                 size = item_to_sell[name][size]
-                # duration = random.randint(*self.size_lookup[size])
-                self.task_list.append(Task(type, name, size))#duration, removed
+                duration = random.randint(*self.size_lookup[size])
+                self.task_list.append(Task(type, name, size, duration))
 
     def do_task(self, employee):
         for task in self.doing_tasks[:]:
             if task.assigned_to == employee:
                 task.progress += employee.speed
+                print(f"{employee} is progressing in \"{task.buy} - {task.name}\"")
+
                 if task.progress >= task.duration:
                     self.completed_tasks.append(task)
                     self.doing_tasks.remove(task)
                     employee.tasks_completed += 1
                     employee.working = False
+                    print(f"{employee} has completed \"{task.buy} - {task.name}\"")
                     break
     
     def overtime_check(self, employees, attendance, day):

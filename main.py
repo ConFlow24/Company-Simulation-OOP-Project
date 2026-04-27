@@ -63,6 +63,7 @@ while True:
 Input choice: """)
             match End_day_choice:
                 case "1":
+                    day += 1
                     break
                     #start next day
                 case "2":
