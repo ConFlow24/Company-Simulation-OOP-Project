@@ -26,6 +26,7 @@ class Company:
         print("\n--- Employees ---")
         for emp in self.employees:
             print(f"{emp.name} | {emp.role} | {emp.pay:,}")
+        print("\n")
 
     def advance_day(self):
         self.day += 1

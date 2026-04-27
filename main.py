@@ -53,7 +53,9 @@ while True:
 
 
     while True:
-            End_day_choice = input(f"""1. Start next day
+            End_day_choice = input(f"""
+--- End of Day Choices ---
+1. Start next day
 2. Open CEO panel
 3. View reports
 4. View Inventory

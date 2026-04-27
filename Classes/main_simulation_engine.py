@@ -27,13 +27,12 @@ class main_simulation_engine:
                 TaskGen.complete_task(inventory)
             case "Manual":
                 TaskGen.assign_task_manual(employees, Attendance, day, company)
-                for _ in range(8):
+                for i in range(8):
                     for employee in employees:
                         TaskGen.do_task(employee)
-                        if employee.working == False:
-                            if not TaskGen.task_list:
-                                break
-                            TaskGen.assign_task_manual_individual(employee)
+                        if not employee.working:
+                            if TaskGen.task_list:
+                                TaskGen.assign_task_manual_individual(employee)
                 TaskGen.overtime_check(employees, Attendance, day)
                 TaskGen.complete_task(inventory)
                 

@@ -106,30 +106,49 @@ class TaskSystems:
             self.task_list.append(Task(type, name, size, duration))
 
     def generate_sell_task(self, inventory, order_spike=False):
-        if inventory.items:
-            task_amount = len(inventory.items) // 3
-            if order_spike:
-                task_amount *= 4
-            for _ in range(task_amount): #generate sell tasks based on the number of items in inventory, but not more than half of the total items
-                type = "Sell"
-                item_to_sell = random.choice(list(inventory.items.keys()))
-                name = item_to_sell[item_to_sell.name]
-                size = item_to_sell[item_to_sell.name][size]
-                duration = random.randint(*self.size_lookup[size])
-                self.task_list.append(Task(type, name, size, duration))
+        actual_items = {}
+        for name, stock in inventory.items.items():
+            has_stock = False
+            for size in ["Small", "Medium", "Large"]:
+                if stock[size] > 0:
+                    has_stock = True
+                    break
+            if has_stock:
+                actual_items[name] = stock
+
+        if not actual_items:
+            return
+
+        task_amount = len(inventory.items) // 3
+        if order_spike:
+            task_amount *= 4
+        for _ in range(task_amount): #generate sell tasks based on the number of items in inventory, but not more than half of the total items
+            type = "Sell"
+            item_to_sell = random.choice(list(inventory.items.keys()))
+            name = inventory.items[item_to_sell]
+            size_choices = ["Small", "Medium", "Large"]
+            while True:
+                size = random.choice(size_choices)
+                if inventory.items[item_to_sell][size] == 0:
+                    size_choices.remove(size)
+                else:
+                    break
+                
+            duration = random.randint(*self.size_lookup[size])
+            self.task_list.append(Task(type, name, size, duration))
 
     def do_task(self, employee):
         for task in self.doing_tasks[:]:
             if task.assigned_to == employee:
                 task.progress += employee.speed
-                print(f"{employee} is progressing in \"{task.buy} - {task.name}\"")
+                print(f"{employee.name} is progressing in \"{task.type} - {task.name}\"")
 
                 if task.progress >= task.duration:
                     self.completed_tasks.append(task)
                     self.doing_tasks.remove(task)
                     employee.tasks_completed += 1
                     employee.working = False
-                    print(f"{employee} has completed \"{task.buy} - {task.name}\"")
+                    print(f"{employee.name} has completed \"{task.type} - {task.name}\"")
                     break
     
     def overtime_check(self, employees, attendance, day):
