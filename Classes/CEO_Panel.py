@@ -5,7 +5,7 @@ from Classes.task_generator import items
 class CEOPanel:
     # Employee Options
     def hire_employee(self, company, emp_gen):
-        candidates = emp_gen.generate_candidates(3)
+        candidates = emp_gen.generate_employee(3)
 
         print("\n--- Candidates ---")
         for i, emp in enumerate(candidates, 1):
