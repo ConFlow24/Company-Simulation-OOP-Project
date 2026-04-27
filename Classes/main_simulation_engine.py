@@ -8,12 +8,12 @@ class main_simulation_engine:
         for employee in employees:
             Attendance.clock_in(day, employee.name)
         print("Attendance for", end=" ")
-        Attendance.show_attendance()
+        Attendance.show_attendance(day)
 
         #tasks
         TaskGen.generate_buy_task(employees)
-        TaskGen.generate_store_task(employees)
-        TaskGen.generate_sell_task(employees, inventory)
+        TaskGen.generate_store_task()
+        TaskGen.generate_sell_task(inventory)
         print("Tasks for the day:")
         TaskGen.show_tasks()
         match control_type:

@@ -50,5 +50,5 @@ Cash: {self.inventory.cash:,.2f}
 \n--- Employees ---\n""")
 
         for emp in self.employees:
-            print(f"{emp.name} | {emp.role} | {emp.pay:,.2f} | Tasks: {emp.tasks_completed} | Late: {emp.late_count} | Absent: {emp.absent_count}")
+            print(f"{emp.name} | {emp.role} | {emp.pay:,.2f} |")# Tasks: {emp.tasks_completed} | Late: {emp.late_count} | Absent: {emp.absent_count}, removed
         #add inventory report and task report here

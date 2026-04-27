@@ -30,11 +30,16 @@ class Attendance:
                 total_hours += employees[employee_name]["hours_worked"]
         return total_hours
 
-    def show_attendance(self):
-        for day, employees in self.records.items():
-            print(f"Day {day}:")
-            for employee_name, record in employees.items():
-                print(f"  {employee_name}: {record['status']}")
+    # def show_attendance(self, day):
+    #     for day, employees in self.records.items():
+    #         print(f"Day {day}:")
+    #         for employee_name, record in employees.items():
+    #             print(f"  {employee_name}: {record['status']}")
+    
+    def show_attendance(self, day):
+        print(f"Day {day}:")
+        for employee_name, record in self.records[day].items():
+            print(f"  {employee_name}: {record['status']}")
 
 class Salary:
     def __init__(self):
@@ -49,18 +54,18 @@ class Salary:
         return employee.pay
 
     def apply_deduction(self, employee, deduction = 1000):
-        if employee.late_count > 6:
+        if self.records[employee]["late_count"] > 6:
             if employee.pay > 1000:
                 employee.pay -= deduction
                 self.salary_record[employee]["Deductions"] -= deduction
-                employee.late_count = 0 # reset late count after applying deduction
+                self.records[employee]["late_count"] = 0 # reset late count after applying deduction
             else:
                 return "Employee's salary cannot be any lower than 1000."
-        if employee.absent_count > 3:
+        if self.records[employee]["absent_count"] > 3:
             if employee.pay > 1000:
                 employee.pay -= deduction
                 self.salary_record[employee]["Deductions"] -= deduction
-                employee.absent_count = 0 # reset absent count after applying deduction
+                self.records[employee]["absent_count"] = 0 # reset absent count after applying deduction
             else:
                 return "Employee's salary cannot be any lower than 1000."
             

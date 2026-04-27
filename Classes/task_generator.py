@@ -66,7 +66,7 @@ class TaskSystems:
                     print("Employee not found.")
                 else: break
 
-            task.assigned_to = emp
+            task.assigned_to = employee
             task.duration = random.randint(*self.size_lookup[task.size])
 
             emp.working = True
@@ -87,26 +87,26 @@ class TaskSystems:
             type = "Buy"
             name = random.choice(list(items))
             size = random.choice(["Small", "Medium", "Large"])
-            duration = random.randint(*self.size_lookup[size])
-            self.task_list.append(Task(type, name, size, duration))
+            # duration = random.randint(*self.size_lookup[size]), duration is now set in assign_task
+            self.task_list.append(Task(type, name, size))#if error add duration param back
 
-    def generate_store_task(self, employees):
+    def generate_store_task(self):
         for task in self.store_list:
             type = "Store"
             name = task.get("name")
             size = task.get("size")
-            duration = random.randint(*self.size_lookup[size])
-            self.task_list.append(Task(type, name, size, duration))
+            # duration = random.randint(*self.size_lookup[size])
+            self.task_list.append(Task(type, name, size))
 
-    def generate_sell_task(self, employees, inventory):
+    def generate_sell_task(self, inventory):
         if inventory.items:
             for _ in range(len(inventory.items) // 3): #generate sell tasks based on the number of items in inventory, but not more than half of the total items
                 type = "Sell"
                 item_to_sell = random.choice(list(inventory.items.keys()))
                 name = item_to_sell[name]
                 size = item_to_sell[name][size]
-                duration = random.randint(*self.size_lookup[size])
-                self.task_list.append(Task(type, name, size, duration))
+                # duration = random.randint(*self.size_lookup[size])
+                self.task_list.append(Task(type, name, size))#duration, removed
 
     def do_task(self, employee):
         for task in self.doing_tasks[:]:
