@@ -135,11 +135,11 @@ class TaskSystems:
             match task.type:
                 case "Buy":
                     self.store_list.append({"name": task.name, "size": task.size, "quantity": 1})
-                    inventory.money -= inventory.get_price(task.name, task.size)
+                    inventory.cash -= inventory.get_price(task.name, task.size)
                     self.completed_tasks.remove(task)
                 case "Sell":
                     inventory.remove_item(task.name, task.size, 1)
-                    inventory.money += inventory.get_price(task.name, task.size) * 1.2 #sell for 20% profit
+                    inventory.cash += inventory.get_price(task.name, task.size) * 1.2 #sell for 20% profit
                     self.completed_tasks.remove(task)
                 case "Store":
                     for item in self.store_list:

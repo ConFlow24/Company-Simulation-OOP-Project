@@ -29,7 +29,7 @@ class main_simulation_engine:
                 TaskGen.assign_task_manual(employees, Attendance, day, company)
                 for employee in employees:
                     if employee.working == False:
-                        TaskGen.assign_task_manual(employees, Attendance, day, company)
+                        TaskGen.assign_task_manual_individual(employee)
                     else:
                         TaskGen.do_task(employee)
                 TaskGen.overtime_check(employees, Attendance, day)
