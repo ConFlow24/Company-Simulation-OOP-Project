@@ -125,14 +125,16 @@ class TaskSystems:
         for _ in range(task_amount): #generate sell tasks based on the number of items in inventory, but not more than half of the total items
             type = "Sell"
             item_to_sell = random.choice(list(inventory.items.keys()))
-            name = inventory.items[item_to_sell]
+            name = item_to_sell
             size_choices = ["Small", "Medium", "Large"]
-            while True:
+            while size_choices:
                 size = random.choice(size_choices)
                 if inventory.items[item_to_sell][size] == 0:
                     size_choices.remove(size)
                 else:
                     break
+            else:
+                continue
                 
             duration = random.randint(*self.size_lookup[size])
             self.task_list.append(Task(type, name, size, duration))
@@ -141,7 +143,7 @@ class TaskSystems:
         for task in self.doing_tasks[:]:
             if task.assigned_to == employee:
                 task.progress += employee.speed
-                print(f"{employee.name} is progressing in \"{task.type} - {task.name}\"")
+                print(f"{employee.name} is progressing in \"{task.type} - {task.name}\". Progress left {task.duration - task.progress}")
 
                 if task.progress >= task.duration:
                     self.completed_tasks.append(task)
@@ -176,7 +178,7 @@ class TaskSystems:
                 case "Store":
                     for item in self.store_list:
                         if item["name"] == task.name and item["size"] == task.size:
-                            inventory.add_item(task.name, task.size, item["quantity"], inventory.get_price(task.name, task.size))
+                            inventory.add_item(task.name, task.size, item["quantity"])
                             self.store_list.remove(item)
                             break
                     self.completed_tasks.remove(task)
