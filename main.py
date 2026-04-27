@@ -69,7 +69,7 @@ Input choice: """)
                     break
                     #start next day
                 case "2":
-                    CEOPanel.show_panel(company, EmpGen, inventory)
+                    CEOPanel.show_panel(company, inventory)
                 case "3":
                     company.show_full_report()
                 case "4":

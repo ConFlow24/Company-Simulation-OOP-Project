@@ -17,7 +17,7 @@ class Inventory:
 
     def get_price(self, name, size):
         size_multipliers = {"Small": 1, "Medium": 1.5, "Large": 2}
-        return self.items[name]["Base Price"] * size_multipliers.get(size, 1)
+        return items[name] * size_multipliers.get(size, 1)
     
     def total_stock_and_price(self):
         total_stock = 0
