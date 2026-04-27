@@ -105,9 +105,12 @@ class TaskSystems:
             duration = random.randint(*self.size_lookup[size])
             self.task_list.append(Task(type, name, size, duration))
 
-    def generate_sell_task(self, inventory):
+    def generate_sell_task(self, employees, inventory, order_spike=False):
         if inventory.items:
-            for _ in range(len(inventory.items) // 3): #generate sell tasks based on the number of items in inventory, but not more than half of the total items
+            task_amount = len(inventory.items) // 3
+            if order_spike:
+                task_amount *= 4
+            for _ in range(task_amount): #generate sell tasks based on the number of items in inventory, but not more than half of the total items
                 type = "Sell"
                 item_to_sell = random.choice(list(inventory.items.keys()))
                 name = item_to_sell[name]
