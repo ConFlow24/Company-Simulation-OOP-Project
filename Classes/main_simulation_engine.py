@@ -29,6 +29,7 @@ class main_simulation_engine:
                 TaskGen.assign_task_manual(employees, Attendance, day, company)
                 for _ in range(8):
                     for employee in employees:
+                        TaskGen.do_task(employee)
                         if employee.working == False:
                             if not TaskGen.task_list:
                                 break
