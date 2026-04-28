@@ -24,8 +24,18 @@ class Company:
 
     def list_employees(self):
         print("\n--- Employees ---")
+        print(f"{'Name':<15} {'Role':<15} {'Pay':>10} {'Speed':>8} {'Punctuality':>12}")
+        print("-" * 65)
         for emp in self.employees:
-            print(f"{emp.name} | {emp.role} | {emp.pay:,}")
+            print(f"{emp.name:<15} {emp.role:<15} {emp.pay:>10,} {emp.speed:>8} {emp.punctuality:>12}")
+        print("\n")
+
+    def list_available_employees(self, available_emps):
+        print("\n--- Employees ---")
+        print(f"{'Name':<22} {'Role':<18} {'Pay':>8} {'Speed':>6} {'Punctuality':>11}")
+        print("-" * 70)
+        for emp in available_emps:
+            print(f"{emp.name:<22} {emp.role:<18} {emp.pay:>8,} {emp.speed:>6} {emp.punctuality:>11}")
         print("\n")
 
     def advance_day(self):
@@ -53,3 +63,8 @@ Cash: {self.inventory.cash:,.2f}
         for emp in self.employees:
             print(f"{emp.name} | {emp.role} | {emp.pay:,.2f} |")# Tasks: {emp.tasks_completed} | Late: {emp.late_count} | Absent: {emp.absent_count}, removed
         #add inventory report and task report here
+
+    def upgrade_employee(self):
+        for employee in self.employees:
+            employee.upgrade_stats()
+            employee.check_promotion()

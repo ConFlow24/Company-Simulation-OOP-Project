@@ -5,13 +5,20 @@ class Attendance:
         # Yung init, purpose niya mag-store ng employee id, status (present or not), hours worked, late, overtime hours using dictionary.
         self.records = defaultdict(lambda: defaultdict(dict)) # per employee has status, hours worked, overtime hours. defaultdict automatically makes keys for no errors, lambda para pwede nested dicts
         # has total lates and absences for each employee for salary deductions and bonuses.
-    def clock_in(self, day, employee_name):# day is from day generator when implemented into the manin program
+    def clock_in(self, day, employee_name, employee_punct):# day is from day generator when implemented into the manin program
         attendance_list = ["Present", "Late", "Absent"]
-        weights = [0.9, 0.07, 0.03]
+        if employee_punct == 1:
+            weights = [0.9, 0.07, 0.03]
+        elif employee_punct == 2:
+            weights = [1, 0, 0]
+        elif employee_punct < 1:
+            punctuality_mult = abs(employee_punct) * 0.1
+            weights = [0.9-punctuality_mult, 0.07 + punctuality_mult*0.7, 0.03 + punctuality_mult*0.3]
         attendance = random.choices(attendance_list, weights=weights, k=1)[0] #weighted randomness
         self.records[day][employee_name] = {
             "status": attendance
         }
+
         match attendance:
             case "Present":
                 self.records[day][employee_name]["hours_worked"] = 8
@@ -29,12 +36,6 @@ class Attendance:
             if employee_name in employees:
                 total_hours += employees[employee_name]["hours_worked"]
         return total_hours
-
-    # def show_attendance(self, day):
-    #     for day, employees in self.records.items():
-    #         print(f"Day {day}:")
-    #         for employee_name, record in employees.items():
-    #             print(f"  {employee_name}: {record['status']}")
     
     def show_attendance(self, day):
         print(f"Day {day}:")

@@ -32,7 +32,7 @@ while True:
         initial_comp_size = int(input("How many employees to start with(5-10): "))
         if 5 <= initial_comp_size <= 10:
             EmpGen.generate_employee(initial_comp_size, company)
-            EmpGen.print_employees()
+            company.list_employees()
             break
         else:
             print("Invalid input. Please enter a number between 5 and 10.")

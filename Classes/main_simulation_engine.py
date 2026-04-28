@@ -6,7 +6,7 @@ class main_simulation_engine:
         print(f"\nDay {day}\n")
         #generate attendance for each employee
         for employee in employees:
-            Attendance.clock_in(day, employee.name)
+            Attendance.clock_in(day, employee.name, employee.punctuality)
         print("Attendance for", end=" ")
         Attendance.show_attendance(day)
 
@@ -25,6 +25,7 @@ class main_simulation_engine:
                         TaskGen.do_task(employee)
                 TaskGen.overtime_check(employees, Attendance, day)
                 TaskGen.complete_task(inventory)
+                company.upgrade_employee()
             case "Manual":
                 TaskGen.assign_task_manual(employees, Attendance, day, company)
                 for i in range(8):
@@ -35,6 +36,7 @@ class main_simulation_engine:
                                 TaskGen.assign_task_manual_individual(employee)
                 TaskGen.overtime_check(employees, Attendance, day)
                 TaskGen.complete_task(inventory)
+                company.upgrade_employee()
                 
         #show End of day menu
         

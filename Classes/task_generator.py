@@ -56,9 +56,9 @@ class TaskSystems:
             if not available_employees:
                 break
 
-            company.list_employees()
+            company.list_available_employees(available_employees)
             while True:
-                name = input("Enter an employee from the list: ").strip()
+                name = input(f"Enter an employee from the list to complete \"{task.type} - {task.name.title()}\": ").strip()
                 employee = company.get_employee(name)
                 if employee is None:
                     print("Employee not found.")
@@ -185,5 +185,8 @@ class TaskSystems:
 
     def show_tasks(self):
         print("\n--- Tasks ---")
+        print(f"{'Type':<10} {'Name':<15} {'Size':<10} {'Duration':>10} {'Assigned To':<20}")
+        print("-" * 70)
         for task in self.task_list:
-            print(f"{task.type} | {task.name} | {task.size} | Duration: {task.duration} | Assigned to: {task.assigned_to.name if task.assigned_to else 'Unassigned'}")
+            assigned = task.assigned_to.name if task.assigned_to else "Unassigned"
+            print(f"{task.type:<10} {task.name.title():<15} {task.size:<10} {task.duration:>10} {assigned:<20}")
