@@ -143,14 +143,14 @@ class TaskSystems:
         for task in self.doing_tasks[:]:
             if task.assigned_to == employee:
                 task.progress += employee.speed
-                print(f"{employee.name} is progressing in \"{task.type} - {task.name}\". Progress left {task.duration - task.progress}")
+                print(f"{employee.name} is progressing in \"{task.type} - {task.name.title()}\". Progress left {max(0, task.duration - task.progress)}")
 
                 if task.progress >= task.duration:
                     self.completed_tasks.append(task)
                     self.doing_tasks.remove(task)
                     employee.tasks_completed += 1
                     employee.working = False
-                    print(f"{employee.name} has completed \"{task.type} - {task.name}\"")
+                    print(f"{employee.name} has completed \"{task.type} - {task.name.title()}\"")
                     break
     
     def overtime_check(self, employees, attendance, day):
