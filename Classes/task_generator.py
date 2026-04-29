@@ -54,34 +54,6 @@ class TaskSystems:
                 continue
 
             available_employees.append(emp)
-        # for task in self.task_list[:]:
-        #     if not available_employees:
-        #         break
-            
-        #     company.list_available_employees(available_employees)
-            
-        #     while True:
-        #         name = input(f"Enter an employee from the list to complete \"{task.type} - {task.name.title()}\": ").strip()
-        #         employee = company.get_employee(name)
-        #         if employee is None:
-        #             print("Employee not found.")
-        #         else:
-        #             found = False
-        #             for emp in available_employees:
-        #                 if emp.name == employee.name:
-        #                     found = True
-        #                     break
-        #             if not found:
-        #                 print("Employee is unavailable (absent, already working, or is CEO).")
-        #             else:
-        #                 break
-
-        #     task.assigned_to = employee
-
-        #     employee.working = True
-        #     self.doing_tasks.append(task)
-        #     available_employees.remove(employee)
-        #     self.task_list.remove(task)
         while self.task_list and available_employees:
         # pick task
             print("\n--- Unassigned Tasks ---")
