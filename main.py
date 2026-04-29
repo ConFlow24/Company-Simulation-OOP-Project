@@ -65,6 +65,7 @@ while True:
 6. Enable Auto Simulation
 7. Exit Simulation
 {'=' * 70}
+
 Input choice: """)
 
         match End_day_choice:
@@ -83,6 +84,9 @@ Input choice: """)
             case "6":
                 amount = int(
                     input("\nEnter number of days to automatically assign tasks: "))
+                print(f"\nAuto Simulation set to {amount} day(s).")
+                print(
+                    "Select Option 1 (Start Next Day) to begin automatic simulation.")
                 auto_days = amount
             case "7":
                 print(f"""
