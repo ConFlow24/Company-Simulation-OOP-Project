@@ -22,32 +22,44 @@ class Employee:
 
     def check_promotion(self):
         if self.role == "Intern" and self.tasks_completed >= promotion_threshold["Intern"]:
-            choice = input(f"""{self.name} is ready for promotion!
-Do you want to promote {self.name} to an Employee(y/n): """).lower()
-            match choice:
-                case "y":
-                    self.role = "Employee"
-                    print(f"{self.name} is now an Employee.")
-                case "n":
-                    print(f"You have not promoted {self.name}.")
+            while True:
+                choice = input(f"{self.name} is ready for promotion! Promote to Employee? (y/n): ").lower()
+                match choice:
+                    case "y":
+                        self.role = "Employee"
+                        print(f"{self.name} is now an Employee.")
+                        break
+                    case "n":
+                        print(f"You have not promoted {self.name}.")
+                        break
+                    case _:
+                        print("Invalid input. Enter y or n.")
         elif self.role == "Employee" and self.tasks_completed >= promotion_threshold["Employee"]:
-            choice = input(f"""{self.name} is ready for promotion!
-Do you want to promote {self.name} to an Senior(y/n): """).lower()
-            match choice:
-                case "y":
-                    self.role = "Senior"
-                    print(f"{self.name} is now a Senior.")
-                case "n":
-                    print(f"You have not promoted {self.name}.")
+            while True:
+                choice = input(f"{self.name} is ready for promotion! Promote to Senior? (y/n): ").lower()
+                match choice:
+                    case "y":
+                        self.role = "Senior"
+                        print(f"{self.name} is now a Senior.")
+                        break
+                    case "n":
+                        print(f"You have not promoted {self.name}.")
+                        break
+                    case _:
+                        print("Invalid input. Enter y or n.")
         elif self.role == "Senior" and self.tasks_completed >= promotion_threshold["Senior"]:
-            choice = input(f"""{self.name} is ready for promotion!
-Do you want to promote {self.name} to a Manager(y/n): """).lower()
-            match choice:
-                case "y":
-                    self.role = "Manager"
-                    print(f"{self.name} is now a Manager.")
-                case "n":
-                    print(f"You have not promoted {self.name}.")
+            while True:
+                choice = input(f"{self.name} is ready for promotion! Promote to Manager? (y/n): ").lower()
+                match choice:
+                    case "y":
+                        self.role = "Manager"
+                        print(f"{self.name} is now a Manager.")
+                        break
+                    case "n":
+                        print(f"You have not promoted {self.name}.")
+                        break
+                    case _:
+                        print("Invalid input. Enter y or n.")
 
 
 class Manager(Employee):

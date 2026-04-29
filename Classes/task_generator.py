@@ -78,7 +78,7 @@ class TaskSystems:
             company.list_available_employees(available_employees)
             while True:
                 try:
-                    emp_choice = int(input(f"Pick an employee for \"{task.type} - {task.name.title()}\": "))
+                    emp_choice = int(input(f"Enter the number of an employee to work on \"{task.type} - {task.name.title()}\": "))
                     if 1 <= emp_choice <= len(available_employees):
                         employee = available_employees[emp_choice - 1]
                         break
@@ -88,12 +88,12 @@ class TaskSystems:
                     print("Invalid input.")
                     
 
-        task.assigned_to = employee
-        print(f"{task.type} - {task.name} has been assigned to {employee}")
-        employee.working = True
-        self.doing_tasks.append(task)
-        available_employees.remove(employee)
-        self.task_list.remove(task)
+            task.assigned_to = employee
+            print(f"{task.type} - {task.name} has been assigned to {employee.name}")
+            employee.working = True
+            self.doing_tasks.append(task)
+            available_employees.remove(employee)
+            self.task_list.remove(task)
 
     def assign_task_manual_individual(self, emp):
         print("\n--- Unassigned Tasks ---")

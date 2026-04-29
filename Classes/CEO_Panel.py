@@ -180,61 +180,50 @@ class CEOPanel:
             else:
                 inventory.add_item(item_list[int(choice) - 1][0], item_list[int(choice) - 1][1], 1)
                 inventory.cash -= inventory.get_price(item_list[int(choice) - 1][0], size)
-                print(f"You have bought {random_item.title()}.   |   Remaining cash {inventory.cash}")
+                print(f"You have bought {item_list[int(choice) - 1][0].title()}. | Remaining cash {inventory.cash}")
                 break
 
-    def sell_item(self, inventory):
+    def sell_item(self, inventory, sell=True):
         inventory.show_inventory()
         if not inventory.items:
-            print("No item yet.")
-        choice = input("Choose an item: ")
-        if choice not in inventory.items:
-            print("Invalid choice.")
+            print("No items yet.")
             return
-        choice_size = input("What size of the item (Small, Medium, Large): ")
-        if choice_size not in ["Small", "Medium", "Large"]:
-            print("Invalid size.")
-            return
-        if inventory.items[choice][choice_size] == 0:
-            print("No stock of that size. ")
-            return
-        try:
-            choice_amount = int(input("How many: "))
-        except ValueError: 
-                print("Invalid input.")
-        else: 
-            if choice_amount > inventory.items[choice][choice_size]:
-                print("Choice is larger than the amount in stock.")
-            elif choice_amount < 0:
-                print("Choice cannot be negative.")
-            else:
-                inventory.remove_item(choice, choice_size, choice_amount)
-                inventory.cash += inventory.get_price(choice, choice_size) * int(choice_amount)
 
-    def delete_item(self, inventory):
-        inventory.show_inventory()
-        choice = input("Choose an item: ")
-        if choice not in inventory.items:
+        while True:
+            choice = input("Choose an item: ").strip()
+            if choice in inventory.items:
+                break
             print("Invalid choice.")
-            return
-        choice_size = input("What size of the item (Small, Medium, Large): ")
-        if choice_size not in ["Small", "Medium", "Large"]:
+
+        while True:
+            choice_size = input("What size? (Small, Medium, Large): ").strip()
+            if choice_size in ["Small", "Medium", "Large"]:
+                break
             print("Invalid size.")
-            return
+
         if inventory.items[choice][choice_size] == 0:
-            print("No stock of that size. ")
+            print("No stock of that size.")
             return
-        try:
-            choice_amount = int(input("How many: "))
-        except ValueError: 
+
+        while True:
+            try:
+                choice_amount = int(input("How many: "))
+                if choice_amount <= 0:
+                    print("Amount must be positive.")
+                elif choice_amount > inventory.items[choice][choice_size]:
+                    print("Not enough stock.")
+                else:
+                    break
+            except ValueError:
                 print("Invalid input.")
-        else: 
-            if choice_amount > inventory.items[choice][choice_size]:
-                print("Choice is larger than the amount in stock.")
-            elif choice_amount < 0:
-                print("Choice cannot be negative.")
-            else:
-                inventory.remove_item(choice, choice_size, choice_amount)
+
+        inventory.remove_item(choice, choice_size, choice_amount)
+        if sell:
+            earned = inventory.get_price(choice, choice_size) * choice_amount
+            inventory.cash += earned
+            print(f"Sold {choice_amount}x {choice.title()} ({choice_size}) for ${earned:.2f}. Cash: ${inventory.cash:.2f}")
+        else:
+            print(f"Deleted {choice_amount}x {choice.title()} ({choice_size}) from inventory.")
 
     def show_panel(self, company, inventory, emp_gen):
         while True:
@@ -276,6 +265,6 @@ Choose (1-3): """)
                     match choice2:
                         case "1": self.buy_item(inventory)
                         case "2": self.sell_item(inventory)
-                        case "3": self.delete_item(inventory)
+                        case "3": self.sell_item(inventory, sell=False)
                         case _: print("Choice is not an option")
                 case _: break
