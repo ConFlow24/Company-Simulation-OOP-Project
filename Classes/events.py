@@ -40,3 +40,10 @@ class Event:
             if hasattr(emp, 'original_speed'):
                 emp.speed = emp.original_speed
                 del emp.original_speed
+                
+    def check_order_spike(self):
+        event_roll = random.randint(1, 100)
+        if event_roll <= 15:
+            print("\nRANDOM EVENT: Sudden spike in customer orders! Expect more sell tasks today.")
+            return True
+        return False
