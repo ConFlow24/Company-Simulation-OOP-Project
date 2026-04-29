@@ -18,7 +18,7 @@ class main_simulation_engine:
         #tasks
         TaskGen.generate_buy_task(employees)
         TaskGen.generate_store_task()
-        TaskGen.generate_sell_task(inventory)
+        TaskGen.generate_sell_task(inventory, order_spike=self.event_system.check_order_spike())
         TaskGen.show_tasks()
         match control_type:
             case "Auto":
