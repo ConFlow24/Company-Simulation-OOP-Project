@@ -29,15 +29,15 @@ class Inventory:
                     total_price += self.get_price(name, size) * quantity
         return total_stock, total_price
     
-def show_inventory(self):
-    print("\n" + "=" * 70)
-    print(f"{'INVENTORY':^70}")
-    print("=" * 70)
-    if self.items:
-        print(f"{'Item Name':<20} {'Small':>10} {'Medium':>10} {'Large':>10} {'Base Price':>15}")
+    def show_inventory(self):
+        print("\n" + "=" * 70)
+        print(f"{'INVENTORY':^70}")
         print("=" * 70)
-        for name, sizes in self.items.items():
-            print(f"{name.title():<20} {sizes['Small']:>10} {sizes['Medium']:>10} {sizes['Large']:>10} {sizes['Base Price']:>15.2f}")
-    else:
-        print(f"{'No items yet':^70}")
-    print("=" * 70 + "\n")
+        if self.items:
+            print(f"{'Item Name':<20} {'Small':>10} {'Medium':>10} {'Large':>10} {'Base Price':>15}")
+            print("=" * 70)
+            for name, sizes in self.items.items():
+                print(f"{name.title():<20} {sizes['Small']:>10} {sizes['Medium']:>10} {sizes['Large']:>10} {sizes['Base Price']:>15.2f}")
+        else:
+            print(f"{'No items yet':^70}")
+        print("=" * 70 + "\n")
