@@ -81,7 +81,8 @@ Input choice: """)
             case "5":
                 company.list_employees()
             case "6":
-                amount = int(input("\nEnter number of days to automatically assign tasks: "))
+                amount = int(
+                    input("\nEnter number of days to automatically assign tasks: "))
                 auto_days = amount
             case "7":
                 print(f"""
