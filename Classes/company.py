@@ -66,21 +66,20 @@ class Company:
         print(f"Cash: {self.inventory.cash:,.2f}")
 
     def show_full_report(self, day):
-        print("\n" + "=" * 70)
-        print(f"{'COMPANY REPORT':^70}")
-        print("=" * 70)
-        print(f"{'Company Name:':<20} {self.name}")
-        print(f"{'Days Simulated:':<20} {day}")
-        print(f"{'Total Employees:':<20} {len(self.employees)}")
-        print(f"{'Cash:':<20} {self.inventory.cash:,.2f}")
         stock, price = self.inventory.total_stock_and_price()
-        print(f"{'Items in Inventory:':<20} {stock}")
-        print(f"{'Inventory Value:':<20} {price:,.2f}")
-        print("=" * 70)
-        print(f"{'EMPLOYEE LIST':^70}")
-        print("=" * 70)
-        print(f"{'Name':<30} {'Role':<20} {'Pay':>18}")
-        print("-" * 70)
+        print("\n" +"=" * 70 +
+f"\n{'COMPANY REPORT':^70}" +
+"=" * 70 + f"""
+{'Company Name:':<20} {self.name}
+{'Days Simulated:':<20} {day}
+{'Total Employees:':<20} {len(self.employees)}
+{'Cash:':<20} {self.inventory.cash:,.2f}
+{'Items in Inventory:':<20} {stock}
+{'Inventory Value:':<20} {price:,.2f}\n""" +
+"=" * 70 +
+f"\n{'EMPLOYEE LIST':^70}\n" +
+"=" * 70 +
+f"\n{'Name':<30} {'Role':<20} {'Pay':>18}\n" + "-" * 70)
         for emp in self.employees:
             print(f"{emp.name:<30} {emp.role:<20} {emp.pay:>18,.2f}")
         print("=" * 70 + "\n")

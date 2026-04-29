@@ -64,7 +64,7 @@ class Salary:
         # If worked hours more than 12 hours add 15% for bonus.
         if attendance.records[day][employee.name]["hours_worked"] > 10:
             employee.pay += bonus
-            attendance.salary_record[employee.name]["Bonuses"] += bonus
+            self.salary_record[employee.name]["Bonuses"] += bonus
 
         return employee.pay
 
