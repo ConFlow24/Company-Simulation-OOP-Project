@@ -79,12 +79,23 @@ Input choice: """)
             case "5":
                 company.list_employees()
             case "6":
-                amount = int(input("Enter number of days to simulate: "))
+                amount = int(input("\nEnter number of days to simulate: "))
                 auto_days = amount
             case "7":
-                print("Thank you for using this programs!")
+                print(f"""
+=====================================
+   SIMULATION ENDED
+=====================================
+   Company  : {company.name}
+   Days Run : {day}
+   Cash Left: {inventory.cash:,.2f}
+   Employees: {len(company.employees)}
+=====================================
+   Thank you for playing!
+=====================================
+""")
                 exit()
             case _:
-                print("Input not in choices. Starting next day...")
+                print("\nInput not in choices. Starting next day...")
                 day += 1
                 break

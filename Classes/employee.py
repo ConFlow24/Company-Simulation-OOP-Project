@@ -5,7 +5,7 @@ promotion_threshold = {"Intern": 10,
 
 
 class Employee:
-    def __init__(self, name="John Doe", role="Employee", pay=50000, speed=1, punctuality=1, total_hours=0, tasks_completed=0, working = False):
+    def __init__(self, name="John Doe", role="Employee", pay=50000, speed=1, punctuality=1, total_hours=0, tasks_completed=0, working=False):
         self.name = name
         self.role = role
         self.pay = pay

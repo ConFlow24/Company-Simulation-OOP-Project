@@ -222,12 +222,14 @@ class TaskSystems:
             print("\nYou have too many tasks per employee. Consider hiring more employees, through the CEO Panel.\n")
 
     def show_tasks(self):
-        print("\n--- Tasks ---")
+        print("\n" + "=" * 70)
+        print(f"{'TASKS FOR THE DAY':^70}")
+        print("=" * 70)
         print(
             f"{'Type':<10} {'Name':<15} {'Size':<10} {'Duration':>10} {'Assigned To':<20}")
-        print("-" * 70)
+        print("=" * 70)
         for task in self.task_list:
             assigned = task.assigned_to.name if task.assigned_to else "Unassigned"
             print(
                 f"{task.type:<10} {task.name.title():<15} {task.size:<10} {task.duration:>10} {assigned:<20}")
-        print("-" * 70 + "\n")
+        print("=" * 70 + "\n")
