@@ -32,4 +32,6 @@ class Event:
             speed_modifier = 1.0
 
         for emp in employees:
+            emp_speed_original = emp.speed
             emp.speed = int(emp.speed * speed_modifier)
+            #ibalik yung emp speed pagkatapos ng event

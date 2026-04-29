@@ -26,7 +26,7 @@ class main_simulation_engine:
                         TaskGen.do_task(employee)
                 TaskGen.overtime_check(Attendance, day)
                 TaskGen.complete_task(inventory)
-                company.upgrade_employee()
+                company.upgrade_employee(day)
                 TaskGen.task_to_employee_ratio_check(employees)
             case "Manual":
                 TaskGen.task_to_employee_ratio_check(employees)

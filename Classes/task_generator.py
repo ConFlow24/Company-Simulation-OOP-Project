@@ -155,7 +155,7 @@ class TaskSystems:
         # generate sell tasks based on the number of items in inventory, but not more than half of the total items
         for _ in range(task_amount):
             type = "Sell"
-            item_to_sell = random.choice(list(inventory.items.keys()))
+            item_to_sell = random.choice(list(actual_items.keys()))
             name = item_to_sell
             size_choices = ["Small", "Medium", "Large"]
             while size_choices:

@@ -6,7 +6,7 @@ from Classes.employee_generator import EmpGen
 class CEOPanel:
     
     # Employee Options
-    def hire_employee(self, company):
+    def hire_employee(self, company, empgen):
         Emp_Gen = EmpGen()
         Emp_Gen.roles = ["Employee", "Intern"]
         Emp_Gen.weights = [0.8, 0.2]
@@ -26,7 +26,7 @@ class CEOPanel:
             else: break
 
         chosen = candidates[int(choice) - 1]
-        Emp_Gen.employees.append(chosen)
+        empgen.employees.append(chosen)
         company.add_employee(chosen)
         print(f"{chosen.name} hired as {chosen.role}!")
 
@@ -228,7 +228,7 @@ Choose (1-4): """)
 4. Demote employee
 Choose (1-4): """)
                     match choice2:
-                        case "1": self.hire_employee(company)
+                        case "1": self.hire_employee(company, emp_gen)
                         case "2": self.fire_employee(company, emp_gen)
                         case "3": self.promote_employee(company)
                         case "4": self.demote_employee(company)
@@ -251,6 +251,6 @@ Choose (1-3): """)
                     match choice2:
                         case "1": self.buy_item(inventory)
                         case "2": self.sell_item(inventory, company)
-                        case "3": self.sell_item(inventory, sell=False)
+                        case "3": self.sell_item(inventory, company, sell=False)
                         case _: print("Choice is not an option")
                 case _: break

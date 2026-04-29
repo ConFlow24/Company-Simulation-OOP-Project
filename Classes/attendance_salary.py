@@ -39,8 +39,11 @@ class Attendance:
     def get_total_work_hours(self, employee_name):
         total_hours = 0
         for day, employees in self.records.items():
+            # if day is not an integer, to avoid key errors and crashes
+            if not isinstance(day, int):
+                continue
             if employee_name in employees:
-                total_hours += employees[employee_name]["hours_worked"]
+                total_hours += employees[employee_name].get("hours_worked", 0)
         return total_hours
     
     def show_attendance(self, day):
@@ -50,13 +53,13 @@ class Attendance:
 
 class Salary:
     def __init__(self):
-        self.salary_record = defaultdict(lambda: defaultdict(dict))
+        self.salary_record = defaultdict(lambda: defaultdict(int))
 
     def apply_bonus(self, employee, attendance, day, bonus = 1000):
         # If worked hours more than 12 hours add 15% for bonus.
         if attendance.records[day][employee.name]["hours_worked"] > 10:
             employee.pay += bonus
-            self.salary_record[employee.name]["Bonuses"] += bonus
+            attendance.salary_record[employee.name]["Bonuses"] += bonus
 
         return employee.pay
 
@@ -65,14 +68,14 @@ class Salary:
             if employee.pay > 1000:
                 employee.pay -= deduction
                 self.salary_record[employee.name]["Deductions"] -= deduction
-                self.records[employee.name]["late_count"] = 0 # reset late count after applying deduction
+                attendance.records[employee.name]["late_count"] = 0 # reset late count after applying deduction
             else:
                 return "Employee's salary cannot be any lower than 1000."
         if attendance.records[employee.name].get("absent_count", 0) > 3:
             if employee.pay > 1000:
                 employee.pay -= deduction
                 self.salary_record[employee.name]["Deductions"] -= deduction
-                self.records[employee.name]["absent_count"] = 0 # reset absent count after applying deduction
+                attendance.records[employee.name]["absent_count"] = 0 # reset absent count after applying deduction
             else:
                 return "Employee's salary cannot be any lower than 1000."
             
