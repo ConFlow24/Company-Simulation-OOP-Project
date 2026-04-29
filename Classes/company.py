@@ -21,6 +21,15 @@ class Company:
             if emp.name == name:
                 return emp
         return None
+    
+    def employee_exists_check(self, prompt):
+        while True:
+            name = input(prompt).strip()
+            employee = self.get_employee(name)
+            if employee is None:
+                print("Employee not found.")
+            else:
+                return employee
 
     def list_employees(self):
         print("\n--- Employees ---")

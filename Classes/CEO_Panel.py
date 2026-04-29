@@ -18,12 +18,12 @@ class CEOPanel:
         print("\n--- Candidates ---")
         for i, emp in enumerate(candidates, 1):
             print(f"{i}. {emp.name} | {emp.role} | {emp.pay:,}")
-
-        choice = input("Pick candidate (1-3): ").strip()
-
-        if choice not in ["1", "2", "3"]:
-            print("Invalid choice.")
-            return
+        
+        while True:
+            choice = input("Pick candidate (1-3): ").strip()
+            if choice not in ["1", "2", "3"]:
+                print("Invalid choice.")
+            else: break
 
         chosen = candidates[int(choice) - 1]
         Emp_Gen.employees.append(chosen)
@@ -32,42 +32,32 @@ class CEOPanel:
 
     def fire_employee(self, company, emp_gen):
         company.list_employees()
-        name = input("Enter employee name to fire: ").strip()
-        employee = company.get_employee(name)
-        if employee is None:
-            print("Employee not found.")
-            return
+        employee = company.get_employee_input("Enter employee name to fire: ")
 
         if employee.role == "CEO":
-            choice = input("Cannot fire the CEO! Transfer the position to another employee(y/n): ")
-            match choice:
-                case "y":
-                    company.list_employees()
-                    new_ceo_name = input("Enter employee name to promote: ").strip()
-                    new_ceo = company.get_employee(new_ceo_name)
-                    if new_ceo is None:
-                        print("Employee not found.")
-                        return
-                    new_ceo.role = "CEO"
-                    company.remove_employee(name)
-                    emp_gen.employees.remove(employee)
-                    return
-                case "n":
-                    print(f"{name} will remain CEO.")
+            while True:
+                choice = input("Cannot fire the CEO! Transfer the position to another employee(y/n): ")
+                match choice:
+                    case "y":
+                        company.list_employees()
+                        new_ceo = company.get_employee_input("Enter employee name to promote: ")
+                        new_ceo.role = "CEO"
+                        company.remove_employee(employee.name)
+                        emp_gen.employees.remove(employee)
+                        break
+                    case "n":
+                        print(f"{employee.name} will remain CEO.")
+                        break
+                    case _: print("Invalid choice.")
             return
 
-        company.remove_employee(name)
+        company.remove_employee(employee.name)
         emp_gen.employees.remove(employee)
-        print(f"{name} has been fired.")
+        print(f"{employee.name} has been fired.")
 
     def promote_employee(self, company):
         company.list_employees()
-        name = input("Enter employee name to promote: ").strip()
-
-        employee = company.get_employee(name)
-        if employee is None:
-            print("Employee not found.")
-            return
+        employee = company.get_employee_input("Enter employee name to fire: ")
 
         manager_count = 0
         for emp in company.employees:
@@ -106,12 +96,7 @@ class CEOPanel:
 
     def demote_employee(self, company):
         company.list_employees()
-        name = input("Enter employee name to demote: ").strip()
-
-        employee = company.get_employee(name)
-        if employee is None:
-            print("Employee not found.")
-            return
+        employee = company.get_employee_input("Enter employee name to fire: ")
 
         match employee.role:
             case "CEO":
@@ -134,11 +119,8 @@ class CEOPanel:
     # Financial Options
     def increase_salary(self, company):
         company.list_employees()
-        name = input("Enter employee name to increase salary: ").strip()
-        employee = company.get_employee(name)
-        if employee is None:
-            print("Employee not found.")
-            return
+        employee = company.get_employee_input("Enter employee name to fire: ")
+
         amount = input("Enter amount to increase: ").strip()
         if not amount.isdigit():
             print("Invalid amount.")
@@ -149,11 +131,8 @@ class CEOPanel:
 
     def decrease_salary(self, company):
         company.list_employees()
-        name = input("Enter employee name to decrease salary: ").strip()
-        employee = company.get_employee(name)
-        if employee is None:
-            print("Employee not found.")
-            return
+        employee = company.get_employee_input("Enter employee name to fire: ")
+
         amount = input("Enter amount to decrease: ").strip()
         if not amount.isdigit():
             print("Invalid amount.")
