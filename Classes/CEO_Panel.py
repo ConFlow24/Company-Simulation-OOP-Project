@@ -212,7 +212,7 @@ class CEOPanel:
 
         while True:
             try:
-                choice_amount = int(input("\nHow many you want to buy?: "))
+                choice_amount = int(input("\nHow many you want to remove?: "))
                 if choice_amount <= 0:
                     print("Amount must be positive.")
                 elif choice_amount > inventory.items[chosen_item][choice_size]:
