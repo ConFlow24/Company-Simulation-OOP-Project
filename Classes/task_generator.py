@@ -4,7 +4,7 @@ from Classes.items import items
 
 
 class Task:
-    def __init__(self, type, name, size, duration = 1):
+    def __init__(self, type, name, size, duration=1):
         self.name = name
         self.type = type
         self.duration = duration
@@ -12,13 +12,15 @@ class Task:
         self.progress = 0
         self.assigned_to = None
 
+
 class TaskSystems:
     def __init__(self):
-        self.task_list = [] #iniial task list
-        self.doing_tasks = [] #task list when assigned to employees and in progress
-        self.store_list = [] #for storing items that are bought and waiting to be added to inventory, each item is a dictionary with name, size, and quantity
+        self.task_list = []  # iniial task list
+        self.doing_tasks = []  # task list when assigned to employees and in progress
+        self.store_list = []  # for storing items that are bought and waiting to be added to inventory, each item is a dictionary with name, size, and quantity
         self.completed_tasks = []
-        self.size_lookup = {"Small": (1, 2), "Medium": (3, 5), "Large": (6, 8)} #task duration based on size of item
+        # task duration based on size of item
+        self.size_lookup = {"Small": (1, 2), "Medium": (3, 5), "Large": (6, 8)}
 
     def assign_task(self, employees, attendance, day):
         available_employees = []
@@ -143,7 +145,8 @@ class TaskSystems:
         self.task_list.remove(task)
 
     def generate_buy_task(self, employees):
-        for _ in range(int(len(employees) // 1.5)): #generate buy tasks based on the number of employees, but not more than half of the total employees
+        # generate buy tasks based on the number of employees, but not more than half of the total employees
+        for _ in range(int(len(employees) // 1.5)):
             type = "Buy"
             name = random.choice(list(items))
             size = random.choice(["Small", "Medium", "Large"])
@@ -175,7 +178,8 @@ class TaskSystems:
         task_amount = len(inventory.items) // 3
         if order_spike:
             task_amount *= 4
-        for _ in range(task_amount): #generate sell tasks based on the number of items in inventory, but not more than half of the total items
+        # generate sell tasks based on the number of items in inventory, but not more than half of the total items
+        for _ in range(task_amount):
             type = "Sell"
             item_to_sell = random.choice(list(inventory.items.keys()))
             name = item_to_sell
@@ -188,7 +192,7 @@ class TaskSystems:
                     break
             else:
                 continue
-                
+
             duration = random.randint(*self.size_lookup[size])
             self.task_list.append(Task(type, name, size, duration))
 
@@ -203,14 +207,15 @@ class TaskSystems:
                     self.doing_tasks.remove(task)
                     employee.tasks_completed += 1
                     employee.working = False
-                    print(f"{employee.name} has completed \"{task.type} - {task.name.title()}\"")
+                    print(
+                        f"{employee.name} has completed \"{task.type} - {task.name.title()}\"")
                     break
-    
+
     def overtime_check(self, employees, attendance, day):
         for employee in employees:
             if self.doing_tasks:
                 for task in self.doing_tasks[:]:
-                    #add remaining hours to overtime if task not complete in 8 hours(loops)
+                    # add remaining hours to overtime if task not complete in 8 hours(loops)
                     remaining = task.duration - task.progress
                     attendance.records[day][employee.name]["overtime_hours"] = remaining
                     attendance.records[day][employee.name]["hours_worked"] += remaining
@@ -221,17 +226,21 @@ class TaskSystems:
         for task in self.completed_tasks[:]:
             match task.type:
                 case "Buy":
-                    self.store_list.append({"name": task.name, "size": task.size, "quantity": 1})
+                    self.store_list.append(
+                        {"name": task.name, "size": task.size, "quantity": 1})
                     inventory.cash -= inventory.get_price(task.name, task.size)
                     self.completed_tasks.remove(task)
                 case "Sell":
                     inventory.remove_item(task.name, task.size, 1)
-                    inventory.cash += inventory.get_price(task.name, task.size) * 1.2 #sell for 20% profit
+                    # sell for 20% profit
+                    inventory.cash += inventory.get_price(
+                        task.name, task.size) * 1.2
                     self.completed_tasks.remove(task)
                 case "Store":
                     for item in self.store_list:
                         if item["name"] == task.name and item["size"] == task.size:
-                            inventory.add_item(task.name, task.size, item["quantity"])
+                            inventory.add_item(
+                                task.name, task.size, item["quantity"])
                             self.store_list.remove(item)
                             break
                     self.completed_tasks.remove(task)
@@ -242,8 +251,11 @@ class TaskSystems:
 
     def show_tasks(self):
         print("\n--- Tasks ---")
-        print(f"{'Type':<10} {'Name':<15} {'Size':<10} {'Duration':>10} {'Assigned To':<20}")
+        print(
+            f"{'Type':<10} {'Name':<15} {'Size':<10} {'Duration':>10} {'Assigned To':<20}")
         print("-" * 70)
         for task in self.task_list:
             assigned = task.assigned_to.name if task.assigned_to else "Unassigned"
-            print(f"{task.type:<10} {task.name.title():<15} {task.size:<10} {task.duration:>10} {assigned:<20}")
+            print(
+                f"{task.type:<10} {task.name.title():<15} {task.size:<10} {task.duration:>10} {assigned:<20}")
+        print("-" * 70 + "\n")
