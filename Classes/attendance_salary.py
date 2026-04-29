@@ -7,13 +7,19 @@ class Attendance:
         # has total lates and absences for each employee for salary deductions and bonuses.
     def clock_in(self, day, employee_name, employee_punct):# day is from day generator when implemented into the manin program
         attendance_list = ["Present", "Late", "Absent"]
-        if employee_punct == 1:
-            weights = [0.9, 0.07, 0.03]
-        elif employee_punct == 2:
-            weights = [1, 0, 0]
-        elif employee_punct < 1:
-            punctuality_mult = abs(employee_punct) * 0.1
-            weights = [0.9-punctuality_mult, 0.07 + punctuality_mult*0.7, 0.03 + punctuality_mult*0.3]
+        match employee_punct: #less and less likely to be present
+            case 5:
+                weights = [1, 0, 0]
+            case 4:
+                weights = [0.9, 0.07, 0.03]
+            case 3:
+                weights = [0.75, 0.18, 0.07]
+            case 2:
+                weights = [0.55, 0.30, 0.15]
+            case 1:
+                weights = [0.35, 0.40, 0.25]
+            case _:
+                weights = [0.75, 0.18, 0.07]
         attendance = random.choices(attendance_list, weights=weights, k=1)[0] #weighted randomness
         self.records[day][employee_name] = {
             "status": attendance

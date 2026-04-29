@@ -45,8 +45,8 @@ class EmpGen:
             random_name = f"{random.choice(self.first_names)} {random.choice(self.last_names)}"
             pay = random.randint(min_pay, max_pay) // 1000 * 1000
             speed = random.randint(1, 5)
-            punctuality_values = [2, 1, -1, -2]  
-            weights = [0.05, 0.75, 0.15, 0.05]
+            punctuality_values = [5, 4, 3, 2, 1]  
+            weights = [0.05, 0.75, 0.10, 0.05, 0.05]
             puncuality = random.choices(punctuality_values, weights=weights, k=1)[0]
             emp = Employee(random_name, role, pay, speed, puncuality)
             self.employees.append(emp)

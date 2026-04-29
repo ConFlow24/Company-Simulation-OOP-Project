@@ -1,5 +1,4 @@
 #runs the program
-# Dito papasok kung paano gumagalaw ung attendance sa totoong buhay. 
 
 from Classes.employee_generator import EmpGen
 from Classes.main_simulation_engine import main_simulation_engine
@@ -69,9 +68,9 @@ Input choice: """)
                     break
                     #start next day
                 case "2":
-                    CEOPanel.show_panel(company, inventory)
+                    CEOPanel.show_panel(company, inventory, EmpGen)
                 case "3":
-                    company.show_full_report()
+                    company.show_full_report(day)
                 case "4":
                     inventory.show_inventory()
                 case "5":
@@ -82,3 +81,7 @@ Input choice: """)
                 case "7":
                     print("Thank you for using this programs!")
                     exit()
+                case _:
+                    print("Input not in choices. Starting next day...")
+                    day += 1
+                    break

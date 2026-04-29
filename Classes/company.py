@@ -38,10 +38,10 @@ class Company:
             print(f"{emp.name:<22} {emp.role:<18} {emp.pay:>8,} {emp.speed:>6} {emp.punctuality:>11}")
         print("\n")
 
-    def advance_day(self):
+    def advance_day(self): # unused
         self.day += 1
 
-    def run_daily_attendance(self):
+    def run_daily_attendance(self): # unused
         for emp in self.employees:
             if emp.role != "CEO":
                 self.attendance.clock_in(self.day, emp)
@@ -51,11 +51,11 @@ class Company:
         print(f"\n--- Day {self.day} Report ---")
         print(f"Cash: {self.inventory.cash:,.2f}")
 
-    def show_full_report(self):
+    def show_full_report(self, day):
         print(f"""
 \n--- Company Report ---\n
 Company Name: {self.name}
-Days Simulated: {self.day}
+Days Simulated: {day}
 Total Employees: {len(self.employees)}
 Cash: {self.inventory.cash:,.2f}
 \n--- Employees ---\n""")
