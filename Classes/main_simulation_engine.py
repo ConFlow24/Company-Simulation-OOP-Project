@@ -7,20 +7,19 @@ class main_simulation_engine:
         #generate attendance for each employee
         for employee in employees:
             Attendance.clock_in(day, employee.name, employee.punctuality)
-        print("Attendance for", end=" ")
         Attendance.show_attendance(day)
 
         #tasks
         TaskGen.generate_buy_task(employees)
         TaskGen.generate_store_task()
         TaskGen.generate_sell_task(inventory)
-        print("Tasks for the day:")
         TaskGen.show_tasks()
         match control_type:
             case "Auto":
                 #work for 8 hours
                 TaskGen.task_to_employee_ratio_check(employees)
                 TaskGen.assign_task(employees, Attendance, day)
+                print("\n--- Day Events ---")
                 for _ in range(8):
                     for employee in employees:
                         TaskGen.do_task(employee)
@@ -31,6 +30,7 @@ class main_simulation_engine:
             case "Manual":
                 TaskGen.task_to_employee_ratio_check(employees)
                 TaskGen.assign_task_manual(employees, Attendance, day, company)
+                print("\n--- Day Events ---")
                 for i in range(8):
                     for employee in employees:
                         TaskGen.do_task(employee)
@@ -41,8 +41,8 @@ class main_simulation_engine:
                 TaskGen.complete_task(inventory)
                 company.upgrade_employee(day)
                 TaskGen.task_to_employee_ratio_check(employees)
-                
+
         #show End of day menu
-        
+
 
         #finish day

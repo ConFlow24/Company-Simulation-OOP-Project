@@ -15,9 +15,14 @@ class CEOPanel:
         candidates.pop(0)
         del company.employees[-4:]
 
-        print("\n--- Candidates ---")
+        print("\n" + "=" * 70)
+        print(f"{'CANDIDATES':^70}")
+        print("=" * 70)
+        print(f"{'#':<4} {'Name':<25} {'Role':<15} {'Pay':>20}")
+        print("=" * 70)
         for i, emp in enumerate(candidates, 1):
-            print(f"{i}. {emp.name} | {emp.role} | {emp.pay:,}")
+            print(f"{i:<4} {emp.name:<25} {emp.role:<15} {emp.pay:>20,}")
+        print("=" * 70 + "\n")
         
         while True:
             choice = input("Pick candidate (1-3): ").strip()

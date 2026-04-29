@@ -54,7 +54,9 @@ while True:
 
     while True:
         End_day_choice = input(f"""
---- End of Day Choices ---
+{'=' * 70}
+{'END OF DAY MENU':^70}
+{'=' * 70}
 1. Start next day
 2. Open CEO panel
 3. View reports
@@ -62,7 +64,7 @@ while True:
 5. View Employees
 6. Enable Auto Simulation
 7. Exit Simulation
-
+{'=' * 70}
 Input choice: """)
 
         match End_day_choice:

@@ -33,19 +33,24 @@ class Company:
                 print("Invalid input.")
 
     def list_employees(self):
-        print("\n--- Employees ---")
-        print(f"{'#':<4} {'Name':<15} {'Role':<15} {'Pay':>10} {'Speed':>8} {'Punctuality':>12}")
-        print("-" * 65)
-        for i, emp in enumerate(self.employees, 0):
-            print(f"{i:<4} {emp.name:<15} {emp.role:<15} {emp.pay:>10,} {emp.speed:>8} {emp.punctuality:>12}")
-        print("\n")
+        print("\n" + "=" * 70)
+        print(f"{'EMPLOYEES':^70}")
+        print("=" * 70)
+        print(f"{'#':<4} {'Name':<18} {'Role':<12} {'Pay':>10} {'Speed':>10} {'Punctuality':>11}")
+        print("=" * 70)
+        for i, emp in enumerate(self.employees, 1):
+            print(f"{i:<4} {emp.name:<18} {emp.role:<12} {emp.pay:>10,} {emp.speed:>10} {emp.punctuality:>11}")
+        print("=" * 70 + "\n")
 
     def list_available_employees(self, available_emps):
-        print("\n--- Employees ---")
-        print(f"{'#':<4} {'Name':<22} {'Role':<18} {'Pay':>8} {'Speed':>6} {'Punctuality':>11}")
-        print("-" * 70)
+        print("\n" + "=" * 70)
+        print(f"{'AVAILABLE EMPLOYEES':^70}")
+        print("=" * 70)
+        print(f"{'#':<4} {'Name':<18} {'Role':<12} {'Pay':>10} {'Speed':>10} {'Punctuality':>11}")
+        print("=" * 70)
         for i, emp in enumerate(available_emps, 1):
-            print(f"{i:<4} {emp.name:<22} {emp.role:<18} {emp.pay:>8,} {emp.speed:>6} {emp.punctuality:>11}")
+            print(f"{i:<4} {emp.name:<18} {emp.role:<12} {emp.pay:>10,} {emp.speed:>10} {emp.punctuality:>11}")
+        print("=" * 70 + "\n")
 
     def advance_day(self): # unused
         self.day += 1
@@ -61,19 +66,24 @@ class Company:
         print(f"Cash: {self.inventory.cash:,.2f}")
 
     def show_full_report(self, day):
-        print(f"""
-\n--- Company Report ---\n
-Company Name: {self.name}
-Days Simulated: {day}
-Total Employees: {len(self.employees)}
-Cash: {self.inventory.cash:,.2f}
-Items in Inventory: {self.inventory.total_stock_and_price()[0]}
-Invetory Price: {self.inventory.total_stock_and_price()[1]}
-\n--- Employees ---\n""")
-
+        print("\n" + "=" * 70)
+        print(f"{'COMPANY REPORT':^70}")
+        print("=" * 70)
+        print(f"{'Company Name:':<20} {self.name}")
+        print(f"{'Days Simulated:':<20} {day}")
+        print(f"{'Total Employees:':<20} {len(self.employees)}")
+        print(f"{'Cash:':<20} {self.inventory.cash:,.2f}")
+        stock, price = self.inventory.total_stock_and_price()
+        print(f"{'Items in Inventory:':<20} {stock}")
+        print(f"{'Inventory Value:':<20} {price:,.2f}")
+        print("=" * 70)
+        print(f"{'EMPLOYEE LIST':^70}")
+        print("=" * 70)
+        print(f"{'Name':<30} {'Role':<20} {'Pay':>18}")
+        print("-" * 70)
         for emp in self.employees:
-            print(f"{emp.name} | {emp.role} | {emp.pay:,.2f} |")# Tasks: {emp.tasks_completed} | Late: {emp.late_count} | Absent: {emp.absent_count}, removed
-        #add inventory report and task report here
+            print(f"{emp.name:<30} {emp.role:<20} {emp.pay:>18,.2f}")
+        print("=" * 70 + "\n")
 
     def upgrade_employee(self, day):
         for employee in self.employees:

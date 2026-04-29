@@ -47,9 +47,14 @@ class Attendance:
         return total_hours
     
     def show_attendance(self, day):
-        print(f"Day {day}:")
+        print("\n" + "=" * 70)
+        print(f"{f'ATTENDANCE - DAY {day}':^70}")
+        print("=" * 70)
+        print(f"{'Employee Name':<40} {'Status':>29}")
+        print("=" * 70)
         for employee_name, record in self.records[day].items():
-            print(f"  {employee_name}: {record['status']}")
+            print(f"{employee_name:<40} {record['status']:>29}")
+        print("=" * 70 + "\n")
 
 class Salary:
     def __init__(self):

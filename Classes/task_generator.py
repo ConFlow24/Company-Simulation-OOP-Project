@@ -104,7 +104,7 @@ class TaskSystems:
         
         while True:
             try:
-                choice = int(input(f"{emp.name} is free. Pick a task (1-{len(self.task_list)}): "))
+                choice = int(input(f"\n{emp.name} is free. Pick a task (1-{len(self.task_list)}): "))
                 if 1 <= choice <= len(self.task_list):
                     task = self.task_list[choice - 1]
                     break
@@ -117,6 +117,9 @@ class TaskSystems:
         emp.working = True
         self.doing_tasks.append(task)
         self.task_list.remove(task)
+        
+        print(f"{task.type} - {task.name.title()} has been assigned to {emp.name}")
+        print("\n--- Continuing Day Events ---")
 
     def generate_buy_task(self, employees):
         # generate buy tasks based on the number of employees, but not more than half of the total employees
