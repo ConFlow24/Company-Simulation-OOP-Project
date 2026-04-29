@@ -21,6 +21,7 @@ class TaskSystems:
         self.completed_tasks = []
         # task duration based on size of item
         self.size_lookup = {"Small": (1, 2), "Medium": (3, 5), "Large": (6, 8)}
+        self.stop_manual_assign = False
 
     def assign_task(self, employees, attendance, day):
         available_employees = []
@@ -65,6 +66,7 @@ class TaskSystems:
                 try:
                     task_choice = int(input("Pick a task: "))
                     if task_choice == len(self.task_list)+1:
+                        self.stop_manual_assign = True
                         return  # Stop assigning option
                     if 1 <= task_choice <= len(self.task_list):
                         task = self.task_list[task_choice - 1]
@@ -96,7 +98,7 @@ class TaskSystems:
             self.task_list.remove(task)
 
     def assign_task_manual_individual(self, emp):
-        if emp.role == "CEO":
+        if emp.role == "CEO" or getattr(self, "stop_manual_assign", False):
             return
         print("\n--- Unassigned Tasks ---")
         for i, task in enumerate(self.task_list):
