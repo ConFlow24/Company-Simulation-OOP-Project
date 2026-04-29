@@ -52,42 +52,95 @@ class TaskSystems:
                 continue
 
             available_employees.append(emp)
-        for task in self.task_list[:]:
-            if not available_employees:
-                break
+        # for task in self.task_list[:]:
+        #     if not available_employees:
+        #         break
+            
+        #     company.list_available_employees(available_employees)
+            
+        #     while True:
+        #         name = input(f"Enter an employee from the list to complete \"{task.type} - {task.name.title()}\": ").strip()
+        #         employee = company.get_employee(name)
+        #         if employee is None:
+        #             print("Employee not found.")
+        #         else:
+        #             found = False
+        #             for emp in available_employees:
+        #                 if emp.name == employee.name:
+        #                     found = True
+        #                     break
+        #             if not found:
+        #                 print("Employee is unavailable (absent, already working, or is CEO).")
+        #             else:
+        #                 break
 
+        #     task.assigned_to = employee
+
+        #     employee.working = True
+        #     self.doing_tasks.append(task)
+        #     available_employees.remove(employee)
+        #     self.task_list.remove(task)
+        while self.task_list and available_employees:
+        # pick task
+            print("\n--- Unassigned Tasks ---")
+            for i, task in enumerate(self.task_list):
+                print(f"{i+1}. {task.type} - {task.name.title()} ({task.size})")
+            print(f"{len(self.task_list)+1}. Stop assigning")
+
+            while True:
+                try:
+                    task_choice = int(input("Pick a task: "))
+                    if task_choice == len(self.task_list)+1:
+                        return  # Stop assigning option
+                    if 1 <= task_choice <= len(self.task_list):
+                        task = self.task_list[task_choice - 1]
+                        break
+                    else:
+                        print("Invalid choice.")
+                except ValueError:
+                    print("Invalid input.")
+
+        # pick employee
             company.list_available_employees(available_employees)
             while True:
-                name = input(f"Enter an employee from the list to complete \"{task.type} - {task.name.title()}\": ").strip()
-                employee = company.get_employee(name)
-                if employee is None:
-                    print("Employee not found.")
-                else:
-                    found = False
-                    for emp in available_employees:
-                        if emp.name == employee.name:
-                            found = True
-                            break
-                    if not found:
-                        print("Employee is unavailable (absent, already working, or is CEO).")
-                    else:
+                try:
+                    emp_choice = int(input(f"Pick an employee for \"{task.type} - {task.name.title()}\": "))
+                    if 1 <= emp_choice <= len(available_employees):
+                        employee = available_employees[emp_choice - 1]
                         break
+                    else:
+                        print("Invalid choice.")
+                except ValueError:
+                    print("Invalid input.")
+                    
 
-            task.assigned_to = employee
-            task.duration = random.randint(*self.size_lookup[task.size])
-
-            employee.working = True
-            self.doing_tasks.append(task)
-            available_employees.remove(employee)
-            self.task_list.remove(task)
+        task.assigned_to = employee
+        print(f"{task.type} - {task.name} has been assigned to {employee}")
+        employee.working = True
+        self.doing_tasks.append(task)
+        available_employees.remove(employee)
+        self.task_list.remove(task)
 
     def assign_task_manual_individual(self, emp):
-        self.task_list[0].assigned_to = emp
-        self.task_list[0].duration = random.randint(*self.size_lookup[self.task_list[0].size])
+        print("\n--- Unassigned Tasks ---")
+        for i, task in enumerate(self.task_list):
+            print(f"{i+1}. {task.type} - {task.name.title()} ({task.size})")
+        
+        while True:
+            try:
+                choice = int(input(f"{emp.name} is free. Pick a task (1-{len(self.task_list)}): "))
+                if 1 <= choice <= len(self.task_list):
+                    task = self.task_list[choice - 1]
+                    break
+                else:
+                    print("Invalid choice.")
+            except ValueError:
+                print("Invalid input.")
 
+        task.assigned_to = emp
         emp.working = True
-        self.doing_tasks.append(self.task_list[0])
-        self.task_list.remove(self.task_list[0])
+        self.doing_tasks.append(task)
+        self.task_list.remove(task)
 
     def generate_buy_task(self, employees):
         for _ in range(int(len(employees) // 1.5)): #generate buy tasks based on the number of employees, but not more than half of the total employees
@@ -182,6 +235,10 @@ class TaskSystems:
                             self.store_list.remove(item)
                             break
                     self.completed_tasks.remove(task)
+    
+    def task_to_employee_ratio_check(self, employees_list):
+        if len(self.task_list) / len(employees_list) > 3:
+            print("\nYou have too many tasks per employee. Consider hiring more employees, through the CEO Panel.\n")
 
     def show_tasks(self):
         print("\n--- Tasks ---")

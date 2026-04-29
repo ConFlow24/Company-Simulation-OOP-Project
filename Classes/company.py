@@ -32,11 +32,10 @@ class Company:
 
     def list_available_employees(self, available_emps):
         print("\n--- Employees ---")
-        print(f"{'Name':<22} {'Role':<18} {'Pay':>8} {'Speed':>6} {'Punctuality':>11}")
+        print(f"{'#':<4} {'Name':<22} {'Role':<18} {'Pay':>8} {'Speed':>6} {'Punctuality':>11}")
         print("-" * 70)
-        for emp in available_emps:
-            print(f"{emp.name:<22} {emp.role:<18} {emp.pay:>8,} {emp.speed:>6} {emp.punctuality:>11}")
-        print("\n")
+        for i, emp in enumerate(available_emps, 1):
+            print(f"{i:<4}. {emp.name:<22} {emp.role:<18} {emp.pay:>8,} {emp.speed:>6} {emp.punctuality:>11}")
 
     def advance_day(self): # unused
         self.day += 1

@@ -19,6 +19,7 @@ class main_simulation_engine:
         match control_type:
             case "Auto":
                 #work for 8 hours
+                TaskGen.task_to_employee_ratio_check(employees)
                 TaskGen.assign_task(employees, Attendance, day)
                 for _ in range(8):
                     for employee in employees:
@@ -27,6 +28,7 @@ class main_simulation_engine:
                 TaskGen.complete_task(inventory)
                 company.upgrade_employee()
             case "Manual":
+                TaskGen.task_to_employee_ratio_check(employees)
                 TaskGen.assign_task_manual(employees, Attendance, day, company)
                 for i in range(8):
                     for employee in employees:
@@ -37,6 +39,7 @@ class main_simulation_engine:
                 TaskGen.overtime_check(employees, Attendance, day)
                 TaskGen.complete_task(inventory)
                 company.upgrade_employee()
+                TaskGen.task_to_employee_ratio_check(employees)
                 
         #show End of day menu
         

@@ -47,8 +47,8 @@ class EmpGen:
             speed = random.randint(1, 5)
             punctuality_values = [5, 4, 3, 2, 1]  
             weights = [0.05, 0.75, 0.10, 0.05, 0.05]
-            puncuality = random.choices(punctuality_values, weights=weights, k=1)[0]
-            emp = Employee(random_name, role, pay, speed, puncuality)
+            punctuality = random.choices(punctuality_values, weights=weights, k=1)[0]
+            emp = Employee(random_name, role, pay, speed, punctuality)
             self.employees.append(emp)
             company.add_employee(emp)
 
