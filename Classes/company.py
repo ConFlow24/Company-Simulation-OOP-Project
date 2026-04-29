@@ -22,21 +22,22 @@ class Company:
                 return emp
         return None
     
-    def employee_exists_check(self, prompt):
+    def get_employee_input(self, prompt, options):
         while True:
-            name = input(prompt).strip()
-            employee = self.get_employee(name)
-            if employee is None:
-                print("Employee not found.")
-            else:
-                return employee
+            try:
+                choice = int(input(prompt))
+                if 1 <= choice <= len(options):
+                    return options[choice - 1]
+                print("Invalid choice.")
+            except ValueError:
+                print("Invalid input.")
 
     def list_employees(self):
         print("\n--- Employees ---")
-        print(f"{'Name':<15} {'Role':<15} {'Pay':>10} {'Speed':>8} {'Punctuality':>12}")
+        print(f"{'#':<4} {'Name':<15} {'Role':<15} {'Pay':>10} {'Speed':>8} {'Punctuality':>12}")
         print("-" * 65)
-        for emp in self.employees:
-            print(f"{emp.name:<15} {emp.role:<15} {emp.pay:>10,} {emp.speed:>8} {emp.punctuality:>12}")
+        for i, emp in enumerate(self.employees, 0):
+            print(f"{i:<4} {emp.name:<15} {emp.role:<15} {emp.pay:>10,} {emp.speed:>8} {emp.punctuality:>12}")
         print("\n")
 
     def list_available_employees(self, available_emps):
@@ -66,6 +67,8 @@ Company Name: {self.name}
 Days Simulated: {day}
 Total Employees: {len(self.employees)}
 Cash: {self.inventory.cash:,.2f}
+Items in Inventory: {self.inventory.total_stock_and_price()[0]}
+Invetory Price: {self.inventory.total_stock_and_price()[1]}
 \n--- Employees ---\n""")
 
         for emp in self.employees:

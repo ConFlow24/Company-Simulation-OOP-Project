@@ -32,7 +32,7 @@ class CEOPanel:
 
     def fire_employee(self, company, emp_gen):
         company.list_employees()
-        employee = company.get_employee_input("Enter employee name to fire: ")
+        employee = company.get_employee_input("Enter employee name to fire: ", company.employees)
 
         if employee.role == "CEO":
             while True:
@@ -40,7 +40,7 @@ class CEOPanel:
                 match choice:
                     case "y":
                         company.list_employees()
-                        new_ceo = company.get_employee_input("Enter employee name to promote: ")
+                        new_ceo = company.get_employee_input("Enter employee name to promote: ", company.employees)
                         new_ceo.role = "CEO"
                         company.remove_employee(employee.name)
                         emp_gen.employees.remove(employee)
@@ -57,7 +57,7 @@ class CEOPanel:
 
     def promote_employee(self, company):
         company.list_employees()
-        employee = company.get_employee_input("Enter employee name to fire: ")
+        employee = company.get_employee_input("Enter employee name to fire: ", company.employees)
 
         manager_count = 0
         for emp in company.employees:
@@ -102,7 +102,7 @@ class CEOPanel:
 
     def demote_employee(self, company):
         company.list_employees()
-        employee = company.get_employee_input("Enter employee name to fire: ")
+        employee = company.get_employee_input("Enter employee name to fire: ", company.employees)
 
         match employee.role:
             case "CEO":
@@ -125,7 +125,7 @@ class CEOPanel:
     # Financial Options
     def increase_salary(self, company):
         company.list_employees()
-        employee = company.get_employee_input("Enter employee name to fire: ")
+        employee = company.get_employee_input("Enter employee name to fire: ", company.employees)
 
         while True:
             amount = input("Enter amount to increase: ").strip()
@@ -139,7 +139,7 @@ class CEOPanel:
 
     def decrease_salary(self, company):
         company.list_employees()
-        employee = company.get_employee_input("Enter employee name to fire: ")
+        employee = company.get_employee_input("Enter employee name to fire: ", company.employees)
 
         while True:
             amount = input("Enter amount to decrease: ").strip()
@@ -178,11 +178,8 @@ class CEOPanel:
             print("No items yet.")
             return
 
-        while True:
-            choice = input("Choose an item: ").strip().lower()
-            if choice in inventory.items:
-                break
-            print("Invalid choice.")
+        item_names = list(inventory.items.keys())
+        chosen_item = self.get_employee_input("Pick an item: ", item_names)
 
         while True:
             choice_size = input("What size? (Small, Medium, Large): ").strip()
@@ -190,7 +187,7 @@ class CEOPanel:
                 break
             print("Invalid size.")
 
-        if inventory.items[choice][choice_size] == 0:
+        if inventory.items[chosen_item][choice_size] == 0:
             print("No stock of that size.")
             return
 
@@ -199,20 +196,20 @@ class CEOPanel:
                 choice_amount = int(input("How many: "))
                 if choice_amount <= 0:
                     print("Amount must be positive.")
-                elif choice_amount > inventory.items[choice][choice_size]:
+                elif choice_amount > inventory.items[chosen_item][choice_size]:
                     print("Not enough stock.")
                 else:
                     break
             except ValueError:
                 print("Invalid input.")
 
-        inventory.remove_item(choice, choice_size, choice_amount)
+        inventory.remove_item(chosen_item, choice_size, choice_amount)
         if sell:
-            earned = inventory.get_price(choice, choice_size) * choice_amount
+            earned = inventory.get_price(chosen_item, choice_size) * choice_amount
             inventory.cash += earned
-            print(f"Sold {choice_amount}x {choice.title()} ({choice_size}) for ${earned:.2f}. Cash: ${inventory.cash:.2f}")
+            print(f"Sold {choice_amount}x {chosen_item.title()} ({choice_size}) for ${earned:.2f}. Cash: ${inventory.cash:.2f}")
         else:
-            print(f"Deleted {choice_amount}x {choice.title()} ({choice_size}) from inventory.")
+            print(f"Deleted {choice_amount}x {chosen_item.title()} ({choice_size}) from inventory.")
 
     def show_panel(self, company, inventory, emp_gen):
         while True:
