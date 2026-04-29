@@ -96,6 +96,8 @@ class TaskSystems:
             self.task_list.remove(task)
 
     def assign_task_manual_individual(self, emp):
+        if emp.role == "CEO":
+            return
         print("\n--- Unassigned Tasks ---")
         for i, task in enumerate(self.task_list):
             print(f"{i+1}. {task.type} - {task.name.title()} ({task.size})")

@@ -1,7 +1,5 @@
 # Already  done, pa-check if ok, ung check promotion i-call yan sa main.py
 import random
-promotion_threshold = {"Intern": 10,
-                       "Employee": 20, "Senior": 35, "Manager": 999}
 
 
 class Employee:
@@ -14,13 +12,18 @@ class Employee:
         self.total_hours = total_hours
         self.tasks_completed = tasks_completed
         self.working = working
+        self.last_levelup = 0
 
     def upgrade_stats(self):
-        if self.tasks_completed % 5 == 0:
+        #tasks multiple of 5, never level up more than once, not level up when no tasks complete
+        if self.tasks_completed % 5 == 0 and self.tasks_completed != self.last_levelup and self.tasks_completed != 0:
             self.speed += random.randint(1, 3)
+            self.last_levelup = self.tasks_completed
             print(f"{self.name} leveled up!")
 
     def check_promotion(self):
+        promotion_threshold = {"Intern": 10,
+            "Employee": 20, "Senior": 35, "Manager": 999}
         if self.role == "Intern" and self.tasks_completed >= promotion_threshold["Intern"]:
             while True:
                 choice = input(f"{self.name} is ready for promotion! Promote to Employee? (y/n): ").lower()

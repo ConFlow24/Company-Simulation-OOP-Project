@@ -190,7 +190,7 @@ class CEOPanel:
             return
 
         while True:
-            choice = input("Choose an item: ").strip()
+            choice = input("Choose an item: ").strip().lower()
             if choice in inventory.items:
                 break
             print("Invalid choice.")
