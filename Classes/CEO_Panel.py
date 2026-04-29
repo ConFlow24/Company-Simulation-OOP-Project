@@ -39,7 +39,7 @@ class CEOPanel:
     def fire_employee(self, company, emp_gen):
         company.list_employees()
         employee = company.get_employee_input(
-            "Enter employee name to fire: ", company.employees)
+            "Choose a number from the list to fire: ", company.employees)
 
         if employee.role == "CEO":
             while True:
@@ -49,7 +49,7 @@ class CEOPanel:
                     case "y":
                         company.list_employees()
                         new_ceo = company.get_employee_input(
-                            "Enter employee name to promote: ", company.employees)
+                            "Choose a number from the list to promote: ", company.employees)
                         new_ceo.role = "CEO"
                         company.remove_employee(employee.name)
                         emp_gen.employees.remove(employee)
@@ -67,7 +67,7 @@ class CEOPanel:
     def promote_employee(self, company):
         company.list_employees()
         employee = company.get_employee_input(
-            "Enter employee name to promote: ", company.employees)
+            "Choose a number from the list to promote: ", company.employees)
 
         manager_count = 0
         for emp in company.employees:
@@ -113,7 +113,7 @@ class CEOPanel:
     def demote_employee(self, company):
         company.list_employees()
         employee = company.get_employee_input(
-            "Enter employee name to demote: ", company.employees)
+            "Choose a number from the list to demote: ", company.employees)
 
         match employee.role:
             case "CEO":
@@ -137,7 +137,7 @@ class CEOPanel:
     def increase_salary(self, company):
         company.list_employees()
         employee = company.get_employee_input(
-            "Enter employee name to increase salary: ", company.employees)
+            "Choose a number from the list to increase salary: ", company.employees)
 
         while True:
             amount = input("Enter amount to increase: ").strip()
@@ -152,7 +152,7 @@ class CEOPanel:
     def decrease_salary(self, company):
         company.list_employees()
         employee = company.get_employee_input(
-            "Enter employee name to decrease salary: ", company.employees)
+            "Choose a number from the list to decrease salary: ", company.employees)
 
         while True:
             amount = input("Enter amount to decrease: ").strip()
