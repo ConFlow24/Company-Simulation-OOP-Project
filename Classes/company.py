@@ -75,7 +75,9 @@ Invetory Price: {self.inventory.total_stock_and_price()[1]}
             print(f"{emp.name} | {emp.role} | {emp.pay:,.2f} |")# Tasks: {emp.tasks_completed} | Late: {emp.late_count} | Absent: {emp.absent_count}, removed
         #add inventory report and task report here
 
-    def upgrade_employee(self):
+    def upgrade_employee(self, day):
         for employee in self.employees:
             employee.upgrade_stats()
             employee.check_promotion()
+            self.salary.apply_bonus(employee, self.attendance, day)
+            self.salary.apply_deduction(employee, self.attendance)

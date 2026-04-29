@@ -185,16 +185,16 @@ class TaskSystems:
                         f"{employee.name} has completed \"{task.type} - {task.name.title()}\"")
                     break
 
-    def overtime_check(self, employees, attendance, day):
-        for employee in employees:
-            if self.doing_tasks:
-                for task in self.doing_tasks[:]:
-                    # add remaining hours to overtime if task not complete in 8 hours(loops)
-                    remaining = task.duration - task.progress
-                    attendance.records[day][employee.name]["overtime_hours"] = remaining
-                    attendance.records[day][employee.name]["hours_worked"] += remaining
-                    self.completed_tasks.append(task)
-                    self.doing_tasks.remove(task)
+    def overtime_check(self, attendance, day):
+        for task in self.doing_tasks[:]:
+            employee = task.assigned_to
+            if employee is None:
+                continue
+            remaining = task.duration - task.progress
+            attendance.records[day][employee.name]["overtime_hours"] = remaining
+            attendance.records[day][employee.name]["hours_worked"] += remaining
+            self.completed_tasks.append(task)
+            self.doing_tasks.remove(task)
 
     def complete_task(self, inventory):
         for task in self.completed_tasks[:]:

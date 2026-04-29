@@ -56,23 +56,23 @@ class Salary:
         # If worked hours more than 12 hours add 15% for bonus.
         if attendance.records[day][employee.name]["hours_worked"] > 10:
             employee.pay += bonus
-            self.salary_record[employee]["Bonuses"] += bonus
+            self.salary_record[employee.name]["Bonuses"] += bonus
 
         return employee.pay
 
-    def apply_deduction(self, employee, deduction = 1000):
-        if self.records[employee]["late_count"] > 6:
+    def apply_deduction(self, employee, attendance, deduction = 1000):
+        if attendance.records[employee.name].get("late_count", 0) > 6:
             if employee.pay > 1000:
                 employee.pay -= deduction
-                self.salary_record[employee]["Deductions"] -= deduction
-                self.records[employee]["late_count"] = 0 # reset late count after applying deduction
+                self.salary_record[employee.name]["Deductions"] -= deduction
+                self.records[employee.name]["late_count"] = 0 # reset late count after applying deduction
             else:
                 return "Employee's salary cannot be any lower than 1000."
-        if self.records[employee]["absent_count"] > 3:
+        if attendance.records[employee.name].get("absent_count", 0) > 3:
             if employee.pay > 1000:
                 employee.pay -= deduction
-                self.salary_record[employee]["Deductions"] -= deduction
-                self.records[employee]["absent_count"] = 0 # reset absent count after applying deduction
+                self.salary_record[employee.name]["Deductions"] -= deduction
+                self.records[employee.name]["absent_count"] = 0 # reset absent count after applying deduction
             else:
                 return "Employee's salary cannot be any lower than 1000."
             
@@ -96,4 +96,4 @@ class Salary:
         for employee in employees_list:
             print(f"""Current salary: {employee.pay}
 Bonuses received over time: {self.salary_record[employee]["Bonuses"]}
-Deductions received over time: {self.salary_record[employee]["Bonuses"]}""")
+Deductions received over time: {self.salary_record[employee]["Deductions"]}""")

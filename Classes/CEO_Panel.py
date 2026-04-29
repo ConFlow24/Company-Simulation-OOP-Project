@@ -57,7 +57,7 @@ class CEOPanel:
 
     def promote_employee(self, company):
         company.list_employees()
-        employee = company.get_employee_input("Enter employee name to fire: ", company.employees)
+        employee = company.get_employee_input("Enter employee name to promote: ", company.employees)
 
         manager_count = 0
         for emp in company.employees:
@@ -102,7 +102,7 @@ class CEOPanel:
 
     def demote_employee(self, company):
         company.list_employees()
-        employee = company.get_employee_input("Enter employee name to fire: ", company.employees)
+        employee = company.get_employee_input("Enter employee name to demote: ", company.employees)
 
         match employee.role:
             case "CEO":
@@ -125,7 +125,7 @@ class CEOPanel:
     # Financial Options
     def increase_salary(self, company):
         company.list_employees()
-        employee = company.get_employee_input("Enter employee name to fire: ", company.employees)
+        employee = company.get_employee_input("Enter employee name to increase salary: ", company.employees)
 
         while True:
             amount = input("Enter amount to increase: ").strip()
@@ -139,7 +139,7 @@ class CEOPanel:
 
     def decrease_salary(self, company):
         company.list_employees()
-        employee = company.get_employee_input("Enter employee name to fire: ", company.employees)
+        employee = company.get_employee_input("Enter employee name to decrease salary: ", company.employees)
 
         while True:
             amount = input("Enter amount to decrease: ").strip()
@@ -168,18 +168,18 @@ class CEOPanel:
                 print("Invalid choice.")
             else:
                 inventory.add_item(item_list[int(choice) - 1][0], item_list[int(choice) - 1][1], 1)
-                inventory.cash -= inventory.get_price(item_list[int(choice) - 1][0], size)
+                inventory.cash -= inventory.get_price(item_list[int(choice) - 1][0], item_list[int(choice) - 1][1])
                 print(f"You have bought {item_list[int(choice) - 1][0].title()}. | Remaining cash {inventory.cash}")
                 break
 
-    def sell_item(self, inventory, sell=True):
+    def sell_item(self, inventory, company, sell=True):
         inventory.show_inventory()
         if not inventory.items:
             print("No items yet.")
             return
 
         item_names = list(inventory.items.keys())
-        chosen_item = self.get_employee_input("Pick an item: ", item_names)
+        chosen_item = company.get_employee_input("Pick an item: ", item_names)
 
         while True:
             choice_size = input("What size? (Small, Medium, Large): ").strip()
@@ -250,7 +250,7 @@ Choose (1-2): """)
 Choose (1-3): """)
                     match choice2:
                         case "1": self.buy_item(inventory)
-                        case "2": self.sell_item(inventory)
+                        case "2": self.sell_item(inventory, company)
                         case "3": self.sell_item(inventory, sell=False)
                         case _: print("Choice is not an option")
                 case _: break

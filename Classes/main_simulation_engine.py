@@ -24,9 +24,10 @@ class main_simulation_engine:
                 for _ in range(8):
                     for employee in employees:
                         TaskGen.do_task(employee)
-                TaskGen.overtime_check(employees, Attendance, day)
+                TaskGen.overtime_check(Attendance, day)
                 TaskGen.complete_task(inventory)
                 company.upgrade_employee()
+                TaskGen.task_to_employee_ratio_check(employees)
             case "Manual":
                 TaskGen.task_to_employee_ratio_check(employees)
                 TaskGen.assign_task_manual(employees, Attendance, day, company)
@@ -36,9 +37,9 @@ class main_simulation_engine:
                         if not employee.working:
                             if TaskGen.task_list:
                                 TaskGen.assign_task_manual_individual(employee)
-                TaskGen.overtime_check(employees, Attendance, day)
+                TaskGen.overtime_check(Attendance, day)
                 TaskGen.complete_task(inventory)
-                company.upgrade_employee()
+                company.upgrade_employee(day)
                 TaskGen.task_to_employee_ratio_check(employees)
                 
         #show End of day menu

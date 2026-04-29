@@ -32,4 +32,4 @@ class Event:
             speed_modifier = 1.0
 
         for emp in employees:
-            emp.speed = speed_modifier
+            emp.speed = int(emp.speed * speed_modifier)

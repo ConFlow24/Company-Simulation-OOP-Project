@@ -23,7 +23,7 @@ salary = Salary()
 print("\n--- Welcome to the Company Simulator! ---\n")
 print("In this simulation, you will be managing a company, overseeing employees, and making strategic decisions to grow your business.")
 name = input("\nEnter the name of your Company: ")
-company = Company(name, Attendance, Salary, inventory)
+company = Company(name, Attendance, salary, inventory)
 
 
 while True:
@@ -50,7 +50,7 @@ while True:
         auto_days -= 1
 
     main_simulation_engine.sim_engine(
-        day, EmpGen.employees, control_type, company, Attendance, TaskGen, inventory, Salary)
+        day, EmpGen.employees, control_type, company, Attendance, TaskGen, inventory, salary)
 
     while True:
         End_day_choice = input(f"""
