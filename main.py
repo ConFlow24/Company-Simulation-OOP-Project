@@ -96,6 +96,4 @@ Input choice: """)
 """)
                 exit()
             case _:
-                print("\nInput not in choices. Starting next day...")
-                day += 1
-                break
+                print("\nInput not in choices. Please try again.")
