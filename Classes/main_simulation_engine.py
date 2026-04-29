@@ -1,13 +1,19 @@
 #main simulation engine, responsible for generating days and managing the flow of the simulation
 
+from Classes.events import Event
 
 class main_simulation_engine:
+    def __init__(self):
+        self.event_system = Event()
+
     def sim_engine(self, day, employees, control_type, company, Attendance, TaskGen, inventory, salary):#loop in main.py
         print(f"\nDay {day}\n")
         #generate attendance for each employee
         for employee in employees:
             Attendance.clock_in(day, employee.name, employee.punctuality)
         Attendance.show_attendance(day)
+        
+        self.event_system.random_productivity(employees)
 
         #tasks
         TaskGen.generate_buy_task(employees)
@@ -41,6 +47,8 @@ class main_simulation_engine:
                 TaskGen.complete_task(inventory)
                 company.upgrade_employee(day)
                 TaskGen.task_to_employee_ratio_check(employees)
+                
+        self.event_system.restore_productivity(employees)
 
         #show End of day menu
 

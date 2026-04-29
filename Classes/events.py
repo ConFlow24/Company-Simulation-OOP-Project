@@ -23,15 +23,20 @@ class Event:
         ]
 
         if event_roll <= 15:
-            print(random.choice(bad_texts))
+            print("\n" + random.choice(bad_texts))
             speed_modifier = 0.5
         elif event_roll >= 85:
-            print(random.choice(good_texts))
+            print("\n" + random.choice(good_texts))
             speed_modifier = 2.0
         else:
             speed_modifier = 1.0
 
         for emp in employees:
-            emp_speed_original = emp.speed
-            emp.speed = int(emp.speed * speed_modifier)
-            #ibalik yung emp speed pagkatapos ng event
+            emp.original_speed = emp.speed 
+            emp.speed = max(1, int(emp.original_speed * speed_modifier))
+
+    def restore_productivity(self, employees):
+        for emp in employees:
+            if hasattr(emp, 'original_speed'):
+                emp.speed = emp.original_speed
+                del emp.original_speed
