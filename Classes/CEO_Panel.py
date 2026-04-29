@@ -197,7 +197,7 @@ class CEOPanel:
 
         item_names = list(inventory.items.keys())
         chosen_item = company.get_employee_input(
-            "\nPick an item: ", item_names)
+            "\nPick an item using a number (chronological) from the list: ", item_names)
 
         while True:
             choice_size = input(
@@ -212,7 +212,7 @@ class CEOPanel:
 
         while True:
             try:
-                choice_amount = int(input("\nHow many: "))
+                choice_amount = int(input("\nHow many you want to buy?: "))
                 if choice_amount <= 0:
                     print("Amount must be positive.")
                 elif choice_amount > inventory.items[chosen_item][choice_size]:
