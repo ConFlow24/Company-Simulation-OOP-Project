@@ -74,18 +74,24 @@ class CEOPanel:
                 employee.pay = 55000
                 print(f"{employee.name} promoted to Employee!")
             case "Employee":
-                skip = input("Skip Senior? (yes/no): ").strip().lower()
-                if skip == "yes":
-                    if manager_count >= 5:
-                        print("Cannot promote. Already have 5 managers!")
-                        return
-                    employee.role = "Manager"
-                    employee.pay = 80000
-                    print(f"{employee.name} promoted to Manager!")
-                else:
-                    employee.role = "Senior"
-                    employee.pay = 90000
-                    print(f"{employee.name} promoted to Senior!")
+                while True:
+                    skip = input("Skip Senior? (yes/no): ").strip().lower()
+                    match skip:
+                        case "yes":
+                            if manager_count >= 5:
+                                print("Cannot promote. Already have 5 managers!")
+                                continue
+                            employee.role = "Manager"
+                            employee.pay = 80000
+                            print(f"{employee.name} promoted to Manager!")
+                            break
+                        case "no":
+                            employee.role = "Senior"
+                            employee.pay = 90000
+                            print(f"{employee.name} promoted to Senior!")
+                            break
+                        case _:
+                            print("Invalid choice.")
             case "Senior":
                 if manager_count >= 5:
                     print("Cannot promote. Already have 5 managers!")
@@ -121,10 +127,12 @@ class CEOPanel:
         company.list_employees()
         employee = company.get_employee_input("Enter employee name to fire: ")
 
-        amount = input("Enter amount to increase: ").strip()
-        if not amount.isdigit():
-            print("Invalid amount.")
-            return
+        while True:
+            amount = input("Enter amount to increase: ").strip()
+            if not amount.isdigit():
+                print("Invalid amount.")
+                continue
+            break
         amount = int(amount)
         employee.pay += amount
         print(f"Salary of {employee.name} increased by {amount}!")
@@ -133,10 +141,12 @@ class CEOPanel:
         company.list_employees()
         employee = company.get_employee_input("Enter employee name to fire: ")
 
-        amount = input("Enter amount to decrease: ").strip()
-        if not amount.isdigit():
-            print("Invalid amount.")
-            return
+        while True:
+            amount = input("Enter amount to decrease: ").strip()
+            if not amount.isdigit():
+                print("Invalid amount.")
+                continue
+            break
         amount = int(amount)
         if amount > employee.pay+1000:
             print("Cannot decrease salary below 1000.")
