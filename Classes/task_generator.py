@@ -57,7 +57,9 @@ class TaskSystems:
             available_employees.append(emp)
         while self.task_list and available_employees:
         # pick task
-            print("\n--- Unassigned Tasks ---")
+            print(f"""\n" + "=" * 70
+{'UNASSIGNED TASKS':^70}
+{"=" * 70}""")
             for i, task in enumerate(self.task_list):
                 print(f"{i+1}. {task.type} - {task.name.title()} ({task.size})")
             print(f"{len(self.task_list)+1}. Stop assigning")
@@ -100,7 +102,9 @@ class TaskSystems:
     def assign_task_manual_individual(self, emp):
         if emp.role == "CEO" or self.stop_manual_assign == False:
             return
-        print("\n--- Unassigned Tasks ---")
+        print(f"""\n" + "=" * 70
+{'UNASSIGNED TASKS':^70}
+{"=" * 70}""")
         for i, task in enumerate(self.task_list):
             print(f"{i+1}. {task.type} - {task.name.title()} ({task.size})")
         
@@ -226,15 +230,16 @@ class TaskSystems:
     
     def task_to_employee_ratio_check(self, employees_list):
         if len(self.task_list) / len(employees_list) > 3:
-            print("\nYou have too many tasks per employee. Consider hiring more employees, through the CEO Panel.\n")
+            print(f"\n{"-" * 70}\nYou have too many tasks per employee. Consider hiring more employees, through the CEO Panel.\n{"-" * 70}\n")
 
     def show_tasks(self):
-        print("\n" + "=" * 70)
-        print(f"{'TASKS FOR THE DAY':^70}")
-        print("=" * 70)
-        print(
-            f"{'Type':<10} {'Name':<15} {'Size':<10} {'Duration':>10} {'Assigned To':<20}")
-        print("=" * 70)
+        print(f"""
+{"=" * 70}
+{'TASKS FOR THE DAY':^70}
+{"=" * 70}
+{'Type':<10} {'Name':<15} {'Size':<10} {'Duration':>10} {'Assigned To':<20}
+{"=" * 70}
+""")
         for task in self.task_list:
             assigned = task.assigned_to.name if task.assigned_to else "Unassigned"
             print(

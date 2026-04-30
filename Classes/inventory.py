@@ -30,9 +30,9 @@ class Inventory:
         return total_stock, total_price
     
     def show_inventory(self):
-        print("\n" + "=" * 70)
-        print(f"{'INVENTORY':^70}")
-        print("=" * 70)
+        print(f"""{'=' * 70}
+{'INVENTORY':^70}
+{'=' * 70}""")
         if self.items:
             print(f"{'Item Name':<20} {'Small':>10} {'Medium':>10} {'Large':>10} {'Base Price':>15}")
             print("=" * 70)

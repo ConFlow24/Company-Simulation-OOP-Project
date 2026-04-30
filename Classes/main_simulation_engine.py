@@ -25,7 +25,9 @@ class main_simulation_engine:
                 #work for 8 hours
                 TaskGen.task_to_employee_ratio_check(employees)
                 TaskGen.assign_task(employees, Attendance, day)
-                print("\n--- Day Events ---")
+                print(f"""{'=' * 70}
+{'DAY EVENTS':^70}
+{'=' * 70}""")
                 for _ in range(8):
                     for employee in employees:
                         TaskGen.do_task(employee)
@@ -36,7 +38,9 @@ class main_simulation_engine:
             case "Manual":
                 TaskGen.task_to_employee_ratio_check(employees)
                 TaskGen.assign_task_manual(employees, Attendance, day, company)
-                print("\n--- Day Events ---")
+                print(f"""{'=' * 70}
+{'DAY EVENTS':^70}
+{'=' * 70}""")
                 for i in range(8):
                     for employee in employees:
                         TaskGen.do_task(employee)

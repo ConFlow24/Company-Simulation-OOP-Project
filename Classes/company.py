@@ -67,19 +67,21 @@ class Company:
 
     def show_full_report(self, day):
         stock, price = self.inventory.total_stock_and_price()
-        print("\n" +"=" * 70 +
-f"\n{'COMPANY REPORT':^70}" +
-"=" * 70 + f"""
+        print(f"""\n{"=" * 70}
+{'COMPANY REPORT':^70}
+{"=" * 70}
 {'Company Name:':<20} {self.name}
 {'Days Simulated:':<20} {day}
 {'Total Employees:':<20} {len(self.employees)}
 {'Cash:':<20} {self.inventory.cash:,.2f}
 {'Items in Inventory:':<20} {stock}
-{'Inventory Value:':<20} {price:,.2f}\n""" +
-"=" * 70 +
-f"\n{'EMPLOYEE LIST':^70}\n" +
-"=" * 70 +
-f"\n{'Name':<30} {'Role':<20} {'Pay':>18}\n" + "-" * 70)
+{'Inventory Value:':<20} {price:,.2f}
+
+{"=" * 70}
+{'EMPLOYEE LIST':^70}
+{"=" * 70 }
+{'Name':<30} {'Role':<20} {'Pay':>18}
+{"-" * 70}""")
         for emp in self.employees:
             print(f"{emp.name:<30} {emp.role:<20} {emp.pay:>18,.2f}")
         print("=" * 70 + "\n")
