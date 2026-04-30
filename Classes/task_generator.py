@@ -45,6 +45,19 @@ class TaskSystems:
             available_employees.remove(emp)
             self.task_list.remove(task)
 
+    def assign_task_single(self, employee, attendance, day):
+        if employee.role == "CEO":
+            return
+        emp_record = attendance.records[day].get(employee.name, {})
+        if emp_record.get("status") == "Absent":
+            return
+        if self.task_list:
+            task = random.choice(self.task_list)
+            task.assigned_to = employee
+            employee.working = True
+            self.doing_tasks.append(task)
+            self.task_list.remove(task)
+
     def assign_task_manual(self, employees, attendance, day, company):
         available_employees = []
         for emp in employees:

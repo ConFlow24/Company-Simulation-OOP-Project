@@ -7,7 +7,9 @@ class main_simulation_engine:
         self.event_system = Event()
 
     def sim_engine(self, day, employees, control_type, company, Attendance, TaskGen, inventory, salary):#loop in main.py
-        print(f"\nDay {day}\n")
+        print(f"""\n{'=' * 70}
+Day {day}
+{'=' * 70}""")
         #generate attendance for each employee
         for employee in employees:
             Attendance.clock_in(day, employee.name, employee.punctuality)
@@ -31,8 +33,12 @@ class main_simulation_engine:
                 for _ in range(8):
                     for employee in employees:
                         TaskGen.do_task(employee)
+                        if not employee.working and TaskGen.task_list:
+                            TaskGen.assign_task_single(employee, Attendance, day)
                 TaskGen.overtime_check(Attendance, day)
                 TaskGen.complete_task(inventory)
+                for employee in employees:
+                    employee.working = False
                 company.upgrade_employee(day)
                 TaskGen.task_to_employee_ratio_check(employees)
             case "Manual":
@@ -41,7 +47,7 @@ class main_simulation_engine:
                 print(f"""{'=' * 70}
 {'DAY EVENTS':^70}
 {'=' * 70}""")
-                for i in range(8):
+                for _ in range(8):
                     for employee in employees:
                         TaskGen.do_task(employee)
                         if not employee.working:

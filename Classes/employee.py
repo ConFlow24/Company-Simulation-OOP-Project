@@ -16,7 +16,7 @@ class Employee:
 
     def upgrade_stats(self):
         #tasks multiple of 5, never level up more than once, not level up when no tasks complete
-        if self.tasks_completed % 5 == 0 and self.tasks_completed != self.last_levelup and self.tasks_completed != 0:
+        if self.tasks_completed % 8 == 0 and self.tasks_completed != self.last_levelup and self.tasks_completed != 0:
             self.speed += random.randint(1, 3)
             self.last_levelup = self.tasks_completed
             print(f"{self.name} leveled up!")
