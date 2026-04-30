@@ -170,14 +170,24 @@ class CEOPanel:
     # Inventory Options
     def buy_item(self, inventory):
         item_list = []
+
+        print("\n" + "=" * 45)
+        print(f"{'AVAILABLE ITEMS':^45}")
+        print("=" * 45)
+        print(f"{'#':<5} {'Item':<25} {'Price':>10}")
+        print("=" * 45)
+
         for i in range(5):
             random_item = random.choice(list(items))
             size = random.choice(["Small", "Medium", "Large"])
             print(
                 f"{i+1}. {random_item.title()} - ${inventory.get_price(random_item, size):.2f}")
             item_list.append((random_item, size))
+
+        print("=" * 45)
+
         while True:
-            choice = input("\nPick item to buy (1-5): \n").strip()
+            choice = input("\nPick item to buy (1-5): ").strip()
             if choice not in ["1", "2", "3", "4", "5"]:
                 print("Invalid choice.")
             else:
@@ -212,7 +222,7 @@ class CEOPanel:
 
         while True:
             try:
-                choice_amount = int(input("\nHow many you want to remove?: "))
+                choice_amount = int(input("\nHow many do you want?: "))
                 if choice_amount <= 0:
                     print("Amount must be positive.")
                 elif choice_amount > inventory.items[chosen_item][choice_size]:
