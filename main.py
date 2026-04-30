@@ -20,8 +20,22 @@ TaskGen = TaskGen()
 salary = Salary()
 
 
-print("\n--- Welcome to the Company Simulator! ---\n")
-print("In this simulation, you will be managing a company, overseeing employees, and making strategic decisions to grow your business.")
+print("""
+==========================================================
+        WELCOME TO THE COMPANY SIMULATOR!
+==========================================================
+  You are the CEO of a newly founded company.
+  Your goal is to manage employees, handle inventory,
+  and make strategic decisions to grow your business.
+
+  - Assign tasks to employees
+  - Hire and fire staff
+  - Buy and sell inventory
+  - Grow your company day by day
+
+  Good luck, CEO!
+==========================================================\n
+""")
 name = input("\nEnter the name of your Company: ")
 company = Company(name, Attendance, salary, inventory)
 
