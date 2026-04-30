@@ -57,7 +57,7 @@ class TaskSystems:
             available_employees.append(emp)
         while self.task_list and available_employees:
         # pick task
-            print(f"""\n" + "=" * 70
+            print(f"""\n{"=" * 70}
 {'UNASSIGNED TASKS':^70}
 {"=" * 70}""")
             for i, task in enumerate(self.task_list):
@@ -102,7 +102,7 @@ class TaskSystems:
     def assign_task_manual_individual(self, emp):
         if emp.role == "CEO" or self.stop_manual_assign == False:
             return
-        print(f"""\n" + "=" * 70
+        print(f"""\n{"=" * 70}
 {'UNASSIGNED TASKS':^70}
 {"=" * 70}""")
         for i, task in enumerate(self.task_list):
