@@ -3,8 +3,21 @@ import random
 
 class Employee:
     """
-    Represents a company employee with attributes like role, pay, and performance stats.
-    Serves as the base class for Manager, CEO, Intern, and Senior.
+    Base class representing a general employee in the company simulation.
+
+    Serves as the parent class for all specific roles (Manager, CEO, Intern, Senior).
+    Stores core employee attributes and handles stat upgrades and promotion checks.
+
+    Attributes:
+        name (str): Full name of the employee.
+        role (str): Current job role (ex. Employee, Manager, Intern, Senior).
+        pay (int): Monthly salary of the employee.
+        speed (int): Work speed stat that affects task completion rate.
+        punctuality (int): Punctuality rating from 1-5; affects attendance probability.
+        total_hours (int): Accumulated total hours worked.
+        tasks_completed (int): Total number of tasks the employee has finished.
+        working (bool): Whether the employee is currently assigned to a task.
+        last_levelup (int): Task count at which the employee last leveled up; prevents double leveling.
     """
 
     def __init__(self, name="John Doe", role="Employee", pay=50000, speed=1, punctuality=1, total_hours=0, tasks_completed=0, working=False):
@@ -19,7 +32,12 @@ class Employee:
         self.last_levelup = 0
 
     def upgrade_stats(self):
-        # tasks multiple of 5, never level up more than once, not level up when no tasks complete
+        """
+        Increases the employee's speed stat when a level-up threshold is reached.
+
+        Level-up occurs every 8 completed tasks. Uses last_levelup to ensure
+        the employee only levels up once per threshold, even if called multiple times.
+        """
         if self.tasks_completed % 8 == 0 and self.tasks_completed != self.last_levelup and self.tasks_completed != 0:
             self.speed += random.randint(1, 3)
             self.last_levelup = self.tasks_completed
