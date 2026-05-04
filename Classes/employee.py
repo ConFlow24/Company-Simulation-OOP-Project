@@ -1,8 +1,12 @@
-# Already  done, pa-check if ok, ung check promotion i-call yan sa main.py
 import random
 
 
 class Employee:
+    """
+    Represents a company employee with attributes like role, pay, and performance stats.
+    Serves as the base class for Manager, CEO, Intern, and Senior.
+    """
+
     def __init__(self, name="John Doe", role="Employee", pay=50000, speed=1, punctuality=1, total_hours=0, tasks_completed=0, working=False):
         self.name = name
         self.role = role
@@ -15,7 +19,7 @@ class Employee:
         self.last_levelup = 0
 
     def upgrade_stats(self):
-        #tasks multiple of 5, never level up more than once, not level up when no tasks complete
+        # tasks multiple of 5, never level up more than once, not level up when no tasks complete
         if self.tasks_completed % 8 == 0 and self.tasks_completed != self.last_levelup and self.tasks_completed != 0:
             self.speed += random.randint(1, 3)
             self.last_levelup = self.tasks_completed
@@ -23,10 +27,11 @@ class Employee:
 
     def check_promotion(self):
         promotion_threshold = {"Intern": 10,
-            "Employee": 20, "Senior": 35, "Manager": 999}
+                               "Employee": 20, "Senior": 35, "Manager": 999}
         if self.role == "Intern" and self.tasks_completed >= promotion_threshold["Intern"]:
             while True:
-                choice = input(f"{self.name} is ready for promotion! Promote to Employee? (y/n): ").lower()
+                choice = input(
+                    f"{self.name} is ready for promotion! Promote to Employee? (y/n): ").lower()
                 match choice:
                     case "y":
                         self.role = "Employee"
@@ -39,7 +44,8 @@ class Employee:
                         print("Invalid input. Enter y or n.")
         elif self.role == "Employee" and self.tasks_completed >= promotion_threshold["Employee"]:
             while True:
-                choice = input(f"{self.name} is ready for promotion! Promote to Senior? (y/n): ").lower()
+                choice = input(
+                    f"{self.name} is ready for promotion! Promote to Senior? (y/n): ").lower()
                 match choice:
                     case "y":
                         self.role = "Senior"
@@ -52,7 +58,8 @@ class Employee:
                         print("Invalid input. Enter y or n.")
         elif self.role == "Senior" and self.tasks_completed >= promotion_threshold["Senior"]:
             while True:
-                choice = input(f"{self.name} is ready for promotion! Promote to Manager? (y/n): ").lower()
+                choice = input(
+                    f"{self.name} is ready for promotion! Promote to Manager? (y/n): ").lower()
                 match choice:
                     case "y":
                         self.role = "Manager"
