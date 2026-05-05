@@ -38,12 +38,25 @@ class Employee:
         Level-up occurs every 8 completed tasks. Uses last_levelup to ensure
         the employee only levels up once per threshold, even if called multiple times.
         """
+
         if self.tasks_completed % 8 == 0 and self.tasks_completed != self.last_levelup and self.tasks_completed != 0:
             self.speed += random.randint(1, 3)
             self.last_levelup = self.tasks_completed
             print(f"{self.name} leveled up!")
 
     def check_promotion(self):
+        """
+        This function checks if the employee is elogible for promotion 
+        based on their current role and tasks completed.
+
+        Promotion thresholds:
+            - Intern → Employee: 10 tasks
+            - Employee → Senior: 20 tasks
+            - Senior → Manager: 35 tasks
+
+        Prompts the CEO (user) to confirm or decline each promotion interactively.
+        """
+
         promotion_threshold = {"Intern": 10,
                                "Employee": 20, "Senior": 35, "Manager": 999}
         if self.role == "Intern" and self.tasks_completed >= promotion_threshold["Intern"]:
@@ -91,27 +104,74 @@ class Employee:
 
 
 class Manager(Employee):
+    """
+    This class represents a Manager role in the company simulation.
+    It also inherits from the Employee class and uses the same attributes and methods,
+    but has a specific method for managing tasks and teams.
+    """
+
     def __init__(self, name, pay, role="Manager", speed=1, punctuality=1,
                  total_hours=0, tasks_completed=0, working=False):
         super().__init__(name, role, pay, speed, punctuality,
                          total_hours, tasks_completed)
+
+        """
+        Initializes a Manager with Manager-specific defaults.
+ 
+        Args:
+            name (str): Manager's full name.
+            pay (int): Monthly salary.
+            role (str): Defaults to 'Manager'.
+            speed (int): Work speed stat. Defaults to 1.
+            punctuality (int): Punctuality rating (1-5). Defaults to 1.
+            total_hours (int): Total hours worked. Defaults to 0.
+            tasks_completed (int): Tasks completed so far. Defaults to 0.
+            working (bool): Whether currently on a task. Defaults to False.
+        """
 
     def manage(self):
         print(f"{self.name} is managing.")
 
 
 class CEO(Employee):
+    """
+    This class represents a CEO role in the company simulation.
+    It also inherits from the Employee class and uses the same attributes and methods,
+    but has a specific method for making strategic decisions.
+    """
+
     def __init__(self, name, pay, role="CEO", speed=1, punctuality=1,
                  total_hours=0, tasks_completed=0):
         super().__init__(name, role, pay, speed, punctuality,
                          total_hours, tasks_completed)
 
+        """
+        Initializes the CEO with CEO-specific defaults.
+ 
+        Args:
+            name (str): CEO's full name.
+            pay (int): Monthly salary.
+            role (str): Defaults to 'CEO'.
+            speed (int): Work speed stat. Defaults to 1.
+            punctuality (int): Punctuality rating (1-5). Defaults to 1.
+            total_hours (int): Total hours worked. Defaults to 0.
+            tasks_completed (int): Tasks completed so far. Defaults to 0.
+        """
+
 
 class Intern(Employee):
+    """
+    This class represents an Intern role in the company simulation.
+    It also inherits from the Employee class and uses the same attributes and methods,
+    but has a specific method for learning and gaining experience.
+    """
+
     def __init__(self, name, pay, role="Intern", speed=1, punctuality=1,
                  total_hours=0, tasks_completed=0, working=False):
         super().__init__(name, role, pay, speed, punctuality,
                          total_hours, tasks_completed, working)
+
+        # Same attributes as Employee, but with Intern-specific defaults.
 
     def learn(self):
         print(f"{self.name} is learning.")
@@ -122,6 +182,8 @@ class Senior(Employee):
                  total_hours=0, tasks_completed=0, working=False):
         super().__init__(name, role, pay, speed, punctuality,
                          total_hours, tasks_completed)
+
+        # Same attributes as Employee, but with Senior-specific defaults.
 
     def mentor(self):
         print(f"{self.name} is mentoring.")
