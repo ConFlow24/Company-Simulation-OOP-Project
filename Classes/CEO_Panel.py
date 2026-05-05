@@ -4,9 +4,24 @@ from Classes.employee_generator import EmpGen
 
 
 class CEOPanel:
+    """
+    This class represents the CEO Panel in the company simulation.
+    It includes three main categories of options: Employee Options, Financial Options, and Inventory Options.
+    The CEO can use this panel to manage employees (hire, fire, promote, demote), adjust salaries, and buy/sell inventory items.
+    Each option is implemented as a method within this class, and the show_panel method provides an
+    interactive menu for the CEO to access these options.
+    """
 
-    # Employee Options
+    # Emplotee Options
     def hire_employee(self, company, empgen):
+        """
+        This function calls Emp_Gen to generate 4 candidates for the CEO to choose
+        from when hiring a new employee. The CEO can only choose from the 4 candidates.
+        Args:
+            company (Company): The company object to which the new employee will be added.
+            empgen (EmpGen): The employee generator object used to create candidate employees.
+
+        """
         Emp_Gen = EmpGen()
         Emp_Gen.roles = ["Employee", "Intern"]
         Emp_Gen.weights = [0.8, 0.2]
