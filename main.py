@@ -1,4 +1,4 @@
-# runs the program
+"""Company Simulation Game - Main Module"""
 
 from Classes.employee_generator import EmpGen
 from Classes.main_simulation_engine import main_simulation_engine
@@ -9,7 +9,6 @@ from Classes.CEO_Panel import CEOPanel
 from Classes.employee_generator import EmpGen
 from Classes.task_generator import TaskSystems as TaskGen
 from Classes.inventory import Inventory
-
 
 main_simulation_engine = main_simulation_engine()
 EmpGen = EmpGen()
