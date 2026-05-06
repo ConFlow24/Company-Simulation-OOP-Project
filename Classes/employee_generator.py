@@ -1,4 +1,4 @@
-from Classes.employee import Employee
+from Classes.employee import Employee, RegularEmployee, Manager, CEO, Intern, Senior
 import random
 
 first_names = [
@@ -87,7 +87,17 @@ class EmpGen:
             weights = [0.05, 0.75, 0.10, 0.05, 0.05]
             punctuality = random.choices(
                 punctuality_values, weights=weights, k=1)[0]
-            emp = Employee(random_name, role, pay, speed, punctuality)
+            role_class_map = {
+                "CEO": CEO,
+                "Manager": Manager,
+                "Employee": RegularEmployee,
+                "Intern": Intern,
+                "Senior": Senior
+            }
+
+            EmpClass = role_class_map.get(role, RegularEmployee)
+            emp = EmpClass(random_name, pay, speed=speed,
+                           punctuality=punctuality)
             self.employees.append(emp)
             company.add_employee(emp)
 

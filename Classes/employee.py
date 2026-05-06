@@ -1,7 +1,9 @@
+from abc import ABC, abstractmethod
+
 import random
 
 
-class Employee:
+class Employee(ABC):
     """
     Base class representing a general employee in the company simulation.
 
@@ -30,6 +32,10 @@ class Employee:
         self.tasks_completed = tasks_completed
         self.working = working
         self.last_levelup = 0
+
+    @abstractmethod
+    def work(self):
+        pass
 
     def upgrade_stats(self):
         """
@@ -103,6 +109,11 @@ class Employee:
                         print("Invalid input. Enter y or n.")
 
 
+class RegularEmployee(Employee):
+    def work(self):
+        print(f"{self.name} is working.")
+
+
 class Manager(Employee):
     """
     This class represents a Manager role in the company simulation.
@@ -128,6 +139,9 @@ class Manager(Employee):
             tasks_completed (int): Tasks completed so far. Defaults to 0.
             working (bool): Whether currently on a task. Defaults to False.
         """
+
+    def work(self):
+        self.manage()
 
     def manage(self):
         print(f"{self.name} is managing.")
@@ -158,6 +172,9 @@ class CEO(Employee):
             tasks_completed (int): Tasks completed so far. Defaults to 0.
         """
 
+    def work(self):  # ← just add this
+        print(f"{self.name} is overseeing the company.")
+
 
 class Intern(Employee):
     """
@@ -173,6 +190,9 @@ class Intern(Employee):
 
         # Same attributes as Employee, but with Intern-specific defaults.
 
+    def work(self):
+        self.learn()
+
     def learn(self):
         print(f"{self.name} is learning.")
 
@@ -184,6 +204,9 @@ class Senior(Employee):
                          total_hours, tasks_completed)
 
         # Same attributes as Employee, but with Senior-specific defaults.
+
+    def work(self):
+        self.mentor()
 
     def mentor(self):
         print(f"{self.name} is mentoring.")
