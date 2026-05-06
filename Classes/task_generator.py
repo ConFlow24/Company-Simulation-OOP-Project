@@ -133,6 +133,8 @@ class TaskSystems:
             company (Company): Used to display the available employees list.
         """
 
+        self.stop_manual_assign = False
+
         available_employees = []
         for emp in employees:
             if emp.role == "CEO" or emp.working:
@@ -196,7 +198,7 @@ class TaskSystems:
             emp (Employee): The employee who just became free and needs a task.
         """
 
-        if emp.role == "CEO" or self.stop_manual_assign == False:
+        if emp.role == "CEO" or self.stop_manual_assign:
             return
         print(f"""\n{"=" * 70}
 {'UNASSIGNED TASKS':^70}
