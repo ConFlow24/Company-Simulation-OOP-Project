@@ -99,16 +99,12 @@ class TaskSystems:
 
     def assign_task_single(self, employee, attendance, day):
         """
-        Allows the player to manually assign tasks to available employees.
-
-        Loops through available employees and unassigned tasks, prompting the player
-        to pick which task goes to which employee. Player can stop assigning at any time.
+        Automatically assigns a random task to a single free employee mid-day if tasks remain.
 
         Args:
             employees (list): Full list of company employees.
             attendance (Attendance): The attendance system to check absences.
             day (int): The current simulation day.
-            company (Company): Used to display the available employees list.
         """
 
         if employee.role == "CEO":

@@ -123,12 +123,9 @@ class Manager(Employee):
 
     def __init__(self, name, pay, role="Manager", speed=1, punctuality=1,
                  total_hours=0, tasks_completed=0, working=False):
-        super().__init__(name, role, pay, speed, punctuality,
-                         total_hours, tasks_completed)
-
         """
         Initializes a Manager with Manager-specific defaults.
- 
+
         Args:
             name (str): Manager's full name.
             pay (int): Monthly salary.
@@ -139,6 +136,9 @@ class Manager(Employee):
             tasks_completed (int): Tasks completed so far. Defaults to 0.
             working (bool): Whether currently on a task. Defaults to False.
         """
+
+        super().__init__(name, role, pay, speed, punctuality,
+                         total_hours, tasks_completed)
 
     def work(self):
         self.manage()
@@ -156,12 +156,9 @@ class CEO(Employee):
 
     def __init__(self, name, pay, role="CEO", speed=1, punctuality=1,
                  total_hours=0, tasks_completed=0):
-        super().__init__(name, role, pay, speed, punctuality,
-                         total_hours, tasks_completed)
-
         """
         Initializes the CEO with CEO-specific defaults.
- 
+
         Args:
             name (str): CEO's full name.
             pay (int): Monthly salary.
@@ -171,6 +168,9 @@ class CEO(Employee):
             total_hours (int): Total hours worked. Defaults to 0.
             tasks_completed (int): Tasks completed so far. Defaults to 0.
         """
+
+        super().__init__(name, role, pay, speed, punctuality,
+                         total_hours, tasks_completed)
 
     def work(self):  # ← just add this
         print(f"{self.name} is overseeing the company.")
@@ -185,10 +185,9 @@ class Intern(Employee):
 
     def __init__(self, name, pay, role="Intern", speed=1, punctuality=1,
                  total_hours=0, tasks_completed=0, working=False):
+        #  Same attributes as Employee, but with Intern-specific defaults.
         super().__init__(name, role, pay, speed, punctuality,
                          total_hours, tasks_completed, working)
-
-        # Same attributes as Employee, but with Intern-specific defaults.
 
     def work(self):
         self.learn()
@@ -200,10 +199,9 @@ class Intern(Employee):
 class Senior(Employee):
     def __init__(self, name, pay, role="Senior", speed=1, punctuality=1,
                  total_hours=0, tasks_completed=0, working=False):
+        # Same attributes as Employee, but with Senior-specific defaults.
         super().__init__(name, role, pay, speed, punctuality,
                          total_hours, tasks_completed)
-
-        # Same attributes as Employee, but with Senior-specific defaults.
 
     def work(self):
         self.mentor()
