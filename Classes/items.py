@@ -1,3 +1,9 @@
+"""
+This files contains the items dictionary, which is later used in the Inventory class
+to generate the inventory stock randomly at the start of the simulation, 
+and to restock the inventory when items are sold.
+"""
+
 items = {
     "keyboard": 25, "mouse": 15, "monitor": 180, "laptop": 800, "desktop computer": 900,
     "printer": 120, "scanner": 100, "tablet": 300, "smartphone": 700, "phone case": 15,
