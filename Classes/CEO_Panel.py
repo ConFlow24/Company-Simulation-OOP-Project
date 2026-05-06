@@ -25,9 +25,11 @@ class CEOPanel:
         Emp_Gen = EmpGen()
         Emp_Gen.roles = ["Employee", "Intern"]
         Emp_Gen.weights = [0.8, 0.2]
+        # this generates 4 (first becomes the CEO)
         Emp_Gen.generate_employee(4, company)
         candidates = Emp_Gen.employees
-        candidates.pop(0)
+        candidates.pop(0)  # this will remove the CEO candidate from the list.
+        # will remove temporarily added candidates from company.
         del company.employees[-4:]
 
         print("\n" + "=" * 70)
@@ -52,6 +54,17 @@ class CEOPanel:
         print(f"{chosen.name} hired as {chosen.role}!")
 
     def fire_employee(self, company, emp_gen):
+        """
+        This functions lets the USER (or CEO) select and remove an employee from the company.
+
+        If the USER tries to fire the CEO, it will ask if they want to transfer the CEO
+        position to another employee. 
+
+        Args:
+            company (Company): The company to remove the employee from.
+            emp_gen (EmpGen): The employee generator list where the employee to be fired
+            is also removed.
+        """
         company.list_employees()
         employee = company.get_employee_input(
             "Choose a number from the list to fire: ", company.employees)
@@ -80,10 +93,22 @@ class CEOPanel:
         print(f"{employee.name} has been fired.")
 
     def promote_employee(self, company):
+        """
+        This function allows the USER (or CEO) to select an employee (by number) and promote
+        them to the next role (Intern -> Employee -> Senior -> Manager). 
+
+        The USER can also skip the Senior role when promoting an Employee.
+        CEO cannot be promoted, and Managers cannot be promoted further.
+
+        Args:
+            company (Company): The company object containing the employees to be promoted.s
+        """
         company.list_employees()
         employee = company.get_employee_input(
             "Choose a number from the list to promote: ", company.employees)
 
+        # it counts the number of managers to ensure there are no more than 5 in the company.
+        # if there are already 5 manager, the USER cannot promote another employee to manager.
         manager_count = 0
         for emp in company.employees:
             if emp.role == "Manager":
@@ -126,6 +151,16 @@ class CEOPanel:
                 print(f"{employee.name} promoted to Manager!")
 
     def demote_employee(self, company):
+        """
+        This function allows the USER (or CEO) to select an employee (by number) and demote
+        them to the previous role (Manager -> Senior -> Employee -> Intern).
+
+        It is the same as promote_employee but in reverse. 
+        The CEO cannot be demoted, and Interns cannot be demoted further.
+
+        Args:
+            company (Company): The company object containing the employees to be demoted.
+        """
         company.list_employees()
         employee = company.get_employee_input(
             "Choose a number from the list to demote: ", company.employees)
@@ -148,8 +183,15 @@ class CEOPanel:
                 employee.pay = 90000
                 print(f"{employee.name} demoted to Senior!")
 
-    # Financial Options
+    # Financial Options (this includes increasing and decreasing salary of employees)
     def increase_salary(self, company):
+        """
+        This function allows the USER (or CEO) to select an employee (by number) and 
+        increase their salary by a specified amount.
+
+        Args:
+            company (Company): The company object containing the employees whose salary can be increased.
+        """
         company.list_employees()
         employee = company.get_employee_input(
             "Choose a number from the list to increase salary: ", company.employees)
@@ -165,6 +207,13 @@ class CEOPanel:
         print(f"Salary of {employee.name} increased by {amount}!")
 
     def decrease_salary(self, company):
+        """
+        This function allows the USER (or CEO) to select an employee (by number) and 
+        decrease their salary by a specified amount. The salary cannot be decreased below 1000.
+
+        Args:
+            company (Company): The company object containing the employees whose salary can be decreased.
+        """
         company.list_employees()
         employee = company.get_employee_input(
             "Choose a number from the list to decrease salary: ", company.employees)
@@ -182,8 +231,16 @@ class CEOPanel:
         employee.pay -= amount
         print(f"Salary of {employee.name} decreased by {amount}!")
 
-    # Inventory Options
+    # Inventory Options (includes buying, selling, and deleting items from the inventory)
     def buy_item(self, inventory):
+        """
+        This function allows the USER (or CEO) to manually buy an item for the inventory. 
+
+        It deducts the price of the item from the inventory cash and adds the item to the inventory stock.
+
+        Args:
+            inventory (Inventory): The inventory object to buy items for.
+        """
         item_list = []
 
         print("\n" + "=" * 45)
@@ -215,6 +272,17 @@ class CEOPanel:
                 break
 
     def sell_item(self, inventory, company, sell=True):
+        """
+        This function allows the USER (or CEO) to manually sell an item from the inventory.
+
+        If sell is True, it sells the item and adds the price to the inventory cash. 
+        If sell is False, it simply deletes the item from the inventory without adding cash.
+
+        Args:
+            inventory (Inventory): The inventory object to sell items from.
+            company (Company): The company object to get employee input for selecting items.
+            sell (bool): If true, the item is sold. If false, it just deletes the item.
+        """
         inventory.show_inventory()
         if not inventory.items:
             print("No items yet.")
@@ -259,6 +327,17 @@ class CEOPanel:
                 f"Deleted {choice_amount}x {chosen_item.title()} ({choice_size}) from inventory.")
 
     def show_panel(self, company, inventory, emp_gen):
+        """"
+        This function basically shows the CEO panel menu, which allows the USER (or CEO)
+        to access all the options in the panel.
+
+        The 4th option means quit, going back to the end of day menu.
+
+        Args: 
+            company (Company): The company object to access employee and financial options.
+            inventory (Inventory): The inventory object to access inventory options.
+            emp_gen (EmpGen): The employee generator object to access employee options.
+        """
         while True:
             choice = input("""
 1. Employee Options

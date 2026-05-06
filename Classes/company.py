@@ -21,7 +21,7 @@ class Company:
             if emp.name == name:
                 return emp
         return None
-    
+
     def get_employee_input(self, prompt, options):
         while True:
             try:
@@ -36,26 +36,30 @@ class Company:
         print("\n" + "=" * 70)
         print(f"{'EMPLOYEES':^70}")
         print("=" * 70)
-        print(f"{'#':<4} {'Name':<18} {'Role':<12} {'Pay':>10} {'Speed':>10} {'Punctuality':>11}")
+        print(
+            f"{'#':<4} {'Name':<18} {'Role':<12} {'Pay':>10} {'Speed':>10} {'Punctuality':>11}")
         print("=" * 70)
         for i, emp in enumerate(self.employees, 1):
-            print(f"{i:<4} {emp.name:<18} {emp.role:<12} {emp.pay:>10,} {emp.speed:>10} {emp.punctuality:>11}")
+            print(
+                f"{i:<4} {emp.name:<18} {emp.role:<12} {emp.pay:>10,} {emp.speed:>10} {emp.punctuality:>11}")
         print("=" * 70 + "\n")
 
     def list_available_employees(self, available_emps):
         print("\n" + "=" * 70)
         print(f"{'AVAILABLE EMPLOYEES':^70}")
         print("=" * 70)
-        print(f"{'#':<4} {'Name':<18} {'Role':<12} {'Pay':>10} {'Speed':>10} {'Punctuality':>11}")
+        print(
+            f"{'#':<4} {'Name':<18} {'Role':<12} {'Pay':>10} {'Speed':>10} {'Punctuality':>11}")
         print("=" * 70)
         for i, emp in enumerate(available_emps, 1):
-            print(f"{i:<4} {emp.name:<18} {emp.role:<12} {emp.pay:>10,} {emp.speed:>10} {emp.punctuality:>11}")
+            print(
+                f"{i:<4} {emp.name:<18} {emp.role:<12} {emp.pay:>10,} {emp.speed:>10} {emp.punctuality:>11}")
         print("=" * 70 + "\n")
 
-    def advance_day(self): # unused
+    def advance_day(self):  # unused
         self.day += 1
 
-    def run_daily_attendance(self): # unused
+    def run_daily_attendance(self):  # unused
         for emp in self.employees:
             if emp.role != "CEO":
                 self.attendance.clock_in(self.day, emp)
@@ -79,7 +83,7 @@ class Company:
 
 {"=" * 70}
 {'EMPLOYEE LIST':^70}
-{"=" * 70 }
+{"=" * 70}
 {'Name':<30} {'Role':<20} {'Pay':>18}
 {"-" * 70}""")
         for emp in self.employees:
