@@ -154,10 +154,6 @@ class Manager(Employee):
         employee.speed -= 2
 
 
-    def work(self):  # ← just add this
-        print(f"{self.name} is overseeing the company.")
-
-
 class Intern(Employee):
     """
     This class represents an Intern role in the company simulation.
@@ -207,12 +203,16 @@ class Senior(Employee):
 
     def mentor(self, employees):
         #choose an employee or intern and increase their speed
-        for employee in employees:
-            for employee in employees[:]:
-                if employee.role != "Employee" and employee.role != "Intern":
-                    employees.remove(employee)
-        employee = random.choice(employees)
+        temp_employee_list = list(employees)
+        for employee in temp_employee_list[:]:
+            if employee.role != "Employee" and employee.role != "Intern":
+                temp_employee_list.remove(employee)
+        employee = random.choice(temp_employee_list)
+        employee.speed += 2
         print(f"{self.name} is mentoring {employee.name}.")
+    
+    def stop_mentor(self, employee):
+        employee.speed -= 2
         
 
 class EmpGen:
@@ -320,8 +320,12 @@ class CEO(Employee):
         #do employee to task ratio check(from taskgen) and add an employee if triggers
         empgen.roles = ["Employee", "Intern"]
         empgen.weights = [0.8, 0.2]
-        employee = empgen.generate_employee(1, company)[0]
+        empgen.generate_employee(1, company)
+        employee = empgen.employees[-1]
         print(f"{self.name} has hired {employee.name}.")
+        #return original
+        empgen.roles = ["Employee", "Manager", "Intern", "Senior"]
+        empgen.weights = [0.71, 0.09, 0.1, 0.1]
 
     def can_fire(self, salary, employees):
         for employee in employees:

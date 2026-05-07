@@ -30,7 +30,7 @@ class CEOPanel:
         candidates = Emp_Gen.employees
         candidates.pop(0)  # this will remove the CEO candidate from the list.
         # will remove temporarily added candidates from company.
-        del company.employees[-4:]
+        del company.employees[-3:]
 
         print("\n" + "=" * 70)
         print(f"{'CANDIDATES':^70}")

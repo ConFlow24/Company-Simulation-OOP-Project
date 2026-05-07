@@ -425,7 +425,7 @@ class TaskSystems:
                             case "Manager - Manage":
                                 employee.manage(employees)
                             case "CEO - Hire":
-                                employee.hire(taskgen, employees, empgen, company)
+                                employee.hire(taskgen, empgen, company)
                             case "CEO - Fire":
                                 employee.fire(salary, employees, company, empgen)
                             case "CEO - Give Bonus":

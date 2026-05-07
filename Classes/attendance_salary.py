@@ -139,7 +139,7 @@ class Salary:
         if attendance.records[employee.name].get("late_count", 0) > 6:
             if employee.pay > 1000:
                 employee.pay -= deduction
-                self.salary_record[employee.name]["Deductions"] -= deduction
+                self.salary_record[employee.name]["Deductions"] += deduction
                 # reset late count after applying deduction
                 attendance.records[employee.name]["late_count"] = 0
             else:
@@ -148,7 +148,7 @@ class Salary:
         if attendance.records[employee.name].get("absent_count", 0) > 3:
             if employee.pay > 1000:
                 employee.pay -= deduction
-                self.salary_record[employee.name]["Deductions"] -= deduction
+                self.salary_record[employee.name]["Deductions"] += deduction
                 # reset absent count after applying deduction
                 attendance.records[employee.name]["absent_count"] = 0
             else:
