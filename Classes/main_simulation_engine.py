@@ -34,7 +34,6 @@ Day {day}
 
         # generate attendance for each employee
         for employee in employees:
-            employee.work()
             Attendance.clock_in(day, employee.name, employee.punctuality)
         Attendance.show_attendance(day)
 

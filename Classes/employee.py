@@ -34,10 +34,6 @@ class Employee(ABC):
         self.working = working
         self.last_levelup = 0
 
-    @abstractmethod
-    def work(self):
-        pass
-
     def upgrade_stats(self):
         """
         Increases the employee's speed stat when a level-up threshold is reached.
@@ -108,13 +104,17 @@ class Employee(ABC):
                         break
                     case _:
                         print("Invalid input. Enter y or n.")
+    @abstractmethod
     def progress_task(self, task):
         task.progress += self.speed * 1
 
 class RegularEmployee(Employee):
-    def work(self):
-        print(f"{self.name} is working.")
-
+    def __init__(self, name, pay, role="Employee", speed=1, punctuality=1,
+                 total_hours=0, tasks_completed=0, working=False):
+        super().__init__(name, role, pay, speed, punctuality,
+                         total_hours, tasks_completed, working)
+    def progress_task(self, task):
+        task.progress += self.speed * 1
 
 class Manager(Employee):
     """
@@ -140,7 +140,7 @@ class Manager(Employee):
         """
 
         super().__init__(name, role, pay, speed, punctuality,
-                         total_hours, tasks_completed)
+                         total_hours, tasks_completed, working)
 
     def progress_task(self, task):
         task.progress += self.speed * 1.5
@@ -200,7 +200,7 @@ class Senior(Employee):
                  total_hours=0, tasks_completed=0, working=False):
         # Same attributes as Employee, but with Senior-specific defaults.
         super().__init__(name, role, pay, speed, punctuality,
-                         total_hours, tasks_completed)
+                         total_hours, tasks_completed, working)
 
     def progress_task(self, task):
         task.progress += self.speed * 1.25
@@ -272,7 +272,7 @@ class EmpGen:
                 punctuality_values, weights=weights)[0]
             match role:
                 case "CEO": emp = CEO(random_name, pay, role, speed, punctuality)
-                case "Employee": emp = Employee(random_name, role, pay, speed, punctuality)
+                case "Employee": emp = RegularEmployee(random_name, pay, role, speed, punctuality)
                 case "Intern": emp = Intern(random_name, pay, role, speed, punctuality)
                 case "Senior": emp = Senior(random_name, pay, role, speed, punctuality)
                 case "Manager": emp = Manager(random_name, pay, role, speed, punctuality)
@@ -295,9 +295,9 @@ class CEO(Employee):
     but has a specific method for making strategic decisions.
     """
     def __init__(self, name, pay, role="CEO", speed=1, punctuality=1,
-                 total_hours=0, tasks_completed=0):
+                 total_hours=0, tasks_completed=0, working = False):
         super().__init__(name, role, pay, speed, punctuality,
-                         total_hours, tasks_completed)
+                         total_hours, tasks_completed, working)
         """
         Initializes the CEO with CEO-specific defaults.
 
