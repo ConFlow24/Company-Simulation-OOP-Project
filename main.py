@@ -29,6 +29,8 @@ print("""
   - Hire and fire staff
   - Buy and sell inventory
   - Grow your company day by day
+  - Check your budget! You lose if you hit 0
+  - Try to reach 1,000,000!
 
   Good luck, CEO!
 ==========================================================\n
@@ -54,6 +56,7 @@ day = 1
 control_type = "Manual"
 auto_days = 0
 while True:
+
     if auto_days == 0:
         control_type = "Manual"
     else:
@@ -69,7 +72,7 @@ while True:
 {'END OF DAY MENU':^70}
 {'=' * 70}
 1. Start next day
-2. Open CEO panel
+2. Open CEO panel (Employee and Inventory Options)
 3. View reports
 4. View Inventory
 5. View Employees

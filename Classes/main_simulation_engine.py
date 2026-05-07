@@ -12,6 +12,7 @@ class main_simulation_engine:
     def __init__(self):
         # Initialize the event system to manage random events.
         self.event_system = Event()
+        self.still_playing = False
 
     def sim_engine(self, day, employees, control_type, company, Attendance, TaskGen, inventory, salary, empgen):
         """
@@ -31,7 +32,28 @@ class main_simulation_engine:
         print(f"""\n{'=' * 70}
 Day {day}
 {'=' * 70}""")
-
+        #failure/success check
+        if day % 7 == 0:
+            for emp in employees:
+                salary_subtract = emp.pay // 52
+                inventory.cash -= salary_subtract
+            if inventory.cash <= 0:
+                print(f"A week has passed. You have {inventory.cash}. You have gone bankrupt!\n Thank you for playing!")
+                exit()
+            elif inventory.cash >= 1000000 and self.still_playing == False:#if true never get asked this again.
+                while True:
+                    choice = input(f"You've reached a million! Do you still want to play (y/n): ").lower()
+                    match choice:
+                        case "y":
+                            print("You may now continue playing.")
+                            self.still_playing = True
+                            break
+                        case "n":
+                            print("Thank you for playing!")
+                            exit()
+                        case _:
+                            print("Invalid choice.")
+        start_day_cash = inventory.cash
         # generate attendance for each employee
         for employee in employees:
             Attendance.clock_in(day, employee.name, employee.punctuality)
@@ -97,3 +119,5 @@ Day {day}
 
         # reset  speed modifiers after the day ends
         self.event_system.restore_productivity(employees)
+        end_day_cash = inventory.cash
+        print(f"Your total profits today: {end_day_cash - start_day_cash}.")

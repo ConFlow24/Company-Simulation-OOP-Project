@@ -237,6 +237,8 @@ class TaskSystems:
             self.doing_tasks.append(task)
             available_employees.remove(employee)
             self.task_list.remove(task)
+            if available_employees == []:
+                self.stop_manual_assign = True
 
 
     def assign_task_manual_individual(self, emp):
@@ -407,7 +409,7 @@ class TaskSystems:
         for task in self.doing_tasks[:]:
             if task.assigned_to == employee:
                 employee.progress_task(task)
-                print(f"{employee.name} is progressing in \"{task.type} - {task.name.title()}\". Progress left {max(0, task.duration - task.progress)}")
+                print(f"{employee.name} is progressing in \"{task.type} - {task.name.title()}\". Progress left {((max(0, task.duration - task.progress) / task.duration) * 100):.2f}%")
                 if task.progress >= task.duration:
                     self.completed_tasks.append(task)
                     self.doing_tasks.remove(task)
@@ -448,7 +450,7 @@ class TaskSystems:
             employee = task.assigned_to
             if employee is None:
                 continue
-            remaining = task.duration - task.progress
+            remaining = (task.duration - task.progress) // employee.speed
             attendance.records[day][employee.name]["overtime_hours"] = remaining
             attendance.records[day][employee.name]["hours_worked"] += remaining
             self.completed_tasks.append(task)

@@ -271,11 +271,11 @@ class EmpGen:
             punctuality = random.choices(
                 punctuality_values, weights=weights)[0]
             match role:
-                case "CEO": emp = CEO(random_name, pay, role, speed, punctuality)
+                case "CEO": emp = CEO(random_name, pay, role, min(speed + 2, 5), punctuality)
                 case "Employee": emp = RegularEmployee(random_name, pay, role, speed, punctuality)
-                case "Intern": emp = Intern(random_name, pay, role, speed, punctuality)
-                case "Senior": emp = Senior(random_name, pay, role, speed, punctuality)
-                case "Manager": emp = Manager(random_name, pay, role, speed, punctuality)
+                case "Intern": emp = Intern(random_name, pay, role, max(speed -1, 1), punctuality)
+                case "Senior": emp = Senior(random_name, pay, role, min(speed + 2, 5), punctuality)
+                case "Manager": emp = Manager(random_name, pay, role, min(speed + 2, 5), punctuality)
             self.employees.append(emp)
             company.add_employee(emp)
 

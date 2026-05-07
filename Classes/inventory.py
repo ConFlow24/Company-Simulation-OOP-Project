@@ -26,7 +26,7 @@ class Inventory:
         self.items = defaultdict(
             # lambda sets the default value for any new item key — avoids KeyErrors on first access.
             lambda: {"Small": 0, "Medium": 0, "Large": 0, "Base Price": 0})
-        self.cash = 100000.00  # company's starting cash.
+        self.cash = 10000.00  # company's starting cash.
 
     def add_item(self, name, size, quantity):
         """
