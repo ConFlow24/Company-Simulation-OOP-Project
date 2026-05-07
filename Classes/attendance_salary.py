@@ -43,8 +43,7 @@ class Attendance:
             case _:
                 # default to punctuality 3 weights if invalid punctuality value is given
                 weights = [0.75, 0.18, 0.07]
-        attendance = random.choices(attendance_list, weights=weights, k=1)[
-            0]  # weighted randomness
+        attendance = random.choices(attendance_list, weights=weights)[0]  # weighted randomness
         self.records[day][employee_name] = {
             "status": attendance
         }
@@ -119,7 +118,7 @@ class Salary:
             bonus (int): Bonus amount. Defaults to 1000.
         """
 
-        if attendance.records[day][employee.name]["hours_worked"] > 10:  # overtime bonus
+        if attendance.records[day][employee.name].get("hours_worked", 0) > 10:  # overtime bonus
             employee.pay += bonus
             self.salary_record[employee.name]["Bonuses"] += bonus
 

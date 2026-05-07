@@ -42,7 +42,7 @@ class Company:
 
         self.employees.append(employee)
 
-    def remove_employee(self, name):
+    def remove_employee(self, name, emp_gen):
         """
         Removes an employee from the company based on their name.
 
@@ -53,6 +53,7 @@ class Company:
         employee = self.get_employee(name)
         if employee:
             self.employees.remove(employee)
+            emp_gen.employees.remove(employee)
 
     def get_employee(self, name):
         """

@@ -13,7 +13,7 @@ class main_simulation_engine:
         # Initialize the event system to manage random events.
         self.event_system = Event()
 
-    def sim_engine(self, day, employees, control_type, company, Attendance, TaskGen, inventory, salary):
+    def sim_engine(self, day, employees, control_type, company, Attendance, TaskGen, inventory, salary, empgen):
         """
         Runs a single simulation day from start to finish.
 
@@ -46,6 +46,7 @@ Day {day}
         TaskGen.generate_store_task()  # stores items waiting from buy tasks
         TaskGen.generate_sell_task(
             inventory, order_spike=self.event_system.check_order_spike())
+        TaskGen.generate_unique_task(employees, TaskGen, salary)
         TaskGen.show_tasks()
 
         match control_type:
@@ -58,8 +59,7 @@ Day {day}
 {'=' * 70}""")
                 for _ in range(8):  # simulate 8 hours of work
                     for employee in employees:
-                        TaskGen.do_task(employee)
-
+                        TaskGen.do_task(employee, TaskGen, employees, empgen, company, salary)
                         if not employee.working and TaskGen.task_list:
                             TaskGen.assign_task_single(
                                 # assign new task if employee finished their task and there are still tasks left
@@ -84,7 +84,7 @@ Day {day}
 {'=' * 70}""")
                 for _ in range(8):  # simulate 8 hours of work
                     for employee in employees:
-                        TaskGen.do_task(employee)
+                        TaskGen.do_task(employee, TaskGen, employees, empgen, company, salary)
                         if not employee.working:
                             if TaskGen.task_list:
                                 # assign new task if employee finished their task and there are still tasks left, with CEO input

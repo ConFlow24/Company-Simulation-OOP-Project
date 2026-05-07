@@ -63,6 +63,24 @@ class TaskSystems:
         self.size_lookup = {"Small": (1, 2), "Medium": (3, 5), "Large": (6, 8)}
         self.stop_manual_assign = False  # used to let player stop assigning mid-loop
 
+    def _pick_employee_for_task(self, task, available_employees):
+        #Pick a capable employee for a task, falling back to any available employee.
+        if task.type == "Unique":
+            role = task.name.split(" - ")[0]
+            capable = []
+            for employee in available_employees:
+                if employee.role == role:
+                    capable.append(employee)
+            if capable:
+                return random.choice(capable)
+        else:
+            for employee in available_employees[:]:
+                if employee.role == "CEO":
+                    available_employees.remove(employee)
+                
+            return random.choice(available_employees)
+
+
     def assign_task(self, employees, attendance, day):
         """
         Automatically assigns tasks to all available employees for the day.
@@ -78,24 +96,24 @@ class TaskSystems:
 
         available_employees = []
         for emp in employees:
-            if emp.role == "CEO" or emp.working:
+            if emp.working:
                 continue
             emp_record = attendance.records[day].get(emp.name, {})
             if emp_record.get("status") == "Absent":
                 continue
-
             available_employees.append(emp)
+ 
         for task in self.task_list[:]:
             if not available_employees:
                 break
-
-            emp = random.choice(available_employees)
+ 
+            emp = self._pick_employee_for_task(task, available_employees)
             task.assigned_to = emp
-
             emp.working = True
             self.doing_tasks.append(task)
             available_employees.remove(emp)
             self.task_list.remove(task)
+
 
     def assign_task_single(self, employee, attendance, day):
         """
@@ -113,7 +131,21 @@ class TaskSystems:
         if emp_record.get("status") == "Absent":
             return
         if self.task_list:
-            task = random.choice(self.task_list)
+            # Prefer unique tasks that match this employee's role
+            matching = []
+            for task in self.task_list:
+                if task.type == "Unique":
+                    role = task.name.split(" - ")[0]
+                    if role == employee.role:
+                        matching.append(task)
+            if matching:
+                task = random.choice(matching)
+            else:
+                temp_task_list = self.task_list
+                for task in temp_task_list[:]:
+                    if task.type == "Unique":
+                        temp_task_list.remove(task)
+                task = random.choice(temp_task_list)
             task.assigned_to = employee
             employee.working = True
             self.doing_tasks.append(task)
@@ -137,7 +169,7 @@ class TaskSystems:
 
         available_employees = []
         for emp in employees:
-            if emp.role == "CEO" or emp.working:
+            if emp.working:
                 continue
             emp_record = attendance.records[day].get(emp.name, {})
             if emp_record.get("status") == "Absent":
@@ -168,13 +200,31 @@ class TaskSystems:
                     print("Invalid input.")
 
         # pick employee
-            company.list_available_employees(available_employees)
+            if task.type == "Unique":
+                role = task.name.split(" - ")[0]
+                capable = []
+                for e in available_employees:
+                    if e.role == role:
+                        capable.append(e)
+                if capable:
+                    candidates = capable
+                else:
+                    candidates = available_employees
+                if capable and len(capable) < len(available_employees):
+                    print(f"(Showing only {role} employees for this unique task)")
+            else:
+                candidates = []
+                for employee in available_employees:
+                    if employee.role != "CEO":
+                        candidates.append(employee)
+ 
+            company.list_available_employees(candidates)
             while True:
                 try:
                     emp_choice = int(input(
                         f"Enter the number of an employee to work on \"{task.type} - {task.name.title()}\": "))
-                    if 1 <= emp_choice <= len(available_employees):
-                        employee = available_employees[emp_choice - 1]
+                    if 1 <= emp_choice <= len(candidates):
+                        employee = candidates[emp_choice - 1]
                         break
                     else:
                         print("Invalid choice.")
@@ -182,11 +232,12 @@ class TaskSystems:
                     print("Invalid input.")
 
             task.assigned_to = employee
-            print(f"{task.type} - {task.name} has been assigned to {employee.name}")
+            print(f"{task.type} - {task.name.title()} has been assigned to {employee.name}")
             employee.working = True
             self.doing_tasks.append(task)
             available_employees.remove(employee)
             self.task_list.remove(task)
+
 
     def assign_task_manual_individual(self, emp):
         """
@@ -203,9 +254,16 @@ class TaskSystems:
         print(f"""\n{"=" * 70}
 {'UNASSIGNED TASKS':^70}
 {"=" * 70}""")
+ 
+        # Highlight tasks that match this employee's role
         for i, task in enumerate(self.task_list):
-            print(f"{i+1}. {task.type} - {task.name.title()} ({task.size})")
-
+            match_note = ""
+            if task.type == "Unique":
+                role = task.name.split(" - ")[0]
+                if role != emp.role:
+                    match_note = " (not your role)"
+            print(f"{i+1}. {task.type} - {task.name.title()} ({task.size}){match_note}")
+ 
         while True:
             try:
                 choice = int(
@@ -217,7 +275,7 @@ class TaskSystems:
                     print("Invalid choice.")
             except ValueError:
                 print("Invalid input.")
-
+ 
         task.assigned_to = emp
         emp.working = True
         self.doing_tasks.append(task)
@@ -225,6 +283,7 @@ class TaskSystems:
 
         print(f"{task.type} - {task.name.title()} has been assigned to {emp.name}")
         print("\n--- Continuing Day Events ---")
+
 
     def generate_buy_task(self, employees):
         """
@@ -307,7 +366,34 @@ class TaskSystems:
             duration = random.randint(*self.size_lookup[size])
             self.task_list.append(Task(type, name, size, duration))
 
-    def do_task(self, employee):
+    def generate_unique_task(self, employees, taskgen, salary):
+        for employee in employees:
+            name = None
+            match employee.role:
+                case "CEO":
+                    if employee.can_hire(taskgen, employees) == True:
+                        name = "CEO - Hire"
+                    elif employee.can_fire(salary, employees) == True:
+                        name = "CEO - Fire"
+                    if random.random() > 0.8:
+                        name = "CEO - Give Bonus"
+                case "Intern":
+                    if random.random() > 0.4:
+                        name = "Intern - Learn"
+                    elif random.random() > 0.6:
+                        name = "Intern - Errand"
+                case "Senior":
+                    if random.random() > 0.4:
+                        name = "Senior - Mentor"
+                case "Manager":
+                    if random.random() > 0.55:
+                        name = "Manager - Manage"
+            if name is not None:
+                self.task_list.insert(0, Task("Unique", name, "", 1))
+            
+                
+
+    def do_task(self, employee, taskgen, employees, empgen, company, salary):
         """
         Advances progress on the task assigned to a specific employee by their speed stat.
 
@@ -320,16 +406,30 @@ class TaskSystems:
 
         for task in self.doing_tasks[:]:
             if task.assigned_to == employee:
-                task.progress += employee.speed
+                employee.progress_task(task)
                 print(f"{employee.name} is progressing in \"{task.type} - {task.name.title()}\". Progress left {max(0, task.duration - task.progress)}")
-
                 if task.progress >= task.duration:
                     self.completed_tasks.append(task)
                     self.doing_tasks.remove(task)
                     employee.tasks_completed += 1
                     employee.working = False
-                    print(
-                        f"{employee.name} has completed \"{task.type} - {task.name.title()}\"")
+                    print(f"{employee.name} has completed \"{task.type} - {task.name.title()}\"")
+                    if task.type == "Unique":
+                        match task.name:
+                            case "Intern - Learn":
+                                employee.learn()
+                            case "Intern - Errand":
+                                employee.random_errand()
+                            case "Senior - Mentor":
+                                employee.mentor(employees)
+                            case "Manager - Manage":
+                                employee.manage(employees)
+                            case "CEO - Hire":
+                                employee.hire(taskgen, employees, empgen, company)
+                            case "CEO - Fire":
+                                employee.fire(salary, employees, company, empgen)
+                            case "CEO - Give Bonus":
+                                employee.give_bonus(employees, salary)
                     break
 
     def overtime_check(self, attendance, day):
@@ -401,6 +501,9 @@ class TaskSystems:
 
         if len(self.task_list) / len(employees_list) > 3:
             print(f"\n{"-" * 70}\nYou have too many tasks per employee. Consider hiring more employees, through the CEO Panel.\n{"-" * 70}\n")
+            return True #True if ratio is bad
+        else:
+            return False 
 
     def show_tasks(self):
         print(f"""

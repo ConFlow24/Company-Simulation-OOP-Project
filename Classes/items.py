@@ -62,3 +62,27 @@ items = {
 
     "cleaning supplies": 40, "vacuum cleaner": 150, "mop": 20, "broom": 15, "detergent": 25
 }
+
+
+first_names = [
+    "Liam", "Noah", "Ethan", "Mason", "Lucas", "Aiden", "Elijah", "James", "Benjamin", "Logan",
+    "Olivia", "Emma", "Ava", "Sophia", "Isabella", "Alice", "Charlotte", "Amelia", "Harper", "Evelyn",
+    "Henry", "Alexander", "Daniel", "Matthew", "Samuel", "Joseph", "David", "Carter", "Owen", "Wyatt",
+    "John", "Jack", "Luke", "Jayden", "Dylan", "Levi", "Isaac", "Gabriel", "Julian", "Anthony"
+]
+
+last_names = [
+    "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez",
+    "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin",
+    "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson",
+    "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores"
+]
+# the pay ranges for each roles and it generates random pay for each employee based on their role.
+# it represents minimum and maximum pay for each role.
+role_pay_hash = {
+    "Employee": (50000, 70000),
+    "Manager": (70000, 90000),
+    "CEO": (90000, 150000),
+    "Intern": (30000, 40000),
+    "Senior": (80000, 120000)
+}

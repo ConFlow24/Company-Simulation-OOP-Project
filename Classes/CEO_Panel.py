@@ -1,6 +1,6 @@
 import random
 from Classes.items import items
-from Classes.employee_generator import EmpGen
+from Classes.employee import EmpGen
 
 
 class CEOPanel:
@@ -79,8 +79,7 @@ class CEOPanel:
                         new_ceo = company.get_employee_input(
                             "Choose a number from the list to promote: ", company.employees)
                         new_ceo.role = "CEO"
-                        company.remove_employee(employee.name)
-                        emp_gen.employees.remove(employee)
+                        company.remove_employee(employee.name, emp_gen)
                         break
                     case "n":
                         print(f"{employee.name} will remain CEO.")
@@ -88,8 +87,7 @@ class CEOPanel:
                     case _: print("Invalid choice.")
             return
 
-        company.remove_employee(employee.name)
-        emp_gen.employees.remove(employee)
+        company.remove_employee(employee.name, emp_gen)
         print(f"{employee.name} has been fired.")
 
     def promote_employee(self, company):

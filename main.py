@@ -1,12 +1,10 @@
 """Company Simulation Game - Main Module"""
 
-from Classes.employee_generator import EmpGen
+from Classes.employee import EmpGen
 from Classes.main_simulation_engine import main_simulation_engine
-from Classes.attendance_salary import Attendance
-from Classes.attendance_salary import Salary
+from Classes.attendance_salary import Attendance, Salary
 from Classes.company import Company
 from Classes.CEO_Panel import CEOPanel
-from Classes.employee_generator import EmpGen
 from Classes.task_generator import TaskSystems as TaskGen
 from Classes.inventory import Inventory
 
@@ -63,7 +61,7 @@ while True:
         auto_days -= 1
 
     main_simulation_engine.sim_engine(
-        day, EmpGen.employees, control_type, company, Attendance, TaskGen, inventory, salary)
+        day, EmpGen.employees, control_type, company, Attendance, TaskGen, inventory, salary, EmpGen)
 
     while True:
         End_day_choice = input(f"""
