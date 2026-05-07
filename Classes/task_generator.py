@@ -345,7 +345,7 @@ class TaskSystems:
         if not actual_items:
             return
 
-        task_amount = len(inventory.items) // 3
+        task_amount = len(inventory.total_stock_and_price()[0]) // 3
         if order_spike:
             task_amount *= 4
 
