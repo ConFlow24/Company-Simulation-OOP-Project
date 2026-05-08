@@ -377,7 +377,7 @@ class TaskSystems:
                         name = "CEO - Hire"
                     elif employee.can_fire(salary, employees) == True:
                         name = "CEO - Fire"
-                    if random.random() > 0.8:
+                    elif random.random() > 0.8:
                         name = "CEO - Give Bonus"
                 case "Intern":
                     if random.random() > 0.4:

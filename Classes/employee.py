@@ -343,7 +343,7 @@ class CEO(Employee):
 
     def give_bonus(self, employees, salary):
         #low chance to give a bonus, something like "Ceo felt happy today gave {employee} bonus!"
-        employees_list = employees
+        employees_list = employees[:]
         for employee in employees_list[:]:
                 if employee.role == "CEO":
                     employees_list.remove(employee)
