@@ -160,7 +160,13 @@ class Company:
             print(f"{emp.name:<30} {emp.role:<20} {emp.pay:>18,.2f}")
         print("=" * 70 + "\n")
 
-    def upgrade_employee(self, day):
+    def swap_employee(self, old_emp, new_emp, empgen):
+        i = self.employees.index(old_emp)
+        self.employees[i] = new_emp
+        j = empgen.employees.index(old_emp)
+        empgen.employees[j] = new_emp
+
+    def upgrade_employee(self, day, empgen):
         """
         Runs end-of-day upgrades for all employees.
 
@@ -176,6 +182,8 @@ class Company:
 
         for employee in self.employees:
             employee.upgrade_stats()
-            employee.check_promotion()
+            new_emp = employee.check_promotion()
+            if new_emp:
+                self.swap_employee(employee, new_emp, empgen)
             self.salary.apply_bonus(employee, self.attendance, day)
             self.salary.apply_deduction(employee, self.attendance)

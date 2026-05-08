@@ -59,51 +59,30 @@ class Employee(ABC):
 
         Prompts the CEO (user) to confirm or decline each promotion interactively.
         """
-
-        promotion_threshold = {"Intern": 10,
-                               "Employee": 20, "Senior": 35, "Manager": 999}
-        if self.role == "Intern" and self.tasks_completed >= promotion_threshold["Intern"]:
-            while True:
-                choice = input(
-                    f"{self.name} is ready for promotion! Promote to Employee? (y/n): ").lower()
-                match choice:
-                    case "y":
-                        self.role = "Employee"
-                        print(f"{self.name} is now an Employee.")
-                        break
-                    case "n":
-                        print(f"You have not promoted {self.name}.")
-                        break
-                    case _:
-                        print("Invalid input. Enter y or n.")
-        elif self.role == "Employee" and self.tasks_completed >= promotion_threshold["Employee"]:
-            while True:
-                choice = input(
-                    f"{self.name} is ready for promotion! Promote to Senior? (y/n): ").lower()
-                match choice:
-                    case "y":
-                        self.role = "Senior"
-                        print(f"{self.name} is now a Senior.")
-                        break
-                    case "n":
-                        print(f"You have not promoted {self.name}.")
-                        break
-                    case _:
-                        print("Invalid input. Enter y or n.")
-        elif self.role == "Senior" and self.tasks_completed >= promotion_threshold["Senior"]:
-            while True:
-                choice = input(
-                    f"{self.name} is ready for promotion! Promote to Manager? (y/n): ").lower()
-                match choice:
-                    case "y":
-                        self.role = "Manager"
-                        print(f"{self.name} is now a Manager.")
-                        break
-                    case "n":
-                        print(f"You have not promoted {self.name}.")
-                        break
-                    case _:
-                        print("Invalid input. Enter y or n.")
+        role_map = {"Intern": ("Employee", RegularEmployee, 55000),
+                    "Employee": ("Senior", Senior, 90000),
+                    "Senior": ("Manager", Manager, 80000)}
+        
+        if self.role not in role_map:
+            return None
+        
+        threshold = {"Intern": 10, "Employee": 20, "Senior": 35}
+        if self.tasks_completed < threshold[self.role]:
+            return None
+        
+        new_role, new_class, new_pay = role_map[self.role]
+        while True:
+            choice = input(f"{self.name} is ready for promotion to {new_role}! Promote? (y/n): ").lower()
+            match choice:
+                case "y":
+                    return new_class(name=self.name, pay=new_pay, role=new_role,
+                                    speed=self.speed, punctuality=self.punctuality,
+                                    tasks_completed=self.tasks_completed)
+                case "n":
+                    print(f"You have not promoted {self.name}.")
+                    return None
+                case _:
+                    print("Invalid input.")
     @abstractmethod
     def progress_task(self, task):
         task.progress += self.speed * 1
@@ -175,7 +154,7 @@ class Intern(Employee):
         if random.random() > 0.3:
             stat = random.choices(
             [self.punctuality, self.speed], [0.3, 0.7])[0]
-            print(f"{self.name} is learning.", end = "")
+            print(f"{self.name} is learning. ", end = "")
             if stat == self.punctuality and self.punctuality < 5:
                 self.punctuality += 1
                 print(f"{self.name}'s puncuality increased.")
@@ -313,8 +292,8 @@ class CEO(Employee):
     def progress_task(self, task):
         task.progress += self.speed * 1.5
     
-    def can_hire(self, taskgen, employees):
-        return taskgen.task_to_employee_ratio_check(employees)
+    def can_hire(self, taskgen):
+        return taskgen.task_to_employee_ratio_check()
 
     def hire(self, empgen, company):
         #do employee to task ratio check(from taskgen) and add an employee if triggers
@@ -322,6 +301,7 @@ class CEO(Employee):
         empgen.weights = [0.8, 0.2]
         empgen.generate_employee(1, company)
         employee = empgen.employees[-1]
+        company.attendance.clock_in(company.day, employee.name, employee.punctuality) #prevents error when hired mid-day
         print(f"{self.name} has hired {employee.name}.")
         #return original
         empgen.roles = ["Employee", "Manager", "Intern", "Senior"]

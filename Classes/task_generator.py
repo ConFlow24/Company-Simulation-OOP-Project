@@ -54,7 +54,7 @@ class TaskSystems:
         stop_manual_assign (bool): Flag to stop further manual assignment mid-session.
     """
 
-    def __init__(self):
+    def __init__(self, attendance, company, inventory, salary, empgen):
         self.task_list = []  # iniial task list
         self.doing_tasks = []  # task list when assigned to employees and in progress
         self.store_list = []  # for storing items that are bought and waiting to be added to inventory, each item is a dictionary with name, size, and quantity
@@ -62,6 +62,14 @@ class TaskSystems:
         # task duration based on size of item
         self.size_lookup = {"Small": (1, 2), "Medium": (3, 5), "Large": (6, 8)}
         self.stop_manual_assign = False  # used to let player stop assigning mid-loop
+        #other params
+        self.employees = company.employees
+        self.attendance = attendance
+        self.company = company
+        self.inventory = inventory
+        self.salary = salary
+        self.empgen = empgen
+
 
     def _pick_employee_for_task(self, task, available_employees):
         #Pick a capable employee for a task, falling back to any available employee.
@@ -81,7 +89,7 @@ class TaskSystems:
             return random.choice(available_employees)
 
 
-    def assign_task(self, employees, attendance, day):
+    def assign_task(self, day):
         """
         Automatically assigns tasks to all available employees for the day.
 
@@ -95,10 +103,10 @@ class TaskSystems:
         """
 
         available_employees = []
-        for emp in employees:
+        for emp in self.employees:
             if emp.working:
                 continue
-            emp_record = attendance.records[day].get(emp.name, {})
+            emp_record = self.attendance.records[day].get(emp.name, {})
             if emp_record.get("status") == "Absent":
                 continue
             available_employees.append(emp)
@@ -114,8 +122,7 @@ class TaskSystems:
             available_employees.remove(emp)
             self.task_list.remove(task)
 
-
-    def assign_task_single(self, employee, attendance, day):
+    def assign_task_single(self, employee, day):
         """
         Automatically assigns a random task to a single free employee mid-day if tasks remain.
 
@@ -127,7 +134,7 @@ class TaskSystems:
 
         if employee.role == "CEO":
             return
-        emp_record = attendance.records[day].get(employee.name, {})
+        emp_record = self.attendance.records[day].get(employee.name, {})
         if emp_record.get("status") == "Absent":
             return
         if self.task_list:
@@ -151,7 +158,7 @@ class TaskSystems:
             self.doing_tasks.append(task)
             self.task_list.remove(task)
 
-    def assign_task_manual(self, employees, attendance, day, company):
+    def assign_task_manual(self, day):
         """
         Allows the user to manually assign tasks to available employees.
 
@@ -168,15 +175,18 @@ class TaskSystems:
         self.stop_manual_assign = False
 
         available_employees = []
-        for emp in employees:
+        for emp in self.employees:
             if emp.working:
                 continue
-            emp_record = attendance.records[day].get(emp.name, {})
+            emp_record = self.attendance.records[day].get(emp.name, {})
             if emp_record.get("status") == "Absent":
                 continue
 
             available_employees.append(emp)
         while self.task_list and available_employees:
+            candidates_check = [e for e in available_employees if e.role != "CEO"]
+            if not candidates_check:
+                break
             # pick task
             print(f"""\n{"=" * 70}
 {'UNASSIGNED TASKS':^70}
@@ -217,8 +227,10 @@ class TaskSystems:
                 for employee in available_employees:
                     if employee.role != "CEO":
                         candidates.append(employee)
+            if not candidates:
+                break
  
-            company.list_available_employees(candidates)
+            self.company.list_available_employees(candidates)
             while True:
                 try:
                     emp_choice = int(input(
@@ -239,7 +251,6 @@ class TaskSystems:
             self.task_list.remove(task)
             if available_employees == []:
                 self.stop_manual_assign = True
-
 
     def assign_task_manual_individual(self, emp):
         """
@@ -287,7 +298,9 @@ class TaskSystems:
         print("\n--- Continuing Day Events ---")
 
 
-    def generate_buy_task(self, employees):
+
+
+    def generate_buy_task(self, buy_spike = False):
         """
         Generates a set of Buy tasks for the day based on the number of employees.
 
@@ -297,13 +310,19 @@ class TaskSystems:
         Args:
             employees (list): Full list of company employees (used to scale task count).
         """
-
-        for _ in range(int(len(employees) // 1.5)):
-            type = "Buy"
-            name = random.choice(list(items))
-            size = random.choice(["Small", "Medium", "Large"])
-            duration = random.randint(*self.size_lookup[size])
-            self.task_list.append(Task(type, name, size, duration))
+        amount = 0
+        for task in self.task_list:
+            if task.type == "Buy":
+                amount += 1
+        if amount <= len(self.employees) * 3:
+            # limit amount of buy tasks to twice the amount of employees
+            buy_task_amount = int(len(self.employees) // 1.5) if buy_spike == False else int(len(self.employees) // 1.5) * 3
+            for _ in range(buy_task_amount):
+                type = "Buy"
+                name = random.choice(list(items))
+                size = random.choice(["Small", "Medium", "Large"])
+                duration = random.randint(*self.size_lookup[size])
+                self.task_list.append(Task(type, name, size, duration))
 
     def generate_store_task(self):
         """
@@ -312,15 +331,15 @@ class TaskSystems:
         Store tasks move recently bought items from the buffer into actual inventory.
         Called each day to ensure bought items are eventually stocked.
         """
-
+        
         for task in self.store_list:
             type = "Store"
             name = task.get("name")
             size = task.get("size")
             duration = random.randint(*self.size_lookup[size])
-            self.task_list.append(Task(type, name, size, duration))
+            self.task_list.insert(0, Task(type, name, size, duration))
 
-    def generate_sell_task(self, inventory, order_spike=False):
+    def generate_sell_task(self, order_spike=False):
         """
         Generates Sell tasks based on items currently available in inventory.
 
@@ -333,7 +352,7 @@ class TaskSystems:
         """
 
         actual_items = {}
-        for name, stock in inventory.items.items():
+        for name, stock in self.inventory.items.items():
             has_stock = False
             for size in ["Small", "Medium", "Large"]:
                 if stock[size] > 0:
@@ -345,7 +364,7 @@ class TaskSystems:
         if not actual_items:
             return
 
-        task_amount = len(inventory.total_stock_and_price()[0]) // 3
+        task_amount = self.inventory.total_stock_and_price()[0] // 3
         if order_spike:
             task_amount *= 4
 
@@ -358,7 +377,7 @@ class TaskSystems:
             size_choices = ["Small", "Medium", "Large"]
             while size_choices:
                 size = random.choice(size_choices)
-                if inventory.items[item_to_sell][size] == 0:
+                if self.inventory.items[item_to_sell][size] == 0:
                     size_choices.remove(size)
                 else:
                     break
@@ -366,16 +385,25 @@ class TaskSystems:
                 continue
 
             duration = random.randint(*self.size_lookup[size])
-            self.task_list.append(Task(type, name, size, duration))
+            self.task_list.insert(0, Task(type, name, size, duration))
 
-    def generate_unique_task(self, employees, taskgen, salary):
-        for employee in employees:
+    def generate_unique_task(self, day):
+        available_employees = []
+        for emp in self.employees:
+            if emp.working:
+                continue
+            emp_record = self.attendance.records[day].get(emp.name, {})
+            if emp_record.get("status") == "Absent":
+                continue
+            available_employees.append(emp)
+
+        for employee in available_employees:
             name = None
             match employee.role:
                 case "CEO":
-                    if employee.can_hire(taskgen, employees) == True:
+                    if employee.can_hire(self):
                         name = "CEO - Hire"
-                    elif employee.can_fire(salary, employees) == True:
+                    elif employee.can_fire(self.salary, self.employees):
                         name = "CEO - Fire"
                     elif random.random() > 0.8:
                         name = "CEO - Give Bonus"
@@ -395,7 +423,8 @@ class TaskSystems:
             
                 
 
-    def do_task(self, employee, taskgen, employees, empgen, company, salary):
+
+    def do_task(self, employee):
         """
         Advances progress on the task assigned to a specific employee by their speed stat.
 
@@ -423,18 +452,18 @@ class TaskSystems:
                             case "Intern - Errand":
                                 employee.random_errand()
                             case "Senior - Mentor":
-                                employee.mentor(employees)
+                                employee.mentor(self.employees)
                             case "Manager - Manage":
-                                employee.manage(employees)
+                                employee.manage(self.employees)
                             case "CEO - Hire":
-                                employee.hire(taskgen, empgen, company)
+                                employee.hire(self.empgen, self.company)
                             case "CEO - Fire":
-                                employee.fire(salary, employees, company, empgen)
+                                employee.fire(self.salary, self.employees, self.company, self.empgen)
                             case "CEO - Give Bonus":
-                                employee.give_bonus(employees, salary)
+                                employee.give_bonus(self.employees, self.salary)
                     break
 
-    def overtime_check(self, attendance, day):
+    def overtime_check(self, day):
         """
         Processes unfinished tasks at the end of the workday as overtime.
 
@@ -451,12 +480,13 @@ class TaskSystems:
             if employee is None:
                 continue
             remaining = (task.duration - task.progress) // employee.speed
-            attendance.records[day][employee.name]["overtime_hours"] = remaining
-            attendance.records[day][employee.name]["hours_worked"] += remaining
+            self.attendance.records[day][employee.name]["overtime_hours"] = remaining
+            self.attendance.records[day][employee.name]["hours_worked"] += remaining
+            print(f"{employee.name} worked overtime  for {remaining} hours to complete \"{task.type} - {task.name.title()}\" for {remaining} hours.")
             self.completed_tasks.append(task)
             self.doing_tasks.remove(task)
 
-    def complete_task(self, inventory):
+    def complete_task(self):
         """
         Applies the real-world effects of all completed tasks to the inventory and cash.
 
@@ -473,24 +503,24 @@ class TaskSystems:
                 case "Buy":
                     self.store_list.append(
                         {"name": task.name, "size": task.size, "quantity": 1})
-                    inventory.cash -= inventory.get_price(task.name, task.size)
+                    self.inventory.cash -= self.inventory.get_price(task.name, task.size)
                     self.completed_tasks.remove(task)
                 case "Sell":
-                    inventory.remove_item(task.name, task.size, 1)
+                    self.inventory.remove_item(task.name, task.size, 1)
                     # sell for 20% profit
-                    inventory.cash += inventory.get_price(
+                    self.inventory.cash += self.inventory.get_price(
                         task.name, task.size) * 1.2
                     self.completed_tasks.remove(task)
                 case "Store":
                     for item in self.store_list:
                         if item["name"] == task.name and item["size"] == task.size:
-                            inventory.add_item(
+                            self.inventory.add_item(
                                 task.name, task.size, item["quantity"])
                             self.store_list.remove(item)
                             break
                     self.completed_tasks.remove(task)
 
-    def task_to_employee_ratio_check(self, employees_list):
+    def task_to_employee_ratio_check(self):
         """
         Warns the player if there are too many tasks per employee.
 
@@ -501,7 +531,7 @@ class TaskSystems:
             employees_list (list): Full list of company employees.
         """
 
-        if len(self.task_list) / len(employees_list) > 3:
+        if len(self.task_list) / len(self.employees) > 3:
             print(f"\n{"-" * 70}\nYou have too many tasks per employee. Consider hiring more employees, through the CEO Panel.\n{"-" * 70}\n")
             return True #True if ratio is bad
         else:

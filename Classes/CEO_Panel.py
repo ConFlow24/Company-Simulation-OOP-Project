@@ -11,9 +11,14 @@ class CEOPanel:
     Each option is implemented as a method within this class, and the show_panel method provides an
     interactive menu for the CEO to access these options.
     """
+    def __init__(self, company, empgen, inventory):
+        self.company = company
+        self.empgen = empgen
+        self.inventory = inventory
+        self.employees = company.employees
 
     # Emplotee Options
-    def hire_employee(self, company, empgen):
+    def hire_employee(self):
         """
         This function calls Emp_Gen to generate 4 candidates for the CEO to choose
         from when hiring a new employee. The CEO can only choose from the 4 candidates.
@@ -22,15 +27,14 @@ class CEOPanel:
             empgen (EmpGen): The employee generator object used to create candidate employees.
 
         """
-        Emp_Gen = EmpGen()
-        Emp_Gen.roles = ["Employee", "Intern"]
-        Emp_Gen.weights = [0.8, 0.2]
+        self.empgen.roles = ["Employee", "Intern"]
+        self.empgen.weights = [0.8, 0.2]
         # this generates 4 (first becomes the CEO)
-        Emp_Gen.generate_employee(4, company)
-        candidates = Emp_Gen.employees
+        self.empgen.generate_employee(4, self.company)
+        candidates = self.empgen.employees
         candidates.pop(0)  # this will remove the CEO candidate from the list.
         # will remove temporarily added candidates from company.
-        del company.employees[-3:]
+        del self.employees[-3:]
 
         print("\n" + "=" * 70)
         print(f"{'CANDIDATES':^70}")
@@ -49,11 +53,13 @@ class CEOPanel:
                 break
 
         chosen = candidates[int(choice) - 1]
-        empgen.employees.append(chosen)
-        company.add_employee(chosen)
+        self.empgen.employees.append(chosen)
+        self.company.add_employee(chosen)
         print(f"{chosen.name} hired as {chosen.role}!")
+        self.empgen.roles = ["Employee", "Manager", "Intern", "Senior"]
+        self.empgen.weights = [0.71, 0.09, 0.1, 0.1]
 
-    def fire_employee(self, company, emp_gen):
+    def fire_employee(self):
         """
         This functions lets the USER (or CEO) select and remove an employee from the company.
 
@@ -65,9 +71,9 @@ class CEOPanel:
             emp_gen (EmpGen): The employee generator list where the employee to be fired
             is also removed.
         """
-        company.list_employees()
-        employee = company.get_employee_input(
-            "Choose a number from the list to fire: ", company.employees)
+        self.company.list_employees()
+        employee = self.company.get_employee_input(
+            "Choose a number from the list to fire: ", self.employees)
 
         if employee.role == "CEO":
             while True:
@@ -75,11 +81,11 @@ class CEOPanel:
                     "Cannot fire the CEO! Transfer the position to another employee(y/n): ")
                 match choice:
                     case "y":
-                        company.list_employees()
-                        new_ceo = company.get_employee_input(
-                            "Choose a number from the list to promote: ", company.employees)
+                        self.company.list_employees()
+                        new_ceo = self.company.get_employee_input(
+                            "Choose a number from the list to promote: ", self.employees)
                         new_ceo.role = "CEO"
-                        company.remove_employee(employee.name, emp_gen)
+                        self.company.remove_employee(employee.name, self.emp_gen)
                         break
                     case "n":
                         print(f"{employee.name} will remain CEO.")
@@ -87,10 +93,10 @@ class CEOPanel:
                     case _: print("Invalid choice.")
             return
 
-        company.remove_employee(employee.name, emp_gen)
+        self.company.remove_employee(employee.name, self.emp_gen)
         print(f"{employee.name} has been fired.")
 
-    def promote_employee(self, company):
+    def promote_employee(self):
         """
         This function allows the USER (or CEO) to select an employee (by number) and promote
         them to the next role (Intern -> Employee -> Senior -> Manager). 
@@ -101,14 +107,14 @@ class CEOPanel:
         Args:
             company (Company): The company object containing the employees to be promoted.s
         """
-        company.list_employees()
-        employee = company.get_employee_input(
-            "Choose a number from the list to promote: ", company.employees)
+        self.company.list_employees()
+        employee = self.company.get_employee_input(
+            "Choose a number from the list to promote: ", self.employees)
 
         # it counts the number of managers to ensure there are no more than 5 in the company.
         # if there are already 5 manager, the USER cannot promote another employee to manager.
         manager_count = 0
-        for emp in company.employees:
+        for emp in self.employees:
             if emp.role == "Manager":
                 manager_count += 1
 
@@ -148,7 +154,7 @@ class CEOPanel:
                 employee.pay = 80000
                 print(f"{employee.name} promoted to Manager!")
 
-    def demote_employee(self, company):
+    def demote_employee(self):
         """
         This function allows the USER (or CEO) to select an employee (by number) and demote
         them to the previous role (Manager -> Senior -> Employee -> Intern).
@@ -159,9 +165,9 @@ class CEOPanel:
         Args:
             company (Company): The company object containing the employees to be demoted.
         """
-        company.list_employees()
-        employee = company.get_employee_input(
-            "Choose a number from the list to demote: ", company.employees)
+        self.company.list_employees()
+        employee = self.company.get_employee_input(
+            "Choose a number from the list to demote: ", self.employees)
 
         match employee.role:
             case "CEO":
@@ -182,7 +188,7 @@ class CEOPanel:
                 print(f"{employee.name} demoted to Senior!")
 
     # Financial Options (this includes increasing and decreasing salary of employees)
-    def increase_salary(self, company):
+    def increase_salary(self):
         """
         This function allows the USER (or CEO) to select an employee (by number) and 
         increase their salary by a specified amount.
@@ -190,9 +196,9 @@ class CEOPanel:
         Args:
             company (Company): The company object containing the employees whose salary can be increased.
         """
-        company.list_employees()
-        employee = company.get_employee_input(
-            "Choose a number from the list to increase salary: ", company.employees)
+        self.company.list_employees()
+        employee = self.company.get_employee_input(
+            "Choose a number from the list to increase salary: ", self.employees)
 
         while True:
             amount = input("Enter amount to increase: ").strip()
@@ -204,7 +210,7 @@ class CEOPanel:
         employee.pay += amount
         print(f"Salary of {employee.name} increased by {amount}!")
 
-    def decrease_salary(self, company):
+    def decrease_salary(self):
         """
         This function allows the USER (or CEO) to select an employee (by number) and 
         decrease their salary by a specified amount. The salary cannot be decreased below 1000.
@@ -212,9 +218,9 @@ class CEOPanel:
         Args:
             company (Company): The company object containing the employees whose salary can be decreased.
         """
-        company.list_employees()
-        employee = company.get_employee_input(
-            "Choose a number from the list to decrease salary: ", company.employees)
+        self.company.list_employees()
+        employee = self.company.get_employee_input(
+            "Choose a number from the list to decrease salary: ", self.employees)
 
         while True:
             amount = input("Enter amount to decrease: ").strip()
@@ -230,7 +236,7 @@ class CEOPanel:
         print(f"Salary of {employee.name} decreased by {amount}!")
 
     # Inventory Options (includes buying, selling, and deleting items from the inventory)
-    def buy_item(self, inventory):
+    def buy_item(self):
         """
         This function allows the USER (or CEO) to manually buy an item for the inventory. 
 
@@ -251,7 +257,7 @@ class CEOPanel:
             random_item = random.choice(list(items))
             size = random.choice(["Small", "Medium", "Large"])
             print(
-                f"{i+1}. {random_item.title()} - ${inventory.get_price(random_item, size):.2f}")
+                f"{i+1}. {random_item.title()} - ${self.inventory.get_price(random_item, size):.2f}")
             item_list.append((random_item, size))
 
         print("=" * 45)
@@ -261,15 +267,15 @@ class CEOPanel:
             if choice not in ["1", "2", "3", "4", "5"]:
                 print("Invalid choice.")
             else:
-                inventory.add_item(
+                self.inventory.add_item(
                     item_list[int(choice) - 1][0], item_list[int(choice) - 1][1], 1)
-                inventory.cash -= inventory.get_price(
+                self.inventory.cash -= self.inventory.get_price(
                     item_list[int(choice) - 1][0], item_list[int(choice) - 1][1])
                 print(
-                    f"You have bought {item_list[int(choice) - 1][0].title()}. | Remaining cash {inventory.cash}")
+                    f"You have bought {item_list[int(choice) - 1][0].title()}. | Remaining cash {self.inventory.cash}")
                 break
 
-    def sell_item(self, inventory, company, sell=True):
+    def sell_item(self, sell=True):
         """
         This function allows the USER (or CEO) to manually sell an item from the inventory.
 
@@ -281,13 +287,13 @@ class CEOPanel:
             company (Company): The company object to get employee input for selecting items.
             sell (bool): If true, the item is sold. If false, it just deletes the item.
         """
-        inventory.show_inventory()
-        if not inventory.items:
+        self.inventory.show_inventory()
+        if not self.inventory.items:
             print("No items yet.")
             return
 
-        item_names = list(inventory.items.keys())
-        chosen_item = company.get_employee_input(
+        item_names = list(self.inventory.items.keys())
+        chosen_item = self.company.get_employee_input(
             "\nPick an item using a number (chronological) from the list: ", item_names)
 
         while True:
@@ -297,7 +303,7 @@ class CEOPanel:
                 break
             print("Invalid size.")
 
-        if inventory.items[chosen_item][choice_size] == 0:
+        if self.inventory.items[chosen_item][choice_size] == 0:
             print("No stock of that size.")
             return
 
@@ -306,25 +312,25 @@ class CEOPanel:
                 choice_amount = int(input("\nHow many do you want?: "))
                 if choice_amount <= 0:
                     print("Amount must be positive.")
-                elif choice_amount > inventory.items[chosen_item][choice_size]:
+                elif choice_amount > self.inventory.items[chosen_item][choice_size]:
                     print("Not enough stock.")
                 else:
                     break
             except ValueError:
                 print("Invalid input.")
 
-        inventory.remove_item(chosen_item, choice_size, choice_amount)
+        self.inventory.remove_item(chosen_item, choice_size, choice_amount)
         if sell:
-            earned = inventory.get_price(
+            earned = self.inventory.get_price(
                 chosen_item, choice_size) * choice_amount
-            inventory.cash += earned
+            self.inventory.cash += earned
             print(
-                f"Sold {choice_amount}x {chosen_item.title()} ({choice_size}) for ${earned:.2f}. Cash: ${inventory.cash:.2f}")
+                f"Sold {choice_amount}x {chosen_item.title()} ({choice_size}) for ${earned:.2f}. Cash: ${self.inventory.cash:.2f}")
         else:
             print(
                 f"Deleted {choice_amount}x {chosen_item.title()} ({choice_size}) from inventory.")
 
-    def show_panel(self, company, inventory, emp_gen):
+    def show_panel(self):
         """"
         This function basically shows the CEO panel menu, which allows the USER (or CEO)
         to access all the options in the panel.
@@ -354,10 +360,10 @@ Choose (1-4): """)
                                     
 Choose (1-4): """)
                     match choice2:
-                        case "1": self.hire_employee(company, emp_gen)
-                        case "2": self.fire_employee(company, emp_gen)
-                        case "3": self.promote_employee(company)
-                        case "4": self.demote_employee(company)
+                        case "1": self.hire_employee(self.company, self.emp_gen)
+                        case "2": self.fire_employee(self.company, self.emp_gen)
+                        case "3": self.promote_employee(self.company)
+                        case "4": self.demote_employee(self.company)
                         case _: print("Choice is not an option")
                 case "2":
                     choice2 = input("""
@@ -366,8 +372,8 @@ Choose (1-4): """)
                                     
 Choose (1-2): """)
                     match choice2:
-                        case "1": self.increase_salary(company)
-                        case "2": self.decrease_salary(company)
+                        case "1": self.increase_salary(self.company)
+                        case "2": self.decrease_salary(self.company)
                         case _: print("Choice is not an option")
                 case "3":
                     choice2 = input("""
@@ -377,8 +383,8 @@ Choose (1-2): """)
                                     
 Choose (1-3): """)
                     match choice2:
-                        case "1": self.buy_item(inventory)
-                        case "2": self.sell_item(inventory, company)
-                        case "3": self.sell_item(inventory, company, sell=False)
+                        case "1": self.buy_item(self.inventory)
+                        case "2": self.sell_item(self.inventory, self.company)
+                        case "3": self.sell_item(self.inventory, self.company, sell=False)
                         case _: print("Choice is not an option")
                 case _: break

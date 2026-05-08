@@ -17,6 +17,7 @@ class Attendance:
         # lambda allows nested dicts, avoids KeyErrors on first access
         self.records = defaultdict(lambda: defaultdict(dict))
 
+
     def clock_in(self, day, employee_name, employee_punct):
         """
         Records attendance for an employee using weighted randomness based on punctuality.
@@ -103,11 +104,12 @@ class Salary:
     Tracks cumulative bonuses and deductions per employee over the simulation.
     """
 
-    def __init__(self):
+    def __init__(self, attendance):
         # salary_record[employee_name]["Bonuses"] and ["Deductions"] track running totals
         self.salary_record = defaultdict(lambda: defaultdict(int))
+        self.attendance = attendance
 
-    def apply_bonus(self, employee, attendance, day, bonus=1000):
+    def apply_bonus(self, employee, day, bonus=1000):
         """
         Awards a bonus if the employee worked more than 10 hours (overtime).
 
@@ -118,13 +120,13 @@ class Salary:
             bonus (int): Bonus amount. Defaults to 1000.
         """
 
-        if attendance.records[day][employee.name].get("hours_worked", 0) > 10:  # overtime bonus
+        if self.attendance.records[day][employee.name].get("hours_worked", 0) > 10:  # overtime bonus
             employee.pay += bonus
             self.salary_record[employee.name]["Bonuses"] += bonus
 
         return employee.pay
 
-    def apply_deduction(self, employee, attendance, deduction=1000):
+    def apply_deduction(self, employee, deduction=1000):
         """
         Deducts salary if employee has too many lates (>6) or absences (>3).
 
@@ -136,25 +138,25 @@ class Salary:
             deduction (int): Amount to deduct. Defaults to 1000.
         """
 
-        if attendance.records[employee.name].get("late_count", 0) > 6:
+        if self.attendance.records[employee.name].get("late_count", 0) > 6:
             if employee.pay > 1000:
                 employee.pay -= deduction
                 self.salary_record[employee.name]["Deductions"] += deduction
                 # reset late count after applying deduction
-                attendance.records[employee.name]["late_count"] = 0
+                self.attendance.records[employee.name]["late_count"] = 0
             else:
                 return "Employee's salary cannot be any lower than 1000."
 
-        if attendance.records[employee.name].get("absent_count", 0) > 3:
+        if self.attendance.records[employee.name].get("absent_count", 0) > 3:
             if employee.pay > 1000:
                 employee.pay -= deduction
                 self.salary_record[employee.name]["Deductions"] += deduction
                 # reset absent count after applying deduction
-                attendance.records[employee.name]["absent_count"] = 0
+                self.attendance.records[employee.name]["absent_count"] = 0
             else:
                 return "Employee's salary cannot be any lower than 1000."
 
-    def apply_top5_bonus(self, top5_list, employees_list):
+    def apply_top5_bonus(self, top5_list, employees):
         """
         Top 5 employees will get a bonus of 1000 and it will be added to their salary.
 
@@ -164,27 +166,27 @@ class Salary:
         """
 
         for employee in top5_list:
-            if employee in employees_list:
+            if employee in employees:
                 employee.pay += 1000
                 self.salary_record[employee]["Bonuses"] += 1000
 
-    def apply_top5_deduct(self, bottom5_list, employees_list):
+    def apply_top5_deduct(self, bottom5_list, employees):
         """
         Same as the top 5 bonus but it deducts 1000 from the bottom 5 employees instead of giving them a bonus.
         """
 
         for employee in bottom5_list:
-            if employee in employees_list:
+            if employee in employees:
                 employee.pay -= 1000
                 self.salary_record[employee]["Deductions"] -= 1000
 
-    def show_salary_report(self, employees_list):
+    def show_salary_report(self, employees):
         """
         Basically print the salary report for all employees in a good format.
         Shows employee name, current salary, total bonuses, and total deductions.
         """
 
-        for employee in employees_list:
+        for employee in employees:
             print(f"""Current salary: {employee.pay}
 Bonuses received over time: {self.salary_record[employee]["Bonuses"]}
 Deductions received over time: {self.salary_record[employee]["Deductions"]}""")

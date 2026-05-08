@@ -8,14 +8,6 @@ from Classes.CEO_Panel import CEOPanel
 from Classes.task_generator import TaskSystems as TaskGen
 from Classes.inventory import Inventory
 
-main_simulation_engine = main_simulation_engine()
-EmpGen = EmpGen()
-CEOPanel = CEOPanel()
-inventory = Inventory()
-Attendance = Attendance()
-TaskGen = TaskGen()
-salary = Salary()
-
 
 print("""
 ==========================================================
@@ -36,85 +28,17 @@ print("""
 ==========================================================\n
 """)
 name = input("\nEnter the name of your Company: ")
+
+
+#constructors
+Attendance = Attendance()
+salary = Salary(Attendance)
+EmpGen = EmpGen()
+inventory = Inventory()
 company = Company(name, Attendance, salary, inventory)
+CEOPanel = CEOPanel(company, EmpGen, inventory)
+TaskGen = TaskGen(Attendance, company, inventory, salary, EmpGen)
+main_simulation_engine = main_simulation_engine(company.employees, company, Attendance, TaskGen, inventory, salary, EmpGen, CEOPanel)
 
 
-while True:
-    try:
-        initial_comp_size = int(
-            input("How many employees to start with (5-10): "))
-        if 5 <= initial_comp_size <= 10:
-            EmpGen.generate_employee(initial_comp_size, company)
-            company.list_employees()
-            break
-        else:
-            print("Invalid input. Please enter a number between 5 and 10.")
-    except ValueError:
-        print("Invalid input. Please enter a number.")
-
-day = 1
-control_type = "Manual"
-auto_days = 0
-while True:
-
-    if auto_days == 0:
-        control_type = "Manual"
-    else:
-        control_type = "Auto"
-        auto_days -= 1
-
-    main_simulation_engine.sim_engine(
-        day, EmpGen.employees, control_type, company, Attendance, TaskGen, inventory, salary, EmpGen)
-
-    while True:
-        End_day_choice = input(f"""
-{'=' * 70}
-{'END OF DAY MENU':^70}
-{'=' * 70}
-1. Start next day
-2. Open CEO panel (Employee and Inventory Options)
-3. View reports
-4. View Inventory
-5. View Employees
-6. Enable Auto Simulation
-7. Exit Simulation
-{'=' * 70}
-
-Input choice: """)
-
-        match End_day_choice:
-            case "1":
-                day += 1
-                break
-                # start next day
-            case "2":
-                CEOPanel.show_panel(company, inventory, EmpGen)
-            case "3":
-                company.show_full_report(day)
-            case "4":
-                inventory.show_inventory()
-            case "5":
-                company.list_employees()
-            case "6":
-                amount = int(
-                    input("\nEnter number of days to automatically assign tasks: "))
-                print(f"\nAuto Simulation set to {amount} day(s).")
-                print(
-                    "Select Option 1 (Start Next Day) to begin automatic simulation.")
-                auto_days = amount
-            case "7":
-                print(f"""
-=====================================
-   SIMULATION ENDED
-=====================================
-   Company  : {company.name}
-   Days Run : {day}
-   Cash Left: {inventory.cash:,.2f}
-   Employees: {len(company.employees)}
-=====================================
-   Thank you for playing!
-=====================================
-""")
-                exit()
-            case _:
-                print("\nInput not in choices. Please try again.")
+main_simulation_engine.run()

@@ -72,7 +72,7 @@ class Event:
         There is a 15% chance for it to happen, which multiplies the number of sell tasks generated
         for the day by 4.
 
-        It return True if there is a spike, andFalse if there is not.
+        It return True if there is a spike, and False if there is not.
         """
 
         event_roll = random.randint(1, 100)
@@ -81,3 +81,21 @@ class Event:
                 "\nRANDOM EVENT: Sudden spike in customer orders! Expect more sell tasks today.")
             return True
         return False
+    
+    def check_buy_spike(self):
+        """
+        This function randomly checks for a sudden spike in buy orders for each day.
+
+        There is a 15% chance for it to happen, which multiplies the number of buy tasks generated
+        for the day by 4.
+
+        It return True if there is a spike, and False if there is not.
+        """
+
+        event_roll = random.randint(1, 100)
+        if event_roll <= 15:
+            print(
+                "\nRANDOM EVENT: Sudden discount! Management took advantage. Expect more buy tasks today.")
+            return True
+        return False
+
