@@ -1,5 +1,4 @@
 import random
-from collections import defaultdict
 from Classes.items import items
 
 
@@ -537,16 +536,20 @@ class TaskSystems:
         else:
             return False 
 
-    def show_tasks(self):
-        print(f"""
-{"=" * 70}
-{'TASKS FOR THE DAY':^70}
-{"=" * 70}
-{'Type':<10} {'Name':<15} {'Size':<10} {'Duration':>10} {'Assigned To':<20}
-{"=" * 70}
-""")
+    def __str__(self):
+        output = f"""
+    {"=" * 70}
+    {'TASKS FOR THE DAY':^70}
+    {"=" * 70}
+    {'Type':<10} {'Name':<15} {'Size':<10} {'Duration':>10} {'Assigned To':<20}
+    {"=" * 70}
+    """
+
         for task in self.task_list:
             assigned = task.assigned_to.name if task.assigned_to else "Unassigned"
-            print(
-                f"{task.type:<10} {task.name.title():<15} {task.size:<10} {task.duration:>10} {assigned:<20}")
-        print("=" * 70 + "\n")
+
+            output += f"{task.type:<10} {task.name.title():<15} {task.size:<10} {task.duration:>10} {assigned:<20}\n"
+
+        output += "=" * 70 + "\n"
+
+        return output

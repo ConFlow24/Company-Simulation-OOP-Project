@@ -83,6 +83,10 @@ class Employee(ABC):
                     return None
                 case _:
                     print("Invalid input.")
+    
+    def __str__(self):
+        return f"{self.name:<18} {self.role:<12} {self.pay:>10,} {self.speed:>10} {self.punctuality:>11}"
+    
     @abstractmethod
     def progress_task(self, task):
         task.progress += self.speed * 1
@@ -317,7 +321,7 @@ class CEO(Employee):
         #check total deductions from attedance.py if greater than 7 fire.
         for employee in employees:
             if salary.salary_record[employee.name].get("Deductions", 0) > 7:
-                company.remove_employee(employee, empgen)
+                company.remove_employee(employee.name, empgen)
                 print(f"{self.name} has fired {employee.name}.")
                 return
 

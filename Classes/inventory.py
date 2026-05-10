@@ -88,22 +88,21 @@ class Inventory:
                     total_price += self.get_price(name, size) * quantity
         return total_stock, total_price
 
-    def show_inventory(self):
-        """
-        Basically print the inventory in a nice format. Includes item name, its quantities for each size,
-        and its base price.
-        """
-
-        print(f"""{'=' * 70}
+    def __str__(self):
+        output = f"""{'=' * 70}
 {'INVENTORY':^70}
-{'=' * 70}""")
+{'=' * 70}
+"""
+
         if self.items:
-            print(
-                f"{'Item Name':<20} {'Small':>10} {'Medium':>10} {'Large':>10} {'Base Price':>15}")
-            print("=" * 70)
+            output += f"{'Item Name':<20} {'Small':>10} {'Medium':>10} {'Large':>10} {'Base Price':>15}\n"
+            output += "=" * 70 + "\n"
+
             for name, sizes in self.items.items():
-                print(
-                    f"{name.title():<20} {sizes['Small']:>10} {sizes['Medium']:>10} {sizes['Large']:>10} {sizes['Base Price']:>15.2f}")
+                output += f"{name.title():<20} {sizes['Small']:>10} {sizes['Medium']:>10} {sizes['Large']:>10} {sizes['Base Price']:>15.2f}\n"
         else:
-            print(f"{'No items yet':^70}")
-        print("=" * 70 + "\n")
+            output += f"{'No items yet':^70}\n"
+
+        output += "=" * 70
+
+        return output

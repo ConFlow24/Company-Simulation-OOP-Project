@@ -23,9 +23,10 @@ class main_simulation_engine:
         self.empgen = empgen
         self.auto_days = 0
         self.CEOPanel = CEOPanel
+        self.day = 1
 
 
-    def sim_engine(self, control_type, day):
+    def sim_engine(self, control_type):
         """
         Runs a single simulation day from start to finish.
 
@@ -41,10 +42,10 @@ class main_simulation_engine:
         """
 
         print(f"""\n{'=' * 70}
-Day {day}
+Day {self.day}
 {'=' * 70}""")
         #failure/success check
-        if day % 7 == 0:
+        if self.day % 7 == 0:
             for emp in self.employees:
                 salary_subtract = emp.pay // 52
                 self.inventory.cash -= salary_subtract
@@ -67,8 +68,8 @@ Day {day}
         start_day_cash = self.inventory.cash
         # generate attendance for each employee
         for employee in self.employees:
-            self.Attendance.clock_in(day, employee.name, employee.punctuality)
-        self.Attendance.show_attendance(day)
+            self.Attendance.clock_in(self.day, employee.name, employee.punctuality)
+        self.Attendance.show_attendance(self.day)
 
         self.event_system.random_productivity(
             self.employees)  # for random speed applier
@@ -77,14 +78,14 @@ Day {day}
         self.TaskGen.generate_buy_task(buy_spike=self.event_system.check_buy_spike())
         self.TaskGen.generate_store_task()  # stores items waiting from buy tasks
         self.TaskGen.generate_sell_task(order_spike=self.event_system.check_order_spike())
-        self.TaskGen.generate_unique_task(day)
-        self.TaskGen.show_tasks()
+        self.TaskGen.generate_unique_task(self.day)
+        print(self.TaskGen)
 
         match control_type:
             case "Auto":
                 self.TaskGen.task_to_employee_ratio_check()
                 # auto-asssign tasks based on employee stats.
-                self.TaskGen.assign_task(day)
+                self.TaskGen.assign_task(self.day)
                 print(f"""{'=' * 70}
 {'DAY EVENTS':^70}
 {'=' * 70}""")
@@ -92,23 +93,23 @@ Day {day}
                     for employee in self.employees:
                         self.TaskGen.do_task(employee)
                         if not employee.working and self.TaskGen.task_list:
-                            self.TaskGen.assign_task_single(employee, day)
+                            self.TaskGen.assign_task_single(employee, self.day)
                                 # assign new task if employee finished their task and there are still tasks left
                                 
                 # finish leftover tasks as overtime
-                self.TaskGen.overtime_check(day)
+                self.TaskGen.overtime_check(self.day)
                 # apply task results to inventory
                 self.TaskGen.complete_task()
 
                 for employee in self.employees:
                     employee.working = False  # reset working state for next day
-                self.company.upgrade_employee(day)
+                self.company.upgrade_employee(self.day)
                 self.TaskGen.task_to_employee_ratio_check()
 
             case "Manual":
                 self.TaskGen.task_to_employee_ratio_check()
                 # manual task assignment with CEO input
-                self.TaskGen.assign_task_manual(day)
+                self.TaskGen.assign_task_manual(self.day)
 
                 print(f"""{'=' * 70}
 {'DAY EVENTS':^70}
@@ -121,10 +122,10 @@ Day {day}
                                 # assign new task if employee finished their task and there are still tasks left, with CEO input
                                 self.TaskGen.assign_task_manual_individual(employee)
                 # finish leftover tasks as overtime
-                self.TaskGen.overtime_check(day)
+                self.TaskGen.overtime_check(self.day)
                 # apply task results to inventory
                 self.TaskGen.complete_task()
-                self.company.upgrade_employee(day, self.empgen)
+                self.company.upgrade_employee(self.day, self.empgen)
                 self.TaskGen.task_to_employee_ratio_check()
 
         # reset  speed modifiers after the day ends
@@ -134,7 +135,7 @@ Day {day}
 
 
 
-    def end_sim(self, day):
+    def end_sim(self):
         while True:
             End_day_choice = input(f"""
 {'=' * 70}
@@ -153,14 +154,14 @@ Input choice: """)
 
             match End_day_choice:
                 case "1":
-                    return day + 1
+                    return self.day + 1
                     # start next day
                 case "2":
                     self.CEOPanel.show_panel()
                 case "3":
-                    self.company.show_full_report(day)
+                    self.company.show_report()
                 case "4":
-                    self.inventory.show_inventory()
+                    print(self.inventory)
                 case "5":
                     self.company.list_employees()
                 case "6":
@@ -175,7 +176,7 @@ Input choice: """)
 SIMULATION ENDED
 =====================================
 Company  : {self.company.name}
-Days Run : {day}
+Days Run : {self.day}
 Cash Left: {self.inventory.cash:,.2f}
 Employees: {len(self.employees)}
 =====================================
@@ -200,10 +201,9 @@ Thank you for playing!
             except ValueError:
                 print("Invalid input. Please enter a number.")
 
-        day = 1
         while True:
             control_type = "Auto" if self.auto_days > 0 else "Manual"
             if self.auto_days > 0:
                 self.auto_days -= 1
-            self.sim_engine(control_type, day)
-            day = self.end_sim(day)
+            self.sim_engine(control_type)
+            self.day = self.end_sim()

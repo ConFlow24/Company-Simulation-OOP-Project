@@ -101,7 +101,7 @@ class Company:
         print("=" * 70)
         for i, emp in enumerate(self.employees, 1):
             print(
-                f"{i:<4} {emp.name:<18} {emp.role:<12} {emp.pay:>10,} {emp.speed:>10} {emp.punctuality:>11}")
+                f"{i:<4} {emp}")
         print("=" * 70 + "\n")
 
     def list_available_employees(self, available_emps):
@@ -120,7 +120,7 @@ class Company:
         print("=" * 70)
         for i, emp in enumerate(available_emps, 1):
             print(
-                f"{i:<4} {emp.name:<18} {emp.role:<12} {emp.pay:>10,} {emp.speed:>10} {emp.punctuality:>11}")
+                f"{i:<4} {emp}")
         print("=" * 70 + "\n")
 
     def advance_day(self):  # unused
@@ -136,7 +136,7 @@ class Company:
         print(f"\n--- Day {self.day} Report ---")
         print(f"Cash: {self.inventory.cash:,.2f}")
 
-    def show_full_report(self, day):
+    def show_report(self, day):
         """
         Displays a comprehensive report of the company's status, including financials and employee details.
         """
@@ -185,5 +185,5 @@ class Company:
             new_emp = employee.check_promotion()
             if new_emp:
                 self.swap_employee(employee, new_emp, empgen)
-            self.salary.apply_bonus(employee, self.attendance, day)
-            self.salary.apply_deduction(employee, self.attendance)
+            self.salary.apply_bonus(employee, day)
+            self.salary.apply_deduction(employee)

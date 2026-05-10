@@ -1,6 +1,5 @@
 import random
 from Classes.items import items
-from Classes.employee import EmpGen
 
 
 class CEOPanel:
@@ -32,9 +31,8 @@ class CEOPanel:
         # this generates 4 (first becomes the CEO)
         self.empgen.generate_employee(4, self.company)
         candidates = self.empgen.employees
-        candidates.pop(0)  # this will remove the CEO candidate from the list.
         # will remove temporarily added candidates from company.
-        del self.employees[-3:]
+        del self.employees[-4:]
 
         print("\n" + "=" * 70)
         print(f"{'CANDIDATES':^70}")
@@ -287,7 +285,7 @@ class CEOPanel:
             company (Company): The company object to get employee input for selecting items.
             sell (bool): If true, the item is sold. If false, it just deletes the item.
         """
-        self.inventory.show_inventory()
+        print(self.inventory)
         if not self.inventory.items:
             print("No items yet.")
             return
