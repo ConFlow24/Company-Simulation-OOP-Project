@@ -31,14 +31,14 @@ def main():
 
 
   #constructors
-  Attendance = Attendance()
-  salary = Salary(Attendance)
-  EmpGen = EmpGen()
+  attendance = Attendance()
+  salary = Salary(attendance)
+  empgen = EmpGen()
   inventory = Inventory()
-  company = Company(name, Attendance, salary, inventory)
-  CEOPanel = CEOPanel(company, EmpGen, inventory)
-  TaskGen = TaskGen(Attendance, company, inventory, salary, EmpGen)
-  main_simulation_engine = main_simulation_engine(company.employees, company, Attendance, TaskGen, inventory, salary, EmpGen, CEOPanel)
+  company = Company(name, attendance, salary, inventory)
+  CEOpanel = CEOPanel(company, empgen, inventory)
+  taskgen = TaskGen(attendance, company, inventory, salary, empgen)
+  main_sim = main_simulation_engine(company.employees, company, attendance, taskgen, inventory, salary, empgen, CEOpanel)
 
 
   main_simulation_engine.run()
