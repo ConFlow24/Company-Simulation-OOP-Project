@@ -538,11 +538,11 @@ class TaskSystems:
 
     def __str__(self):
         output = f"""
-    {"=" * 70}
-    {'TASKS FOR THE DAY':^70}
-    {"=" * 70}
-    {'Type':<10} {'Name':<15} {'Size':<10} {'Duration':>10} {'Assigned To':<20}
-    {"=" * 70}
+{"=" * 70}
+{'TASKS FOR THE DAY':^70}
+{"=" * 70}
+{'Type':<10} {'Name':<15} {'Size':<10} {'Duration':>10} {'Assigned To':<20}
+{"=" * 70}
     """
 
         for task in self.task_list:
