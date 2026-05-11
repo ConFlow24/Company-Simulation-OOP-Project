@@ -8,8 +8,9 @@ from Classes.CEO_Panel import CEOPanel
 from Classes.task_generator import TaskSystems as TaskGen
 from Classes.inventory import Inventory
 
+
 def main():
-  print("""
+    print("""
   ==========================================================
           WELCOME TO THE COMPANY SIMULATOR!
   ==========================================================
@@ -27,21 +28,21 @@ def main():
     Good luck, CEO!
   ==========================================================\n
   """)
-  name = input("\nEnter the name of your Company: ")
+    name = input("\nEnter the name of your Company: ")
 
+    # constructors
+    attendance = Attendance()
+    salary = Salary(attendance)
+    empgen = EmpGen()
+    inventory = Inventory()
+    company = Company(name, attendance, salary, inventory)
+    CEOpanel = CEOPanel(company, empgen, inventory)
+    taskgen = TaskGen(attendance, company, inventory, salary, empgen)
+    main_sim = main_simulation_engine(
+        company.employees, company, attendance, taskgen, inventory, salary, empgen, CEOpanel)
 
-  #constructors
-  attendance = Attendance()
-  salary = Salary(attendance)
-  empgen = EmpGen()
-  inventory = Inventory()
-  company = Company(name, attendance, salary, inventory)
-  CEOpanel = CEOPanel(company, empgen, inventory)
-  taskgen = TaskGen(attendance, company, inventory, salary, empgen)
-  main_sim = main_simulation_engine(company.employees, company, attendance, taskgen, inventory, salary, empgen, CEOpanel)
+    main_sim.run()
 
-
-  main_sim.run()
 
 if __name__ == "__main__":
     main()

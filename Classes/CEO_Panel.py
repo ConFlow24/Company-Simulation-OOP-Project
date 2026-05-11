@@ -10,6 +10,7 @@ class CEOPanel:
     Each option is implemented as a method within this class, and the show_panel method provides an
     interactive menu for the CEO to access these options.
     """
+
     def __init__(self, company, empgen, inventory):
         self.company = company
         self.empgen = empgen
@@ -83,7 +84,8 @@ class CEOPanel:
                         new_ceo = self.company.get_employee_input(
                             "Choose a number from the list to promote: ", self.employees)
                         new_ceo.role = "CEO"
-                        self.company.remove_employee(employee.name, self.emp_gen)
+                        self.company.remove_employee(
+                            employee.name, self.empgen)
                         break
                     case "n":
                         print(f"{employee.name} will remain CEO.")
@@ -91,7 +93,7 @@ class CEOPanel:
                     case _: print("Invalid choice.")
             return
 
-        self.company.remove_employee(employee.name, self.emp_gen)
+        self.company.remove_employee(employee.name, self.empgen)
         print(f"{employee.name} has been fired.")
 
     def promote_employee(self):
@@ -358,10 +360,10 @@ Choose (1-4): """)
                                     
 Choose (1-4): """)
                     match choice2:
-                        case "1": self.hire_employee(self.company, self.emp_gen)
-                        case "2": self.fire_employee(self.company, self.emp_gen)
-                        case "3": self.promote_employee(self.company)
-                        case "4": self.demote_employee(self.company)
+                        case "1": self.hire_employee()
+                        case "2": self.fire_employee()
+                        case "3": self.promote_employee()
+                        case "4": self.demote_employee()
                         case _: print("Choice is not an option")
                 case "2":
                     choice2 = input("""
@@ -370,8 +372,8 @@ Choose (1-4): """)
                                     
 Choose (1-2): """)
                     match choice2:
-                        case "1": self.increase_salary(self.company)
-                        case "2": self.decrease_salary(self.company)
+                        case "1": self.increase_salary()
+                        case "2": self.decrease_salary()
                         case _: print("Choice is not an option")
                 case "3":
                     choice2 = input("""
@@ -381,8 +383,8 @@ Choose (1-2): """)
                                     
 Choose (1-3): """)
                     match choice2:
-                        case "1": self.buy_item(self.inventory)
-                        case "2": self.sell_item(self.inventory, self.company)
-                        case "3": self.sell_item(self.inventory, self.company, sell=False)
+                        case "1": self.buy_item()
+                        case "2": self.sell_item()
+                        case "3": self.sell_item()
                         case _: print("Choice is not an option")
                 case _: break
