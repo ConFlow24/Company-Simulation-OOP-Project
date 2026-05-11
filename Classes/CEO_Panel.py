@@ -385,6 +385,6 @@ Choose (1-3): """)
                     match choice2:
                         case "1": self.buy_item()
                         case "2": self.sell_item()
-                        case "3": self.sell_item()
+                        case "3": self.sell_item(sell = False)
                         case _: print("Choice is not an option")
                 case _: break
