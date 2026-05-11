@@ -41,7 +41,7 @@ def main():
   main_sim = main_simulation_engine(company.employees, company, attendance, taskgen, inventory, salary, empgen, CEOpanel)
 
 
-  main_simulation_engine.run()
+  main_sim.run()
 
 if __name__ == "__main__":
     main()
