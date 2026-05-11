@@ -1,231 +1,98 @@
-ok legit na to. AKo gumawa ng lahat ng concept pinaganda ko lang kay GPT. Pag may mali siya may kasalanan.
+# Company Simulation Game
 
+Welcome to the Company Simulation Game! This is a text-based object-oriented Python program where you play as a newly appointed CEO. Your main objective is to manage your employees, oversee daily tasks, handle the company's inventory, and build a profitable business! 
 
-# 🏢 Company Simulation System
-
-## 📌 Overview
-
-This program simulates the daily operations of a company over a user-defined number of days. At the start, the user selects how many days to simulate and how many employees to begin with.
-
-Each day represents a full business cycle involving employee attendance, task execution, inventory management, and financial updates.
-
-The system is **primarily user-driven**, where the player acts as the CEO and directly manages company decisions. However, an **auto-simulation option** is available for selected day ranges.
+Your ultimate goal is to reach $1,000,000 in cash without going bankrupt.
 
 ---
 
-# 🧠 Core Daily Flow
+## What to Expect
 
-Each simulated day follows this structure:
-
-```plaintext id="flow3"
-1. Start of Day
-2. Generate Tasks / Orders
-3. Employee Clock-in (attendance check)
-4. CEO Task Assignment (manual default)
-5. Task Execution (based on speed + punctuality)
-6. Inventory & Money Updates
-7. Random Events
-8. Promotions / Demotions
-9. End-of-Day Report
-10. CEO Action Menu
-```
+This program simulates the daily operations of a business. When you play, you will experience:
+*   **Employee Management:** Hiring, firing, promoting, demoting, and managing salaries.
+*   **Daily Workflow:** A realistic workday flow where attendance is checked, tasks are generated, and employees spend an 8-hour shift completing them.
+*   **Inventory & Finances:** Balancing the cost of buying stock against the profits of selling it, all while ensuring you have enough money to pay your employees at the end of the week.
+*   **Unpredictability:** Random events happen throughout the week similar to real life workplace challenges.
 
 ---
 
-# 👑 CEO Control System (DEFAULT MODE)
+## How to Play
 
-The player always acts as the CEO by default and directly controls company decisions.
+### Getting Started
+1. Run `main.py` in your terminal or command prompt.
+2. Enter a name for your company.
+3. Choose your starting number of employees (between 5 and 10).
+4. The simulation will begin at Day 1.
 
-## 🎮 CEO Responsibilities:
+### The Daily Loop
+Each simulated day follows a strict schedule:
+1. **Attendance:** Employees clock in. Based on their "Punctuality" stat, they may be Present, Late, or Absent.
+2. **Events:** The system checks if any random events occur today.
+3. **Task Generation:** The game generates necessary tasks for the company to function.
+4. **Task Assignment:** You must assign these tasks to your available employees. You can do this manually, or set the game to "Auto-Simulation" to let the system assign tasks based on roles.
+5. **Work Hours:** Employees spend 8 hours working. If tasks are not finished, they will work overtime.
+6. **End of Day:** Completed tasks affect your inventory and cash. Employee stats update. You are then taken to the End of Day Menu.
 
-* Assign tasks to employees manually
-* Hire new employees
-* Fire employees or managers
-* Promote or demote employees
-* Give bonuses or apply deductions
-* Buy and sell inventory manually
-* Manage stock levels
-* Review employee performance
-
----
-
-# ⚙️ Auto-Simulation Mode
-
-The system allows the CEO to enable **automatic simulation** for a selected number of days.
-
-During auto-mode:
-
-* Tasks are assigned automatically
-* Inventory decisions are system-generated
-* Employee actions are simulated without input
-
-The user can return to manual control after the selected period ends.
+### Winning and Losing
+*   **Bankruptcy (Loss):** Every 7 days (1 week), employee salaries are deducted from your total cash. If your cash drops to $0 or below, your company goes bankrupt and the game ends.
+*   **Success (Win):** If you reach $1,000,000, you have built a highly successful company. You will be congratulated and given the option to keep playing or retire.
 
 ---
 
-# 📋 Daily CEO Menu (UI FLOW)
+## Core Features & Mechanics
 
-At the end of each day, the user is presented with the main control menu:
+### Employees
+Every employee has a Name, Role, Pay, Speed, and Punctuality. 
+*   **Speed:** Determines how fast they complete tasks. Employees level up their speed every 8 completed tasks.
+*   **Punctuality:** Determines how likely they are to show up on time. Excessive lates or absences will result in automatic salary deductions.
 
-```plaintext id="menu1"
-===== END OF DAY MENU =====
+**Roles in the Company:**
+*   **Intern:** Lowest pay and speed. Sometimes given "Unique" tasks like learning (which permanently boosts their stats) or useless errands.
+*   **Employee:** The standard workforce. Reliable and steady.
+*   **Senior:** Fast workers. They can trigger "Unique" tasks to mentor lower-level employees, temporarily boosting their speed.
+*   **Manager:** Very fast workers. They can manage teams to provide large temporary speed boosts. Limited to a maximum of 5 per company.
+*   **CEO (You):** You cannot be fired. You occasionally perform automatic strategic tasks like giving bonuses, or emergency hiring/firing.
 
-1. Start Next Day
-2. CEO Management Panel
-3. View Reports
-4. View Inventory
-5. View Employees
-6. Enable Auto-Simulation (Select Day Range)
-7. Exit Simulation
-```
+### Tasks
+There are three main types of operational tasks:
+1.  **Buy:** Costs money. Purchases an item and puts it in the "Store Buffer."
+2.  **Store:** Takes items from the "Store Buffer" and officially adds them to your Inventory.
+3.  **Sell:** Takes an item from your Inventory and sells it for a 20% profit.
 
----
+### The CEO Panel
+At the End of Day menu, you can access the CEO Panel. Here you can:
+*   Hire new staff from a list of generated candidates.
+*   Fire underperforming staff.
+*   Promote your employees
+*   Demote employees.
+*   Manually increase or decrease salaries.
+*   Manually buy or sell inventory items bypassing the daily task system.
 
-## 🧑‍💼 CEO Management Panel (Option 2)
-
-Inside this panel, the user can:
-
-### Employee Control
-
-* Hire employee
-* Fire employee
-* Promote / demote employee
-* Assign tasks manually
-
-### Financial Control
-
-* Give bonuses
-* Apply deductions
-
-### Inventory Control
-
-* Buy stock
-* Sell stock
-* Adjust inventory
+### Random Events
+The simulation includes a random event system:
+*   **Productivity Changes:** A 15% chance for a bad event (like a broken AC or internet outage) that halves work speed. A 15% chance for a good event (like free donuts or bonus incentives) that doubles work speed.
+*   **Order Spikes:** A 15% chance for a sudden influx of customer orders, which generates four times the usual amount of "Sell" tasks for the day.
+*   **Buy Spikes:** A 15% chance for supplier discounts, generating a massive wave of "Buy" tasks.
 
 ---
 
-## 📊 Reports Menu (Option 3)
+## Tips for Beginners
 
-Displays:
-
-* Daily profit/loss
-* Task completion rate
-* Employee performance rankings
-* Best and worst employees
-* Company efficiency score
-* Attendance summary
+*   **Watch Your Cash Flow:** Do not spend all your money on buying inventory. Every 7 days, salaries are deducted. Always keep a cash reserve to survive payday.
+*   **Automate When Stable:** Manually assigning tasks is great for early optimization, but as your company grows, use the "Auto-Simulation" feature from the End of Day menu to run multiple days automatically!
+*   **Promote Wisely:** Promoting an Intern to an Employee increases their salary. Make sure your daily profits can handle the new payroll before promoting staff.
+*   **Pay Attention to Warnings:** If the game tells you that you have too many tasks per employee, visit the CEO Panel and hire someone immediately. Overworked employees will struggle to keep up.
+*   **Check Reports Regularly:** Use the "View Reports" option at the end of the day to see your total inventory value, cash, and employee list. It helps you decide if you need to manually intervene.
 
 ---
 
-## 📦 Inventory View (Option 4)
+## How to Run
 
-Shows:
+Requirements:
+* Python 3.10 or higher.
 
-* Current stock levels
-* Product status
-* Inventory value
-
----
-
-## 👥 Employee View (Option 5)
-
-Shows:
-
-* All employees
-* Role hierarchy
-* Speed and punctuality stats
-* Attendance record
-
----
-
-# 👨‍💼 Employee System
-
-## 🧍 Roles:
-
-* Intern → low efficiency, training stage
-* Employee → standard worker
-* Senior → high efficiency worker
-* Manager → supervises staff and supports CEO decisions
-* CEO → player-controlled role
-
----
-
-## 📊 Stats:
-
-### ⚡ Speed
-
-* Determines task completion rate
-
-### ⏰ Punctuality
-
-* Affects attendance (late/absent probability)
-
----
-
-# 📦 Inventory & Finance System
-
-The company manages:
-
-* product stock
-* buying and selling operations
-* cash balance
-
-Employees and CEO actions directly affect:
-
-* inventory levels
-* company profit
-
----
-
-# 🎲 Random Events System  (OPTIONAL)
-
-Each day may include events such as:
-
-* employee sickness
-* sudden increase in orders
-* supply shortages
-* productivity changes
-
----
-
-# 🧱 System Architecture (OOP Structure)
-
-```plaintext id="arch3"
-Employee (base class)
- ├── Intern
- ├── Employee
- │     └── Senior
- ├── Manager
- └── CEO (player-controlled role)
-
-SimulationEngine
-TaskGenerator
-InventorySystem
-FinanceSystem
-ReportSystem
-CEOInterface (command handler)
-AutoSimulationController
-```
-
----
-
-# 🎯 Purpose of the Project
-
-This project demonstrates:
-
-* Object-Oriented Programming principles (inheritance, polymorphism, encapsulation)
-* Simulation of real-world business operations
-* Human decision-making integrated with automated systems
-* System modularity and structured design
-
----
-
-# 📌 Footnote (Optional Expansion Ideas)
-
-A significantly larger extension of this project could include:
-
-* A full graphical user interface (GUI) instead of a console-based system
-* Persistent data storage using JSON files (saving/loading simulation states)
-* Charts or visual analytics for company performance over time
-* Enhanced AI-based employee decision-making systems
+Steps:
+1. Open your terminal/command prompt.
+2. Navigate to the project directory.
+3. Run the following command:
+   `python main.py`
