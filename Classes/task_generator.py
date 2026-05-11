@@ -61,7 +61,7 @@ class TaskSystems:
         # task duration based on size of item
         self.size_lookup = {"Small": (1, 2), "Medium": (3, 5), "Large": (6, 8)}
         self.stop_manual_assign = False  # used to let player stop assigning mid-loop
-        #other params
+        # other params
         self.employees = company.employees
         self.attendance = attendance
         self.company = company
@@ -69,9 +69,8 @@ class TaskSystems:
         self.salary = salary
         self.empgen = empgen
 
-
     def _pick_employee_for_task(self, task, available_employees):
-        #Pick a capable employee for a task, falling back to any available employee.
+        # Pick a capable employee for a task, falling back to any available employee.
         if task.type == "Unique":
             role = task.name.split(" - ")[0]
             capable = []
@@ -84,9 +83,8 @@ class TaskSystems:
             for employee in available_employees[:]:
                 if employee.role == "CEO":
                     available_employees.remove(employee)
-                
-            return random.choice(available_employees)
 
+            return random.choice(available_employees)
 
     def assign_task(self, day):
         """
@@ -109,11 +107,11 @@ class TaskSystems:
             if emp_record.get("status") == "Absent":
                 continue
             available_employees.append(emp)
- 
+
         for task in self.task_list[:]:
             if not available_employees:
                 break
- 
+
             emp = self._pick_employee_for_task(task, available_employees)
             task.assigned_to = emp
             emp.working = True
@@ -183,7 +181,8 @@ class TaskSystems:
 
             available_employees.append(emp)
         while self.task_list and available_employees:
-            candidates_check = [e for e in available_employees if e.role != "CEO"]
+            candidates_check = [
+                e for e in available_employees if e.role != "CEO"]
             if not candidates_check:
                 break
             # pick task
@@ -220,7 +219,8 @@ class TaskSystems:
                 else:
                     candidates = available_employees
                 if capable and len(capable) < len(available_employees):
-                    print(f"(Showing only {role} employees for this unique task)")
+                    print(
+                        f"(Showing only {role} employees for this unique task)")
             else:
                 candidates = []
                 for employee in available_employees:
@@ -228,7 +228,7 @@ class TaskSystems:
                         candidates.append(employee)
             if not candidates:
                 break
- 
+
             self.company.list_available_employees(candidates)
             while True:
                 try:
@@ -243,7 +243,8 @@ class TaskSystems:
                     print("Invalid input.")
 
             task.assigned_to = employee
-            print(f"{task.type} - {task.name.title()} has been assigned to {employee.name}")
+            print(
+                f"{task.type} - {task.name.title()} has been assigned to {employee.name}")
             employee.working = True
             self.doing_tasks.append(task)
             available_employees.remove(employee)
@@ -266,7 +267,7 @@ class TaskSystems:
         print(f"""\n{"=" * 70}
 {'UNASSIGNED TASKS':^70}
 {"=" * 70}""")
- 
+
         # Highlight tasks that match this employee's role
         for i, task in enumerate(self.task_list):
             match_note = ""
@@ -274,8 +275,9 @@ class TaskSystems:
                 role = task.name.split(" - ")[0]
                 if role != emp.role:
                     match_note = " (not your role)"
-            print(f"{i+1}. {task.type} - {task.name.title()} ({task.size}){match_note}")
- 
+            print(
+                f"{i+1}. {task.type} - {task.name.title()} ({task.size}){match_note}")
+
         while True:
             try:
                 choice = int(
@@ -287,7 +289,7 @@ class TaskSystems:
                     print("Invalid choice.")
             except ValueError:
                 print("Invalid input.")
- 
+
         task.assigned_to = emp
         emp.working = True
         self.doing_tasks.append(task)
@@ -296,10 +298,7 @@ class TaskSystems:
         print(f"{task.type} - {task.name.title()} has been assigned to {emp.name}")
         print("\n--- Continuing Day Events ---")
 
-
-
-
-    def generate_buy_task(self, buy_spike = False):
+    def generate_buy_task(self, buy_spike=False):
         """
         Generates a set of Buy tasks for the day based on the number of employees.
 
@@ -315,7 +314,8 @@ class TaskSystems:
                 amount += 1
         if amount <= len(self.employees) * 3:
             # limit amount of buy tasks to twice the amount of employees
-            buy_task_amount = int(len(self.employees) // 1.5) if buy_spike == False else int(len(self.employees) // 1.5) * 3
+            buy_task_amount = int(len(
+                self.employees) // 1.5) if buy_spike == False else int(len(self.employees) // 1.5) * 3
             for _ in range(buy_task_amount):
                 type = "Buy"
                 name = random.choice(list(items))
@@ -330,7 +330,7 @@ class TaskSystems:
         Store tasks move recently bought items from the buffer into actual inventory.
         Called each day to ensure bought items are eventually stocked.
         """
-        
+
         for task in self.store_list:
             type = "Store"
             name = task.get("name")
@@ -419,9 +419,6 @@ class TaskSystems:
                         name = "Manager - Manage"
             if name is not None:
                 self.task_list.insert(0, Task("Unique", name, "", 1))
-            
-                
-
 
     def do_task(self, employee):
         """
@@ -443,7 +440,8 @@ class TaskSystems:
                     self.doing_tasks.remove(task)
                     employee.tasks_completed += 1
                     employee.working = False
-                    print(f"{employee.name} has completed \"{task.type} - {task.name.title()}\"")
+                    print(
+                        f"{employee.name} has completed \"{task.type} - {task.name.title()}\"")
                     if task.type == "Unique":
                         match task.name:
                             case "Intern - Learn":
@@ -457,9 +455,11 @@ class TaskSystems:
                             case "CEO - Hire":
                                 employee.hire(self.empgen, self.company)
                             case "CEO - Fire":
-                                employee.fire(self.salary, self.employees, self.company, self.empgen)
+                                employee.fire(
+                                    self.salary, self.employees, self.company, self.empgen)
                             case "CEO - Give Bonus":
-                                employee.give_bonus(self.employees, self.salary)
+                                employee.give_bonus(
+                                    self.employees, self.salary)
                     break
 
     def overtime_check(self, day):
@@ -502,7 +502,8 @@ class TaskSystems:
                 case "Buy":
                     self.store_list.append(
                         {"name": task.name, "size": task.size, "quantity": 1})
-                    self.inventory.cash -= self.inventory.get_price(task.name, task.size)
+                    self.inventory.cash -= self.inventory.get_price(
+                        task.name, task.size)
                     self.completed_tasks.remove(task)
                 case "Sell":
                     self.inventory.remove_item(task.name, task.size, 1)
@@ -532,9 +533,9 @@ class TaskSystems:
 
         if len(self.task_list) / len(self.employees) > 3:
             print(f"\n{"-" * 70}\nYou have too many tasks per employee. Consider hiring more employees, through the CEO Panel.\n{"-" * 70}\n")
-            return True #True if ratio is bad
+            return True  # True if ratio is bad
         else:
-            return False 
+            return False
 
     def __str__(self):
         output = f"""
