@@ -62,42 +62,46 @@ class Employee(ABC):
         role_map = {"Intern": ("Employee", RegularEmployee, 55000),
                     "Employee": ("Senior", Senior, 90000),
                     "Senior": ("Manager", Manager, 80000)}
-        
+
         if self.role not in role_map:
             return None
-        
+
         threshold = {"Intern": 10, "Employee": 20, "Senior": 35}
         if self.tasks_completed < threshold[self.role]:
             return None
-        
+
         new_role, new_class, new_pay = role_map[self.role]
         while True:
-            choice = input(f"{self.name} is ready for promotion to {new_role}! Promote? (y/n): ").lower()
+            choice = input(
+                f"{self.name} is ready for promotion to {new_role}! Promote? (y/n): ").lower()
             match choice:
                 case "y":
                     return new_class(name=self.name, pay=new_pay, role=new_role,
-                                    speed=self.speed, punctuality=self.punctuality,
-                                    tasks_completed=self.tasks_completed)
+                                     speed=self.speed, punctuality=self.punctuality,
+                                     tasks_completed=self.tasks_completed)
                 case "n":
                     print(f"You have not promoted {self.name}.")
                     return None
                 case _:
                     print("Invalid input.")
-    
+
     def __str__(self):
         return f"{self.name:<18} {self.role:<12} {self.pay:>10,} {self.speed:>10} {self.punctuality:>11}"
-    
+
     @abstractmethod
     def progress_task(self, task):
         task.progress += self.speed * 1
+
 
 class RegularEmployee(Employee):
     def __init__(self, name, pay, role="Employee", speed=1, punctuality=1,
                  total_hours=0, tasks_completed=0, working=False):
         super().__init__(name, role, pay, speed, punctuality,
                          total_hours, tasks_completed, working)
+
     def progress_task(self, task):
         task.progress += self.speed * 1
+
 
 class Manager(Employee):
     """
@@ -129,10 +133,12 @@ class Manager(Employee):
         task.progress += self.speed * 1.5
 
     def manage(self, employees):
-        #temporarily increase a specific group of employees' speed
+        # temporarily increase a specific group of employees' speed
         employee = random.choice(employees)
         employee.speed += 2
-        print(f"{self.name} is managing {employee.name}. {employee.name} is temporarily working faster.")
+        print(
+            f"{self.name} is managing {employee.name}. {employee.name} is temporarily working faster.")
+
     def stop_manage(self, employee):
         employee.speed -= 2
 
@@ -149,16 +155,16 @@ class Intern(Employee):
         #  Same attributes as Employee, but with Intern-specific defaults.
         super().__init__(name, role, pay, speed, punctuality,
                          total_hours, tasks_completed, working)
-        
+
     def progress_task(self, task):
         task.progress += self.speed * 0.75
 
     def learn(self):
-        #increase punctuality        
+        # increase punctuality
         if random.random() > 0.3:
             stat = random.choices(
-            [self.punctuality, self.speed], [0.3, 0.7])[0]
-            print(f"{self.name} is learning. ", end = "")
+                [self.punctuality, self.speed], [0.3, 0.7])[0]
+            print(f"{self.name} is learning. ", end="")
             if stat == self.punctuality and self.punctuality < 5:
                 self.punctuality += 1
                 print(f"{self.name}'s puncuality increased.")
@@ -169,7 +175,7 @@ class Intern(Employee):
             print(f"{self.name} failed to learn anything.")
 
     def random_errand(self):
-        #intern is sent on a random errand. useless task
+        # intern is sent on a random errand. useless task
         print(f"{self.name} was sent on a useless errand. Nothing of value was gained.")
         pass
 
@@ -185,7 +191,7 @@ class Senior(Employee):
         task.progress += self.speed * 1.25
 
     def mentor(self, employees):
-        #choose an employee or intern and increase their speed
+        # choose an employee or intern and increase their speed
         temp_employee_list = list(employees)
         for employee in temp_employee_list[:]:
             if employee.role != "Employee" and employee.role != "Intern":
@@ -193,10 +199,10 @@ class Senior(Employee):
         employee = random.choice(temp_employee_list)
         employee.speed += 2
         print(f"{self.name} is mentoring {employee.name}.")
-    
+
     def stop_mentor(self, employee):
         employee.speed -= 2
-        
+
 
 class EmpGen:
     """
@@ -214,6 +220,7 @@ class EmpGen:
         roles (list): List for possible roles to assign (except CEO).
         weights (list): A list of weights corresponding to the likelihood of each role being assigned.
     """
+
     def __init__(self):
         self.employees = []
         self.role_pay_hash = role_pay_hash
@@ -256,7 +263,7 @@ class EmpGen:
             match role:
                 case "CEO": emp = CEO(random_name, pay, role, min(speed + 2, 5), punctuality)
                 case "Employee": emp = RegularEmployee(random_name, pay, role, speed, punctuality)
-                case "Intern": emp = Intern(random_name, pay, role, max(speed -1, 1), punctuality)
+                case "Intern": emp = Intern(random_name, pay, role, max(speed - 1, 1), punctuality)
                 case "Senior": emp = Senior(random_name, pay, role, min(speed + 2, 5), punctuality)
                 case "Manager": emp = Manager(random_name, pay, role, min(speed + 2, 5), punctuality)
             self.employees.append(emp)
@@ -271,16 +278,16 @@ class EmpGen:
         for employee in self.employees:
             print(f"{employee.name:<20} | {employee.role:<10} | {employee.pay:<10}")
 
+
 class CEO(Employee):
     """
     This class represents a CEO role in the company simulation.
     It also inherits from the Employee class and uses the same attributes and methods,
     but has a specific method for making strategic decisions.
     """
+
     def __init__(self, name, pay, role="CEO", speed=1, punctuality=1,
-                 total_hours=0, tasks_completed=0, working = False):
-        super().__init__(name, role, pay, speed, punctuality,
-                         total_hours, tasks_completed, working)
+                 total_hours=0, tasks_completed=0, working=False):
         """
         Initializes the CEO with CEO-specific defaults.
 
@@ -293,21 +300,26 @@ class CEO(Employee):
             total_hours (int): Total hours worked. Defaults to 0.
             tasks_completed (int): Tasks completed so far. Defaults to 0.
         """
+        super().__init__(name, role, pay, speed, punctuality,
+                         total_hours, tasks_completed, working)
+
     def progress_task(self, task):
         task.progress += self.speed * 1.5
-    
+
     def can_hire(self, taskgen):
         return taskgen.task_to_employee_ratio_check()
 
     def hire(self, empgen, company):
-        #do employee to task ratio check(from taskgen) and add an employee if triggers
+        # do employee to task ratio check(from taskgen) and add an employee if triggers
         empgen.roles = ["Employee", "Intern"]
         empgen.weights = [0.8, 0.2]
         empgen.generate_employee(1, company)
         employee = empgen.employees[-1]
-        company.attendance.clock_in(company.day, employee.name, employee.punctuality) #prevents error when hired mid-day
+        # prevents error when hired mid-day
+        company.attendance.clock_in(
+            company.day, employee.name, employee.punctuality)
         print(f"{self.name} has hired {employee.name}.")
-        #return original
+        # return original
         empgen.roles = ["Employee", "Manager", "Intern", "Senior"]
         empgen.weights = [0.71, 0.09, 0.1, 0.1]
 
@@ -318,7 +330,7 @@ class CEO(Employee):
         return False
 
     def fire(self, salary, employees, company, empgen):
-        #check total deductions from attedance.py if greater than 7 fire.
+        # check total deductions from attedance.py if greater than 7 fire.
         for employee in employees:
             if salary.salary_record[employee.name].get("Deductions", 0) > 7:
                 company.remove_employee(employee.name, empgen)
@@ -326,11 +338,11 @@ class CEO(Employee):
                 return
 
     def give_bonus(self, employees, salary):
-        #low chance to give a bonus, something like "Ceo felt happy today gave {employee} bonus!"
+        # low chance to give a bonus, something like "Ceo felt happy today gave {employee} bonus!"
         employees_list = employees[:]
         for employee in employees_list[:]:
-                if employee.role == "CEO":
-                    employees_list.remove(employee)
+            if employee.role == "CEO":
+                employees_list.remove(employee)
         employee = random.choice(employees_list)
         employee.pay += 1000
         salary.salary_record[employee.name]["Bonuses"] += 1000
