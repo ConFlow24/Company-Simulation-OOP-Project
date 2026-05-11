@@ -159,7 +159,7 @@ Input choice: """)
                 case "2":
                     self.CEOPanel.show_panel()
                 case "3":
-                    self.company.show_report()
+                    self.company.show_report(self.day)
                 case "4":
                     print(self.inventory)
                 case "5":
