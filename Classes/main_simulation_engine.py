@@ -103,7 +103,7 @@ Day {self.day}
 
                 for employee in self.employees:
                     employee.working = False  # reset working state for next day
-                self.company.upgrade_employee(self.day)
+                self.company.upgrade_employee(self.day, self.empgen)
                 self.TaskGen.task_to_employee_ratio_check()
 
             case "Manual":
