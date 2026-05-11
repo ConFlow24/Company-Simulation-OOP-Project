@@ -480,8 +480,10 @@ class TaskSystems:
                 continue
             remaining = (task.duration - task.progress) // employee.speed
             self.attendance.records[day][employee.name]["overtime_hours"] = remaining
-            self.attendance.records[day][employee.name]["hours_worked"] += remaining
-            print(f"{employee.name} worked overtime  for {remaining} hours to complete \"{task.type} - {task.name.title()}\" for {remaining} hours.")
+            hours_worked = self.attendance.records[day][employee.name].get("hours_worked", 0)
+            hours_worked += remaining
+            self.attendance.records[day][employee.name]["hours_worked"] = hours_worked
+            print(f"{employee.name} worked overtime  for {remaining} hours to complete \"{task.type} - {task.name.title()}\".")
             self.completed_tasks.append(task)
             self.doing_tasks.remove(task)
 
