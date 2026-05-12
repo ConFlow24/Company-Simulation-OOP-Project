@@ -93,16 +93,16 @@ class Company:
         This function prints all the employees in the company, along with their role and pay, in a formatted table.
         """
 
-        print("\n" + "=" * 70)
+        print("\n" + '=' * 70)
         print(f"{'EMPLOYEES':^70}")
-        print("=" * 70)
+        print('=' * 70)
         print(
             f"{'#':<4} {'Name':<18} {'Role':<12} {'Pay':>10} {'Speed':>10} {'Punctuality':>11}")
-        print("=" * 70)
+        print('=' * 70)
         for i, emp in enumerate(self.employees, 1):
             print(
                 f"{i:<4} {emp}")
-        print("=" * 70 + "\n")
+        print('=' * 70 + "\n")
 
     def list_available_employees(self, available_emps):
         """
@@ -112,16 +112,16 @@ class Company:
             available_emps (list): Filtered list of available Employee objects.
         """
 
-        print("\n" + "=" * 70)
+        print("\n" + '=' * 70)
         print(f"{'AVAILABLE EMPLOYEES':^70}")
-        print("=" * 70)
+        print('=' * 70)
         print(
             f"{'#':<4} {'Name':<18} {'Role':<12} {'Pay':>10} {'Speed':>10} {'Punctuality':>11}")
-        print("=" * 70)
+        print('=' * 70)
         for i, emp in enumerate(available_emps, 1):
             print(
                 f"{i:<4} {emp}")
-        print("=" * 70 + "\n")
+        print('=' * 70 + "\n")
 
     def advance_day(self):  # unused
         self.day += 1
@@ -141,9 +141,9 @@ class Company:
         Displays a comprehensive report of the company's status, including financials and employee details.
         """
         stock, price = self.inventory.total_stock_and_price()
-        print(f"""\n{"=" * 70}
+        print(f"""\n{'=' * 70}
 {'COMPANY REPORT':^70}
-{"=" * 70}
+{'=' * 70}
 {'Company Name:':<20} {self.name}
 {'Days Simulated:':<20} {day}
 {'Total Employees:':<20} {len(self.employees)}
@@ -151,14 +151,14 @@ class Company:
 {'Items in Inventory:':<20} {stock}
 {'Inventory Value:':<20} {price:,.2f}
 
-{"=" * 70}
+{'=' * 70}
 {'EMPLOYEE LIST':^70}
-{"=" * 70}
+{'=' * 70}
 {'Name':<30} {'Role':<20} {'Pay':>18}
-{"-" * 70}""")
+{'-' * 70}""")
         for emp in self.employees:
             print(f"{emp.name:<30} {emp.role:<20} {emp.pay:>18,.2f}")
-        print("=" * 70 + "\n")
+        print('=' * 70 + "\n")
 
     def swap_employee(self, old_emp, new_emp, empgen):
         i = self.employees.index(old_emp)

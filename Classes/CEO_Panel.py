@@ -35,14 +35,14 @@ class CEOPanel:
         # will remove temporarily added candidates from company.
         del self.employees[-4:]
 
-        print("\n" + "=" * 70)
+        print("\n" + '=' * 70)
         print(f"{'CANDIDATES':^70}")
-        print("=" * 70)
+        print('=' * 70)
         print(f"{'#':<4} {'Name':<25} {'Role':<15} {'Pay':>20}")
-        print("=" * 70)
+        print('=' * 70)
         for i, emp in enumerate(candidates, 1):
             print(f"{i:<4} {emp.name:<25} {emp.role:<15} {emp.pay:>20,}")
-        print("=" * 70 + "\n")
+        print('=' * 70 + "\n")
 
         while True:
             choice = input("Pick candidate (1-3): ").strip()
@@ -247,11 +247,11 @@ class CEOPanel:
         """
         item_list = []
 
-        print("\n" + "=" * 45)
+        print("\n" + '=' * 45)
         print(f"{'AVAILABLE ITEMS':^45}")
-        print("=" * 45)
+        print('=' * 45)
         print(f"{'#':<5} {'Item':<25} {'Price':>10}")
-        print("=" * 45)
+        print('=' * 45)
 
         for i in range(5):
             random_item = random.choice(list(items))
@@ -260,7 +260,7 @@ class CEOPanel:
                 f"{i+1}. {random_item.title()} - ${self.inventory.get_price(random_item, size):.2f}")
             item_list.append((random_item, size))
 
-        print("=" * 45)
+        print('=' * 45)
 
         while True:
             choice = input("\nPick item to buy (1-5): ").strip()

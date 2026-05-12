@@ -186,9 +186,9 @@ class TaskSystems:
             if not candidates_check:
                 break
             # pick task
-            print(f"""\n{"=" * 70}
+            print(f"""\n{'=' * 70}
 {'UNASSIGNED TASKS':^70}
-{"=" * 70}""")
+{'=' * 70}""")
             for i, task in enumerate(self.task_list):
                 print(f"{i+1}. {task.type} - {task.name.title()} ({task.size})")
             print(f"{len(self.task_list)+1}. Stop assigning")
@@ -264,9 +264,9 @@ class TaskSystems:
 
         if emp.role == "CEO" or self.stop_manual_assign:
             return
-        print(f"""\n{"=" * 70}
+        print(f"""\n{'=' * 70}
 {'UNASSIGNED TASKS':^70}
-{"=" * 70}""")
+{'=' * 70}""")
 
         # Highlight tasks that match this employee's role
         for i, task in enumerate(self.task_list):
@@ -534,18 +534,18 @@ class TaskSystems:
         """
 
         if len(self.task_list) / len(self.employees) > 3:
-            print(f"\n{"-" * 70}\nYou have too many tasks per employee. Consider hiring more employees, through the CEO Panel.\n{"-" * 70}\n")
+            print(f"\n{'-' * 70}\nYou have too many tasks per employee. Consider hiring more employees, through the CEO Panel.\n{'-' * 70}\n")
             return True  # True if ratio is bad
         else:
             return False
 
     def __str__(self):
         output = f"""
-{"=" * 70}
+{'=' * 70}
 {'TASKS FOR THE DAY':^70}
-{"=" * 70}
+{'=' * 70}
 {'Type':<10} {'Name':<15} {'Size':<10} {'Duration':>10} {'Assigned To':<20}
-{"=" * 70}
+{'=' * 70}
     """
 
         for task in self.task_list:
@@ -553,6 +553,6 @@ class TaskSystems:
 
             output += f"{task.type:<10} {task.name.title():<15} {task.size:<10} {task.duration:>10} {assigned:<20}\n"
 
-        output += "=" * 70 + "\n"
+        output += '=' * 70 + "\n"
 
         return output

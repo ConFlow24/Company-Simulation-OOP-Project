@@ -87,14 +87,14 @@ class Attendance:
         Basically print the attendance records for the day in a good format.
         Shows employee name and their attendance (Present, Late, Absent).
         """
-        print("\n" + "=" * 70)
+        print("\n" + '=' * 70)
         print(f"{f'ATTENDANCE - DAY {day}':^70}")
-        print("=" * 70)
+        print('=' * 70)
         print(f"{'Employee Name':<40} {'Status':>29}")
-        print("=" * 70)
+        print('=' * 70)
         for employee_name, record in self.records[day].items():
             print(f"{employee_name:<40} {record['status']:>29}")
-        print("=" * 70 + "\n")
+        print('=' * 70 + "\n")
 
 
 class Salary:

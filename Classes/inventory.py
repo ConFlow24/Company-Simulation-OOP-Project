@@ -96,13 +96,13 @@ class Inventory:
 
         if self.items:
             output += f"{'Item Name':<20} {'Small':>10} {'Medium':>10} {'Large':>10} {'Base Price':>15}\n"
-            output += "=" * 70 + "\n"
+            output += '=' * 70 + "\n"
 
             for name, sizes in self.items.items():
                 output += f"{name.title():<20} {sizes['Small']:>10} {sizes['Medium']:>10} {sizes['Large']:>10} {sizes['Base Price']:>15.2f}\n"
         else:
             output += f"{'No items yet':^70}\n"
 
-        output += "=" * 70
+        output += '=' * 70
 
         return output
