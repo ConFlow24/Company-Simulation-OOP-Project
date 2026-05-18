@@ -1,4 +1,5 @@
 import random
+import os
 from Classes.items import items
 from Classes import formatting
 
@@ -62,6 +63,8 @@ class TaskSystems:
         # task duration based on size of item
         self.size_lookup = {"Small": (1, 2), "Medium": (3, 5), "Large": (6, 8)}
         self.stop_manual_assign = False  # used to let player stop assigning mid-loop
+        self.progressed_now = []
+        self.completed_now = []
         # other params
         self.employees = company.employees
         self.attendance = attendance
@@ -70,22 +73,23 @@ class TaskSystems:
         self.salary = salary
         self.empgen = empgen
 
+    def _clear(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
+
     def _pick_employee_for_task(self, task, available_employees):
         # Pick a capable employee for a task, falling back to any available employee.
         if task.type == "Unique":
             role = task.name.split(" - ")[0]
-            capable = []
-            for employee in available_employees:
-                if employee.role == role:
-                    capable.append(employee)
+            capable = [emp for emp in available_employees if emp.role == role]
             if capable:
                 return random.choice(capable)
+            return None  # no capable employee found, caller should skip this task
         else:
-            for employee in available_employees[:]:
-                if employee.role == "CEO":
-                    available_employees.remove(employee)
-
-            return random.choice(available_employees)
+            # exclude CEO from regular tasks without mutating the original list
+            candidates = [emp for emp in available_employees if emp.role != "CEO"]
+            if not candidates:
+                return None
+            return random.choice(candidates)
         
     def _get_available_employees(self, day):
         # Helper function that returns all employees who are not working and not absent
@@ -140,11 +144,19 @@ class TaskSystems:
             if not available_employees:
                 break
 
+            # Skip unique tasks that have no capable employee available
+            if task.type == "Unique":
+                role = task.name.split(" - ")[0]
+                capable = [e for e in available_employees if e.role == role]
+                if not capable:
+                    continue
+
             emp = self._pick_employee_for_task(task, available_employees)
-
+            if emp is None:
+                continue
             self._assign_task_to_employee(task, emp)
-
             available_employees.remove(emp)
+
 
     def assign_task_single(self, employee, day):
         """
@@ -161,22 +173,23 @@ class TaskSystems:
         if not self.task_list:
             return
 
-        # Prefer unique tasks that match this employee's role
-        matching = [
+        # Filter out unique tasks that don't match this employee's role
+        eligible_tasks = [
             task for task in self.task_list
-            if task.type == "Unique"
-            and task.name.split(" - ")[0] == employee.role
+            if not (task.type == "Unique" and task.name.split(" - ")[0] != employee.role)
         ]
 
-        task_pool = matching if matching else [
-            t for t in self.task_list if t.type != "Unique"
-        ]
+        if not eligible_tasks:
+            return
+
+        # Prefer unique tasks that match this employee's role
+        matching = [task for task in eligible_tasks if task.type == "Unique"]
+        task_pool = matching if matching else eligible_tasks
 
         task = random.choice(task_pool)
-
         self._assign_task_to_employee(task, employee)
 
-    def assign_task_manual(self, day):
+    def assign_task_manual(self, day, *displays):
         """
         Allows the user to manually assign tasks to available employees.
 
@@ -189,7 +202,11 @@ class TaskSystems:
         # Get available employees for the day
         available_employees = self._get_available_employees(day)
 
+        #refresh the screen
         while self.task_list and available_employees:
+            self._clear()
+            for display in displays:
+                print(display)
 
             # Display unassigned tasks
             print(f"""\n{'=' * 70}
@@ -262,13 +279,12 @@ class TaskSystems:
             if not available_employees:
                 self.stop_manual_assign = True
 
-    def assign_task_manual_individual(self, emp):
+    def assign_task_manual_individual(self, emp, *displays):
         """
         Prompts the player to assign a specific task to a single free employee mid-day.
 
         Only activates if the player previously stopped manual assignment early.
         """
-
         if emp.role == "CEO" or self.stop_manual_assign:
             return
 
@@ -281,6 +297,9 @@ class TaskSystems:
         if not eligible_tasks:
             return
 
+        self._clear()
+        for display in displays:
+            print(display)
         # Display unassigned tasks
         print(f"""\n{'=' * 70}
     {'UNASSIGNED TASKS':^70}
@@ -490,7 +509,7 @@ class TaskSystems:
             print("Default task priorities set.")
         if priorities.get("Sell") == 5:
             self.generate_sell_task(order_spike=True)
-        self.task_list = sorted(self.task_list, key=lambda x: priorities.get(x.type, 99))
+        self.task_list = sorted(self.task_list, key=lambda x: -priorities.get(x.type, 99))
 
     def do_task(self, employee):
         """
@@ -502,19 +521,17 @@ class TaskSystems:
         Args:
             employee (Employee): The employee whose task progress should be updated.
         """
-
         for task in self.doing_tasks[:]:
             if task.assigned_to == employee:
                 employee.progress_task(task)
                 remaining_ratio = min(task.progress, task.duration) / task.duration
-                print(f"{employee.name} is progressing in \"{task.type} - {task.name.title()}\". Progress: {formatting.progress_bar(remaining_ratio)}")
+                self.progressed_now.append((employee, task, remaining_ratio))
                 if task.progress >= task.duration:
                     self.completed_tasks.append(task)
                     self.doing_tasks.remove(task)
                     employee.tasks_completed += 1
                     employee.working = False
-                    print(
-                        f"{employee.name} has completed \"{task.type} - {task.name.title()}\"")
+                    self.completed_now.append((employee, task))
                     if task.type == "Unique":
                         match task.name:
                             case "Intern - Learn":
@@ -534,6 +551,34 @@ class TaskSystems:
                                 employee.give_bonus(
                                     self.employees, self.salary)
                     break
+    
+    def show_work_hour(self, hour:int):
+        output = ""
+
+        output += "\n" + "=" * 70 + "\n"
+        output += f"{f'Hour {hour}':^70}\n"
+        output += "=" * 70 + "\n"
+
+        output += f"{'EMPLOYEE':<20} | {'TASK':<30} | PROGRESS\n"
+        output += "-" * 70 + "\n"
+
+        for employee, task, remaining_ratio in self.progressed_now:
+            output += (
+                f"{employee.name:<20} | "
+                f"{task.type} - {task.name.title():<30} | "
+                f"{formatting.progress_bar(remaining_ratio)}\n"
+            )
+
+        output += "=" * 70 + "\n"
+
+        for employee, task in self.completed_now:
+            output += f"✔ {employee.name} has completed {task.name}\n"
+
+        output += "=" * 70 + "\n"
+        self.progressed_now = []
+        self.completed_now = []
+        return output
+
 
     def overtime_check(self, day):
         """

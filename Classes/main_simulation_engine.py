@@ -1,5 +1,6 @@
 # main simulation engine, responsible for generating days and managing the flow of the simulation
 
+import os
 from Classes.events import Event
 
 
@@ -35,6 +36,8 @@ class main_simulation_engine:
             case _:
                 self.goal = 20_000 + (self.week - 3) * 5_000
 
+    def _clear(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
 
     def sim_engine(self, control_type):
         """
@@ -63,14 +66,13 @@ Week {self.week}
             if self.inventory.cash <= self.goal:
                 print(f"A week has passed. You have {self.inventory.cash}. You have not met the required cash for this week!\n Thank you for playing!")
                 exit()
-            elif self.inventory.cash >= self.goal:#if true never get asked this again.
+            elif self.inventory.cash >= self.goal:
                 print(f"You have reached the goal for this week! Your new goal is {self.goal + 10000}")
         self.start_day_cash = self.inventory.cash
         # generate attendance for each employee
         for employee in self.employees:
             self.Attendance.clock_in(self.day, employee.name, employee.punctuality)
         self.Attendance.show_attendance(self.day)
-
         self.event_system.random_productivity(
             self.employees)  # for random speed applier
 
@@ -80,45 +82,43 @@ Week {self.week}
         self.TaskGen.generate_sell_task(order_spike=self.event_system.check_order_spike())
         self.TaskGen.generate_unique_task(self.day)
         self.TaskGen.prioritize_tasks()
-        print(self.TaskGen)
+        attendance_display = self.Attendance.show_attendance_str(self.day)
+        task_display = str(self.TaskGen)
 
         match control_type:
             case "Auto":
-                # auto-asssign tasks based on employee stats.
+                # auto-assign tasks based on employee stats.
                 self.TaskGen.assign_task(self.day)
                 print(f"""{'=' * 70}
-{'DAY EVENTS':^70}
-{'=' * 70}""")
-                for _ in range(8):  # simulate 8 hours of work
+            {'DAY EVENTS':^70}
+            {'=' * 70}""")
+                for i in range(1, 9):  # simulate 8 hours of work
                     for employee in self.employees:
                         self.TaskGen.do_task(employee)
                         if not employee.working and self.TaskGen.task_list:
                             self.TaskGen.assign_task_single(employee, self.day)
-                                # assign new task if employee finished their task and there are still tasks left
-                                
+                            # assign new task if employee finished their task and there are still tasks left
+                    print(self.TaskGen.show_work_hour(i))
                 # finish leftover tasks as overtime
                 self.TaskGen.overtime_check(self.day)
                 # apply task results to inventory
                 self.TaskGen.complete_task()
-
-                for employee in self.employees:
-                    employee.working = False  # reset working state for next day
                 self.company.upgrade_employee(self.day, self.empgen)
-
             case "Manual":
                 # manual task assignment with CEO input
-                self.TaskGen.assign_task_manual(self.day)
+                self.TaskGen.assign_task_manual(self.day, attendance_display, task_display)
 
                 print(f"""{'=' * 70}
 {'DAY EVENTS':^70}
 {'=' * 70}""")
-                for _ in range(8):  # simulate 8 hours of work
+                for i in range(1, 9):  # simulate 8 hours of work
                     for employee in self.employees:
                         self.TaskGen.do_task(employee)
                         if not employee.working:
                             if self.TaskGen.task_list:
                                 # assign new task if employee finished their task and there are still tasks left, with CEO input
-                                self.TaskGen.assign_task_manual_individual(employee)
+                                self.TaskGen.assign_task_manual_individual(employee, attendance_display, task_display)
+                    print(self.TaskGen.show_work_hour(i))
                 # finish leftover tasks as overtime
                 self.TaskGen.overtime_check(self.day)
                 # apply task results to inventory
@@ -170,6 +170,7 @@ Input choice: """)
 
             match End_day_choice:
                 case "1":
+                    self._clear()
                     return self.day + 1
                     # start next day
                 case "2":

@@ -96,6 +96,25 @@ class Attendance:
             print(f"{employee_name:<40} {record['status']:>29}")
         print('=' * 70 + "\n")
 
+    def show_attendance_str(self, day):
+        """
+        Return attendance records for the day in a formatted string.
+        Shows employee name and their attendance (Present, Late, Absent).
+        """
+        output = ""
+
+        output += "\n" + "=" * 70 + "\n"
+        output += f"{f'ATTENDANCE - DAY {day}':^70}\n"
+        output += "=" * 70 + "\n"
+        output += f"{'Employee Name':<40} {'Status':>29}\n"
+        output += "=" * 70 + "\n"
+
+        for employee_name, record in self.records[day].items():
+            output += f"{employee_name:<40} {record['status']:>29}\n"
+
+        output += "=" * 70 + "\n\n"
+
+        return output
 
 class Salary:
     """
