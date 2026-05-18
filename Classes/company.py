@@ -132,9 +132,15 @@ class Company:
                 self.attendance.clock_in(self.day, emp)
                 self.attendance.clock_out(self.day, emp)
 
-    def show_daily_report(self):
-        print(f"\n--- Day {self.day} Report ---")
-        print(f"Cash: {self.inventory.cash:,.2f}")
+    def show_daily_report(self, day, end_cash, start_cash, tasks_comp, goal):
+        print(f"""
+--- Day {day} Report ---
+Cash: {self.inventory.cash:,.2f}
+Your total profits today: {end_cash - start_cash}.
+Total tasks completed today: {tasks_comp}
+Your goal: {goal}
+""")
+
 
     def show_report(self, day):
         """

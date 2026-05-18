@@ -11,11 +11,13 @@ class CEOPanel:
     interactive menu for the CEO to access these options.
     """
 
-    def __init__(self, company, empgen, inventory):
+    def __init__(self, company, empgen, inventory, taskgen):
         self.company = company
         self.empgen = empgen
         self.inventory = inventory
         self.employees = company.employees
+        self.task_list = taskgen.task_list
+        self.store_tasks = taskgen.store_list
 
     # Emplotee Options
     def hire_employee(self):
@@ -329,6 +331,31 @@ class CEOPanel:
         else:
             print(
                 f"Deleted {choice_amount}x {chosen_item.title()} ({choice_size}) from inventory.")
+            
+    def show_pend_tasks(self):
+        for i, task in enumerate(self.task_list):
+            print(f"{i+1}. {task.type} - {task.name.title()} ({task.size}) ")
+        while True:
+            choice = input("Do you want to remove a task? (y/n): ").lower()
+            match (choice):
+                case "y":
+                    removed_tasks = int(input("Input the associated number of the task you want to remove separated by commas:"))
+                    removed_tasks = [int(num.strip()) for num in removed_tasks.split(",")]
+                    for task_num in sorted(removed_tasks, reverse=True):
+                        if task_num in range(1, len(self.task_list) + 1):
+                            self.task_list.pop(task_num - 1)
+                        else:
+                            print(f"Task {task_num} is invalid.")
+                case "n":
+                    break
+                case _:
+                    print("Invalid choice.")
+
+    def show_storeable(self):
+        for i, item in enumerate(self.store_tasks):
+            print(f"{i+1}. {item.type} - {item.name.title()} ({item.size}) ")
+
+
 
     def show_panel(self):
         """"
@@ -344,47 +371,57 @@ class CEOPanel:
         """
         while True:
             choice = input("""
-1. Employee Options
-2. Financial Options
-3. Inventory Options
-4. Quit
-
-Choose (1-4): """)
-            match choice:
-                case "1":
-                    choice2 = input("""
 1. Hire employee
 2. Fire employee
 3. Promote employee
 4. Demote employee
-                                    
-Choose (1-4): """)
-                    match choice2:
-                        case "1": self.hire_employee()
-                        case "2": self.fire_employee()
-                        case "3": self.promote_employee()
-                        case "4": self.demote_employee()
-                        case _: print("Choice is not an option")
+5. Increase salary
+6. Decrease salary
+7. Manually buy item
+8. Manually sell item
+9. Delete item
+10. Show pending tasks
+11. Show items to store
+12. Quit
+
+    Choose (1-12): """)
+
+            match choice:
+                case "1":
+                    self.hire_employee()
+
                 case "2":
-                    choice2 = input("""
-1. Increase salary
-2. Decrease salary
-                                    
-Choose (1-2): """)
-                    match choice2:
-                        case "1": self.increase_salary()
-                        case "2": self.decrease_salary()
-                        case _: print("Choice is not an option")
+                    self.fire_employee()
+
                 case "3":
-                    choice2 = input("""
-1. Manually buy item
-2. Manually sell item
-3. Delete item
-                                    
-Choose (1-3): """)
-                    match choice2:
-                        case "1": self.buy_item()
-                        case "2": self.sell_item()
-                        case "3": self.sell_item(sell = False)
-                        case _: print("Choice is not an option")
-                case _: break
+                    self.promote_employee()
+
+                case "4":
+                    self.demote_employee()
+
+                case "5":
+                    self.increase_salary()
+
+                case "6":
+                    self.decrease_salary()
+
+                case "7":
+                    self.buy_item()
+
+                case "8":
+                    self.sell_item()
+
+                case "9":
+                    self.sell_item(sell=False)
+
+                case "10":
+                    self.show_pend_tasks()
+
+                case "11":
+                    self.show_storeable()
+
+                case "12":
+                    break
+
+                case _:
+                    print("Choice is not an option")

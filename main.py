@@ -23,7 +23,7 @@ def main():
     - Buy and sell inventory
     - Grow your company day by day
     - Check your budget! You lose if you hit 0
-    - Try to reach 1,000,000!
+    - Every week your profit requirements increase. Right now you have to get 10,000
 
     Good luck, CEO!
   ==========================================================\n
@@ -36,8 +36,8 @@ def main():
     empgen = EmpGen()
     inventory = Inventory()
     company = Company(name, attendance, salary, inventory)
-    CEOpanel = CEOPanel(company, empgen, inventory)
     taskgen = TaskGen(attendance, company, inventory, salary, empgen)
+    CEOpanel = CEOPanel(company, empgen, inventory, taskgen)
     main_sim = main_simulation_engine(
         company.employees, company, attendance, taskgen, inventory, salary, empgen, CEOpanel)
 

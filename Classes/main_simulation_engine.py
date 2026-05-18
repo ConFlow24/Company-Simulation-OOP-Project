@@ -12,8 +12,7 @@ class main_simulation_engine:
     def __init__(self, employees, company, Attendance, TaskGen, inventory, salary, empgen, CEOPanel):
         # Initialize the event system to manage random events.
         self.event_system = Event()
-        self.still_playing = False
-        #other params
+        #constructor params
         self.employees = employees
         self.company = company
         self.Attendance = Attendance
@@ -21,9 +20,20 @@ class main_simulation_engine:
         self.inventory = inventory
         self.salary = salary
         self.empgen = empgen
-        self.auto_days = 0
         self.CEOPanel = CEOPanel
+        #other params
+        self.auto_days = 0
         self.day = 1
+        self.week = (self.day - 1) // 7 + 1
+        match self.week:
+            case 1:
+                self.goal = 10_000
+            case 2:
+                self.goal = 11_000
+            case 3:
+                self.goal = 20_000
+            case _:
+                self.goal = 20_000 + (self.week - 3) * 5_000
 
 
     def sim_engine(self, control_type):
@@ -43,29 +53,19 @@ class main_simulation_engine:
 
         print(f"""\n{'=' * 70}
 Day {self.day}
+Week {self.week}
 {'=' * 70}""")
         #failure/success check
         if self.day % 7 == 0:
             for emp in self.employees:
                 salary_subtract = emp.pay // 52
                 self.inventory.cash -= salary_subtract
-            if self.inventory.cash <= 0:
-                print(f"A week has passed. You have {self.inventory.cash}. You have gone bankrupt!\n Thank you for playing!")
+            if self.inventory.cash <= self.goal:
+                print(f"A week has passed. You have {self.inventory.cash}. You have not met the required cash for this week!\n Thank you for playing!")
                 exit()
-            elif self.inventory.cash >= 1000000 and self.still_playing == False:#if true never get asked this again.
-                while True:
-                    choice = input(f"You've reached a million! Do you still want to play (y/n): ").lower()
-                    match choice:
-                        case "y":
-                            print("You may now continue playing.")
-                            self.still_playing = True
-                            break
-                        case "n":
-                            print("Thank you for playing!")
-                            exit()
-                        case _:
-                            print("Invalid choice.")
-        start_day_cash = self.inventory.cash
+            elif self.inventory.cash >= self.goal:#if true never get asked this again.
+                print(f"You have reached the goal for this week! Your new goal is {self.goal + 10000}")
+        self.start_day_cash = self.inventory.cash
         # generate attendance for each employee
         for employee in self.employees:
             self.Attendance.clock_in(self.day, employee.name, employee.punctuality)
@@ -79,11 +79,11 @@ Day {self.day}
         self.TaskGen.generate_store_task()  # stores items waiting from buy tasks
         self.TaskGen.generate_sell_task(order_spike=self.event_system.check_order_spike())
         self.TaskGen.generate_unique_task(self.day)
+        self.TaskGen.prioritize_tasks()
         print(self.TaskGen)
 
         match control_type:
             case "Auto":
-                self.TaskGen.task_to_employee_ratio_check()
                 # auto-asssign tasks based on employee stats.
                 self.TaskGen.assign_task(self.day)
                 print(f"""{'=' * 70}
@@ -104,10 +104,8 @@ Day {self.day}
                 for employee in self.employees:
                     employee.working = False  # reset working state for next day
                 self.company.upgrade_employee(self.day, self.empgen)
-                self.TaskGen.task_to_employee_ratio_check()
 
             case "Manual":
-                self.TaskGen.task_to_employee_ratio_check()
                 # manual task assignment with CEO input
                 self.TaskGen.assign_task_manual(self.day)
 
@@ -126,16 +124,34 @@ Day {self.day}
                 # apply task results to inventory
                 self.TaskGen.complete_task()
                 self.company.upgrade_employee(self.day, self.empgen)
-                self.TaskGen.task_to_employee_ratio_check()
 
         # reset  speed modifiers after the day ends
         self.event_system.restore_productivity(self.employees)
-        end_day_cash = self.inventory.cash
-        print(f"Your total profits today: {end_day_cash - start_day_cash}.")
+        self.end_day_cash = self.inventory.cash
 
 
 
     def end_sim(self):
+        tips = {
+            5:  "TIP: Inventory piling up? Use the CEO Panel to manually sell items directly without needing a task.",
+            6:  "TIP: Payday is tomorrow! Prioritize Sell tasks today to make sure you can cover salaries.",
+            7:  "TIP: Payday! If you're short on cash, use CEO Panel > Inventory Options to sell items instantly.",
+            10: "TIP: Employees level up every 8 tasks. Faster employees = tasks done in fewer hours = less overtime.",
+            12: "TIP: Store tasks are easy to forget. If your inventory isn't growing, check if items are stuck in the store buffer.",
+            14: "TIP: Payday again! Check cash after payroll in the daily report — if it's red, you need to sell more.",
+            15: "TIP: Interns are cheap but slow. Once they hit 10 tasks, promote them to Employee for a big speed boost.",
+            18: "TIP: Managers progress tasks 1.5x faster and can manage other employees mid-day. Worth promoting Seniors.",
+            20: "TIP: Too many Buy tasks? You're spending cash without earning it. Prioritize Sell and Store tasks instead.",
+            21: "TIP: Third payday! Your salary costs grow as you hire. Make sure your sell income is keeping up.",
+            25: "TIP: Seniors can mentor Employees and Interns, temporarily boosting their speed. Unique tasks are worth it.",
+            28: "TIP: If the same employee keeps getting deductions, the CEO can fire underperformers automatically.",
+            30: "TIP: Weekly goals get harder each week. Focus on building inventory early so you have items ready to sell.",
+        }
+
+        if self.day in tips:
+            print(f"\n  {tips[self.day]}")
+        self.TaskGen.task_to_employee_ratio_check()
+        self.company.show_daily_report(self.day, self.end_day_cash, self.start_day_cash, self.TaskGen.task_comp_today, self.goal)
         while True:
             End_day_choice = input(f"""
 {'=' * 70}
