@@ -553,6 +553,8 @@ class TaskSystems:
                     break
     
     def show_work_hour(self, hour:int):
+        if self.progressed_now == [] or self.completed_now == []:
+            return
         output = ""
 
         output += "\n" + "=" * 70 + "\n"
@@ -572,12 +574,12 @@ class TaskSystems:
         output += "=" * 70 + "\n"
 
         for employee, task in self.completed_now:
-            output += f"✔ {employee.name} has completed {task.name}\n"
+            output += f"✔ {employee.name} has completed {task.type} - {task.name.title()}\n"
 
         output += "=" * 70 + "\n"
         self.progressed_now = []
         self.completed_now = []
-        return output
+        return output 
 
 
     def overtime_check(self, day):
